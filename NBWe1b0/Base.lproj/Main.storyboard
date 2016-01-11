@@ -8,20 +8,21 @@
         <!--Home-->
         <scene sceneID="lOc-KH-epQ">
             <objects>
-                <viewController id="sS4-ff-PW8" userLabel="Home" sceneMemberID="viewController">
+                <viewController id="sS4-ff-PW8" userLabel="Home" customClass="NBWHomeViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="XdL-8b-j0F"/>
                         <viewControllerLayoutGuide type="bottom" id="gQ8-24-pGr"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="TLy-ol-IRs">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" id="Oto-fC-GAY" userLabel="Home"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="tabbar_home" selectedImage="tabbar_home_selected" id="Oto-fC-GAY" userLabel="Home"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WLZ-KW-uUS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3150" y="-1538"/>
+            <point key="canvasLocation" x="-3408" y="-1538"/>
         </scene>
         <!--Message-->
         <scene sceneID="SJ6-9r-Fsi">
@@ -32,50 +33,71 @@
                         <viewControllerLayoutGuide type="bottom" id="sxw-Jp-CeU"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="9Vh-Vu-XdU">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Message" id="3iP-PX-Q0i"/>
+                    <tabBarItem key="tabBarItem" title="Message" image="tabbar_message_center" selectedImage="tabbar_message_center_highlighted" id="3iP-PX-Q0i"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M8b-lo-Ezd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2286" y="-1538"/>
+            <point key="canvasLocation" x="-2556" y="-1538"/>
         </scene>
-        <!--Discover -->
+        <!--Me-->
+        <scene sceneID="0Sj-d1-jdT">
+            <objects>
+                <viewController id="itA-35-YRM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Mnl-Pe-SmC"/>
+                        <viewControllerLayoutGuide type="bottom" id="R6S-IZ-h8q"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="U9X-4y-QnG">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Me" image="tabbar_profile" selectedImage="tabbar_profile_highlighted" id="JWX-Pk-P4t"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DUm-Za-PIg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-93" y="-1530"/>
+        </scene>
+        <!--add-->
         <scene sceneID="qkA-YU-PbZ">
             <objects>
-                <viewController id="qlz-Q6-kgK" userLabel="Discover " sceneMemberID="viewController">
+                <viewController id="qlz-Q6-kgK" userLabel="add" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DQ5-cK-nOP"/>
                         <viewControllerLayoutGuide type="bottom" id="h6z-lC-WTN"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ekb-Aj-kVh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Discover" id="SWl-0K-pke"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="tabbar_compose" id="SWl-0K-pke"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JmD-sH-ZAW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1374" y="-1538"/>
+            <point key="canvasLocation" x="-1812" y="-1530"/>
         </scene>
-        <!--Me -->
+        <!--Discover-->
         <scene sceneID="p2I-TN-mD4">
             <objects>
-                <viewController id="qdh-fr-Ecy" userLabel="Me " sceneMemberID="viewController">
+                <viewController id="qdh-fr-Ecy" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VHS-Je-N1p"/>
                         <viewControllerLayoutGuide type="bottom" id="JWa-pk-cNB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="24b-cG-TEq">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Me" id="EWq-p1-BdP"/>
+                    <tabBarItem key="tabBarItem" title="Discover" image="tabbar_discover" selectedImage="tabbar_discover_highlighted" id="EWq-p1-BdP"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xmt-RP-Zqw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-610.5" y="-1538"/>
+            <point key="canvasLocation" x="-1030.5" y="-1538"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="CxO-iF-GkU">
@@ -91,6 +113,7 @@
                         <segue destination="FXv-rx-Bpn" kind="relationship" relationship="viewControllers" id="zmZ-kq-fIg"/>
                         <segue destination="qlz-Q6-kgK" kind="relationship" relationship="viewControllers" id="DxD-kZ-1wQ"/>
                         <segue destination="qdh-fr-Ecy" kind="relationship" relationship="viewControllers" id="hEg-WN-V3R"/>
+                        <segue destination="itA-35-YRM" kind="relationship" relationship="viewControllers" id="9M5-Sr-nHD"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zlc-ls-KaR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -98,4 +121,15 @@
             <point key="canvasLocation" x="-1812" y="-2490"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tabbar_compose" width="25" height="25"/>
+        <image name="tabbar_discover" width="30" height="30"/>
+        <image name="tabbar_discover_highlighted" width="30" height="30"/>
+        <image name="tabbar_home" width="30" height="30"/>
+        <image name="tabbar_home_selected" width="30" height="30"/>
+        <image name="tabbar_message_center" width="30" height="30"/>
+        <image name="tabbar_message_center_highlighted" width="30" height="30"/>
+        <image name="tabbar_profile" width="30" height="30"/>
+        <image name="tabbar_profile_highlighted" width="30" height="30"/>
+    </resources>
 </document>

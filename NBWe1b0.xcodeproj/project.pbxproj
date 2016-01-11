@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D8DB4D01C43872F00FC4A9E /* NBWHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8DB4CF1C43872F00FC4A9E /* NBWHomeViewController.swift */; };
 		3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */; };
 		3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE1C53A1C3D4CC8008E3A94 /* AppDelegate.swift */; };
 		3DE1C5401C3D4CC8008E3A94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D8DB4CF1C43872F00FC4A9E /* NBWHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWHomeViewController.swift; sourceTree = "<group>"; };
 		3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NBWe1b0-Bridging-Header.h"; sourceTree = "<group>"; };
 		3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWTabBarController.swift; sourceTree = "<group>"; };
 		3DE1C5371C3D4CC8008E3A94 /* NBWe1b0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NBWe1b0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +120,7 @@
 			children = (
 				3DE1C53A1C3D4CC8008E3A94 /* AppDelegate.swift */,
 				3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */,
+				3D8DB4CF1C43872F00FC4A9E /* NBWHomeViewController.swift */,
 				3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */,
 				3DE1C5441C3D4CC8008E3A94 /* Assets.xcassets */,
 				3DE1C5461C3D4CC8008E3A94 /* LaunchScreen.storyboard */,
@@ -337,6 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */,
+				3D8DB4D01C43872F00FC4A9E /* NBWHomeViewController.swift in Sources */,
 				3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */,
 				3DE1C5431C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld in Sources */,
 			);

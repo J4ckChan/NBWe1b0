@@ -9,13 +9,24 @@
 import UIKit
 
 class NBWTabBarController: UITabBarController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.delegate = self
+        self.tabBar.tintColor = UIColor.orangeColor()
+        
+        let addBackgroundImage = UIImage(named: "tabbar_compose_bg")
+        let imageViewOriginX = 2.0*(self.tabBar.frame.size.width/5.0)
+        
+        let addImageView = UIImageView.init(frame: CGRectMake(imageViewOriginX, 0, self.tabBar.frame.size.width/5.0, self.tabBar.frame.size.height))
+        addImageView.image = addBackgroundImage
+        addImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        
+        self.tabBar.insertSubview(addImageView, atIndex: 1)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -32,4 +43,22 @@ class NBWTabBarController: UITabBarController {
     }
     */
 
+}
+
+    //MARK: - UITabBarControllerDelegate
+
+extension NBWTabBarController:UITabBarControllerDelegate{
+    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
+        if viewController.isEqual(tabBarController.viewControllers![2]){
+            let vc = UIViewController.init()
+            vc.view.backgroundColor = UIColor.grayColor()
+            self.presentViewController(vc, animated: true, completion: nil)
+            return true
+        }
+        return true
+    }
+    
+    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController){
+        
+    }
 }
