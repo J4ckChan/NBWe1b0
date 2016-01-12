@@ -9,14 +9,6 @@
 import UIKit
 
 class NBWComposeViewController: UIViewController {
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +27,8 @@ class NBWComposeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func closeCompse(sender: UIButton) {
+    
+    @IBAction func closeCompose(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 

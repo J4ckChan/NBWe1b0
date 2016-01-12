@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="YV5-8m-VXR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Vgf-ev-K2j">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -18,11 +18,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" image="tabbar_home" selectedImage="tabbar_home_selected" id="Oto-fC-GAY" userLabel="Home"/>
+                    <navigationItem key="navigationItem" id="ceO-kn-FHt">
+                        <barButtonItem key="rightBarButtonItem" title="Login" id="kTl-ud-7Yk">
+                            <color key="tintColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="weiboLogin:" destination="sS4-ff-PW8" id="McP-VU-Gxb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WLZ-KW-uUS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3408" y="-1538"/>
+            <point key="canvasLocation" x="-3486" y="-750"/>
         </scene>
         <!--Message-->
         <scene sceneID="SJ6-9r-Fsi">
@@ -41,7 +48,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M8b-lo-Ezd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2556" y="-1538"/>
+            <point key="canvasLocation" x="-2748" y="-1538"/>
         </scene>
         <!--Me-->
         <scene sceneID="0Sj-d1-jdT">
@@ -60,7 +67,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DUm-Za-PIg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-93" y="-1530"/>
+            <point key="canvasLocation" x="-153" y="-1546"/>
         </scene>
         <!--add-->
         <scene sceneID="qkA-YU-PbZ">
@@ -79,7 +86,71 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JmD-sH-ZAW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1824" y="-1538"/>
+            <point key="canvasLocation" x="-1983" y="-1538"/>
+        </scene>
+        <!--Compose View Controller-->
+        <scene sceneID="g6X-F3-ZYQ">
+            <objects>
+                <viewController storyboardIdentifier="ComposeViewController" id="nyv-g7-h5V" customClass="NBWComposeViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4fM-1q-j7T"/>
+                        <viewControllerLayoutGuide type="bottom" id="jYT-l6-FCq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="z1H-Hf-ba6">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kyl-kH-V3t">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="DVd-xG-5lw"/>
+                                    <constraint firstAttribute="height" constant="25" id="chF-i7-22R"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="tabbar_compose_close"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="DVd-xG-5lw"/>
+                                        <exclude reference="chF-i7-22R"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="DVd-xG-5lw"/>
+                                        <include reference="chF-i7-22R"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="closeCompose:" destination="nyv-g7-h5V" eventType="touchUpInside" id="eSp-hs-AR1"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Kyl-kH-V3t" firstAttribute="centerX" secondItem="z1H-Hf-ba6" secondAttribute="centerX" id="1Uu-7f-dzC"/>
+                            <constraint firstItem="jYT-l6-FCq" firstAttribute="top" secondItem="Kyl-kH-V3t" secondAttribute="bottom" constant="10" id="zUv-8F-bKD"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Kyl-kH-V3t"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="1Uu-7f-dzC"/>
+                                <exclude reference="zUv-8F-bKD"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="Kyl-kH-V3t"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="1Uu-7f-dzC"/>
+                                <include reference="zUv-8F-bKD"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YcW-az-WWn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1983" y="-886"/>
         </scene>
         <!--Discover-->
         <scene sceneID="p2I-TN-mD4">
@@ -98,74 +169,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xmt-RP-Zqw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1030.5" y="-1538"/>
-        </scene>
-        <!--Login-->
-        <scene sceneID="FE2-NQ-r9M">
-            <objects>
-                <viewController title="Login" id="YV5-8m-VXR" customClass="NBWLoginViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="PMD-Fs-t1X"/>
-                        <viewControllerLayoutGuide type="bottom" id="QO4-KL-l2H"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0QC-LQ-Sua">
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oYI-F1-mEQ">
-                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="SeE-jq-U4u"/>
-                                    <constraint firstAttribute="width" constant="104" id="f4C-vN-gfv"/>
-                                </constraints>
-                                <state key="normal" title="Weibo Login"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="SeE-jq-U4u"/>
-                                        <exclude reference="f4C-vN-gfv"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="SeE-jq-U4u"/>
-                                        <include reference="f4C-vN-gfv"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <action selector="WeiboLogin:" destination="YV5-8m-VXR" eventType="touchUpInside" id="uxm-mG-tQs"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="oYI-F1-mEQ" firstAttribute="centerX" secondItem="0QC-LQ-Sua" secondAttribute="centerX" id="8GD-bX-9QK"/>
-                            <constraint firstItem="QO4-KL-l2H" firstAttribute="top" secondItem="oYI-F1-mEQ" secondAttribute="bottom" constant="189" id="pg6-du-dAo"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="oYI-F1-mEQ"/>
-                            </mask>
-                            <mask key="constraints">
-                                <exclude reference="8GD-bX-9QK"/>
-                                <exclude reference="pg6-du-dAo"/>
-                            </mask>
-                        </variation>
-                        <variation key="widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="oYI-F1-mEQ"/>
-                            </mask>
-                            <mask key="constraints">
-                                <include reference="8GD-bX-9QK"/>
-                                <include reference="pg6-du-dAo"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <connections>
-                        <segue destination="Vgf-ev-K2j" kind="show" id="avT-zt-u53"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="thE-iI-DPo" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2931" y="-2490"/>
+            <point key="canvasLocation" x="-1042.5" y="-1538"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="CxO-iF-GkU">
@@ -177,7 +181,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="sS4-ff-PW8" kind="relationship" relationship="viewControllers" id="90f-8S-kDS"/>
+                        <segue destination="rjq-J2-GwB" kind="relationship" relationship="viewControllers" id="90f-8S-kDS"/>
                         <segue destination="FXv-rx-Bpn" kind="relationship" relationship="viewControllers" id="zmZ-kq-fIg"/>
                         <segue destination="qlz-Q6-kgK" kind="relationship" relationship="viewControllers" id="DxD-kZ-1wQ"/>
                         <segue destination="qdh-fr-Ecy" kind="relationship" relationship="viewControllers" id="hEg-WN-V3R"/>
@@ -188,9 +192,29 @@
             </objects>
             <point key="canvasLocation" x="-1983" y="-2490"/>
         </scene>
+        <!--Home-->
+        <scene sceneID="GfJ-7j-Xok">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rjq-J2-GwB" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="tabbar_home" selectedImage="tabbar_home_selected" id="Oto-fC-GAY" userLabel="Home"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="w6p-8W-1GH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="sS4-ff-PW8" kind="relationship" relationship="rootViewController" id="rwk-MU-HSA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZKn-5E-t1Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3486" y="-1538"/>
+        </scene>
     </scenes>
     <resources>
         <image name="tabbar_compose" width="25" height="25"/>
+        <image name="tabbar_compose_close" width="25" height="25"/>
         <image name="tabbar_discover" width="30" height="30"/>
         <image name="tabbar_discover_highlighted" width="30" height="30"/>
         <image name="tabbar_home" width="30" height="30"/>

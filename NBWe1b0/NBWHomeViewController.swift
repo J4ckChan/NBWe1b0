@@ -21,6 +21,13 @@ class NBWHomeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func weiboLogin(sender: UIBarButtonItem) {
+        let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
+        request.redirectURI = redirectURL
+        request.scope       = "all"
+        
+        WeiboSDK.sendRequest(request)
+    }
 
     /*
     // MARK: - Navigation

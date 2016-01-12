@@ -51,9 +51,12 @@ class NBWTabBarController: UITabBarController {
 extension NBWTabBarController:UITabBarControllerDelegate{
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
         if viewController.isEqual(tabBarController.viewControllers![2]){
-            let vc = NBWComposeViewController.init(nibName: "NBWComposeViewController", bundle: NSBundle.mainBundle())
-            self.presentViewController(vc, animated: true, completion: nil)
-            return false
+//            let vc = NBWComposeViewController.init(nibName: "NBWComposeViewController", bundle: NSBundle.mainBundle())
+//            self.presentViewController(vc, animated: true, completion: nil)
+//            return false
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let composeVC = mainStoryboard.instantiateViewControllerWithIdentifier("ComposeViewController")
+            self.presentViewController(composeVC, animated: true, completion: nil)
         }
         return true
     }
