@@ -1,14 +1,14 @@
 //
-//  NBWHomeViewController.swift
+//  NBWLoginViewController.swift
 //  NBWe1b0
 //
-//  Created by ChanLiang on 1/11/16.
+//  Created by ChanLiang on 1/12/16.
 //  Copyright © 2016 JackChan. All rights reserved.
 //
 
 import UIKit
 
-class NBWHomeViewController: UIViewController {
+class NBWLoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +22,14 @@ class NBWHomeViewController: UIViewController {
     }
     
 
+    @IBAction func WeiboLogin(sender: UIButton) {
+        
+        let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
+        request.redirectURI = redirectURL
+        request.scope       = "all"
+        
+        WeiboSDK.sendRequest(request)
+    }
     /*
     // MARK: - Navigation
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Vgf-ev-K2j">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="YV5-8m-VXR">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -52,6 +52,7 @@
                         <viewControllerLayoutGuide type="bottom" id="R6S-IZ-h8q"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="U9X-4y-QnG">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -78,7 +79,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JmD-sH-ZAW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1812" y="-1530"/>
+            <point key="canvasLocation" x="-1824" y="-1538"/>
         </scene>
         <!--Discover-->
         <scene sceneID="p2I-TN-mD4">
@@ -99,6 +100,73 @@
             </objects>
             <point key="canvasLocation" x="-1030.5" y="-1538"/>
         </scene>
+        <!--Login-->
+        <scene sceneID="FE2-NQ-r9M">
+            <objects>
+                <viewController title="Login" id="YV5-8m-VXR" customClass="NBWLoginViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="PMD-Fs-t1X"/>
+                        <viewControllerLayoutGuide type="bottom" id="QO4-KL-l2H"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0QC-LQ-Sua">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oYI-F1-mEQ">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="SeE-jq-U4u"/>
+                                    <constraint firstAttribute="width" constant="104" id="f4C-vN-gfv"/>
+                                </constraints>
+                                <state key="normal" title="Weibo Login"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="SeE-jq-U4u"/>
+                                        <exclude reference="f4C-vN-gfv"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="SeE-jq-U4u"/>
+                                        <include reference="f4C-vN-gfv"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="WeiboLogin:" destination="YV5-8m-VXR" eventType="touchUpInside" id="uxm-mG-tQs"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oYI-F1-mEQ" firstAttribute="centerX" secondItem="0QC-LQ-Sua" secondAttribute="centerX" id="8GD-bX-9QK"/>
+                            <constraint firstItem="QO4-KL-l2H" firstAttribute="top" secondItem="oYI-F1-mEQ" secondAttribute="bottom" constant="189" id="pg6-du-dAo"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="oYI-F1-mEQ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="8GD-bX-9QK"/>
+                                <exclude reference="pg6-du-dAo"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="oYI-F1-mEQ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="8GD-bX-9QK"/>
+                                <include reference="pg6-du-dAo"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <segue destination="Vgf-ev-K2j" kind="show" id="avT-zt-u53"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="thE-iI-DPo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2931" y="-2490"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="CxO-iF-GkU">
             <objects>
@@ -118,7 +186,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zlc-ls-KaR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1812" y="-2490"/>
+            <point key="canvasLocation" x="-1983" y="-2490"/>
         </scene>
     </scenes>
     <resources>

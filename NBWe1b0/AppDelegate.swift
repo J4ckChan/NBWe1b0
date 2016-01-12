@@ -9,16 +9,35 @@
 import UIKit
 import CoreData
 
+let appKey = "727947860"
+let appSecret = "357abfd7118c26498b91d9dc3b409546"
+let redirectURL = "https://api.weibo.com/oauth2/default.html"
+
+var accessToken:String = ""
+var userID:String?
+var refreshToken:String?
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
   var window: UIWindow?
 
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     // Override point for customization after application launch.
+    WeiboSDK.enableDebugMode(true)
+    WeiboSDK.registerApp(appKey)
+    
     return true
   }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return WeiboSDK.handleOpenURL(url, delegate: self)
+    }
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        return WeiboSDK.handleOpenURL(url, delegate: self)
+    }
 
   func applicationWillResignActive(application: UIApplication) {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -107,5 +126,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
   }
 
+}
+
+extension AppDelegate: WeiboSDKDelegate{
+    
+    func didReceiveWeiboRequest(request: WBBaseRequest!) {
+        
+    }
+    
+    func didReceiveWeiboResponse(response: WBBaseResponse!) {
+        if response.isKindOfClass(WBAuthorizeResponse){
+            accessToken  = (response as! WBAuthorizeResponse).accessToken
+            userID       = (response as! WBAuthorizeResponse).userID
+            refreshToken = (response as! WBAuthorizeResponse).refreshToken
+            print(accessToken)
+        }
+        
+    }
 }
 

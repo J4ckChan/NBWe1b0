@@ -9,7 +9,7 @@
 import UIKit
 
 class NBWTabBarController: UITabBarController {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,6 +17,7 @@ class NBWTabBarController: UITabBarController {
         self.delegate = self
         self.tabBar.tintColor = UIColor.orangeColor()
         
+        // TabBarItem --- Compose
         let addBackgroundImage = UIImage(named: "tabbar_compose_bg")
         let imageViewOriginX = 2.0*(self.tabBar.frame.size.width/5.0)
         
@@ -50,10 +51,9 @@ class NBWTabBarController: UITabBarController {
 extension NBWTabBarController:UITabBarControllerDelegate{
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
         if viewController.isEqual(tabBarController.viewControllers![2]){
-            let vc = UIViewController.init()
-            vc.view.backgroundColor = UIColor.grayColor()
+            let vc = NBWComposeViewController.init(nibName: "NBWComposeViewController", bundle: NSBundle.mainBundle())
             self.presentViewController(vc, animated: true, completion: nil)
-            return true
+            return false
         }
         return true
     }
