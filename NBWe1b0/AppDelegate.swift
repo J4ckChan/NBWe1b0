@@ -13,8 +13,8 @@ let appKey = "727947860"
 let appSecret = "357abfd7118c26498b91d9dc3b409546"
 let redirectURL = "https://api.weibo.com/oauth2/default.html"
 
-var accessToken:String = ""
-var userID:String?
+var accessToken:String = "2.00HKoGiB0WU5Qn25f63843bdEJB58C"
+var userID:String = "1567914411"
 var refreshToken:String?
 
 @UIApplicationMain
@@ -139,7 +139,7 @@ extension AppDelegate: WeiboSDKDelegate{
             userID       = (response as! WBAuthorizeResponse).userID
             refreshToken = (response as! WBAuthorizeResponse).refreshToken
             
-            print(accessToken)
+            print("accessToken = \(accessToken), userID = \(userID)")
         }
     }
 }
