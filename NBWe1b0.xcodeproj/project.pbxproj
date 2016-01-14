@@ -16,6 +16,7 @@
 		3DE1C5451C3D4CC8008E3A94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DE1C5441C3D4CC8008E3A94 /* Assets.xcassets */; };
 		3DE1C5531C3D4CC8008E3A94 /* NBWe1b0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE1C5521C3D4CC8008E3A94 /* NBWe1b0Tests.swift */; };
 		3DE1C55E1C3D4CC8008E3A94 /* NBWe1b0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE1C55D1C3D4CC8008E3A94 /* NBWe1b0UITests.swift */; };
+		3DF4BB091C47412800CB3408 /* NBWTableViewBasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF4BB081C47412800CB3408 /* NBWTableViewBasicCell.swift */; };
 		42FF1CE2C95AB01C0D4E6291 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A28E511B6FA96780A53227 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		3DE1C5591C3D4CC8008E3A94 /* NBWe1b0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NBWe1b0UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DE1C55D1C3D4CC8008E3A94 /* NBWe1b0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBWe1b0UITests.swift; sourceTree = "<group>"; };
 		3DE1C55F1C3D4CC8008E3A94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DF4BB081C47412800CB3408 /* NBWTableViewBasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWTableViewBasicCell.swift; sourceTree = "<group>"; };
 		791FD454D9D8179E99F850B8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7F4B1336DE0F1420E794259B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		85A28E511B6FA96780A53227 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +124,7 @@
 				3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */,
 				3D8DB4CF1C43872F00FC4A9E /* NBWHomeViewController.swift */,
 				3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */,
+				3DF4BB081C47412800CB3408 /* NBWTableViewBasicCell.swift */,
 				3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */,
 				3DE1C5441C3D4CC8008E3A94 /* Assets.xcassets */,
 				3DE1C5491C3D4CC8008E3A94 /* Info.plist */,
@@ -342,6 +345,7 @@
 				3D8DB4D01C43872F00FC4A9E /* NBWHomeViewController.swift in Sources */,
 				3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */,
 				3DE1C5431C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld in Sources */,
+				3DF4BB091C47412800CB3408 /* NBWTableViewBasicCell.swift in Sources */,
 				3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
