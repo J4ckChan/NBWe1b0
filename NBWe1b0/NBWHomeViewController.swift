@@ -115,7 +115,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         let spacingHeight:CGFloat = 8
         
-        let cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + 22
+        let cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + 22+32
         
         print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
         print(cell?.imageStackView.frame.height)

@@ -34,11 +34,21 @@ class NBWTableViewBasicCell: UITableViewCell {
     @IBOutlet weak var imageViewEight: UIImageView!
     @IBOutlet weak var imageViewNine: UIImageView!
     
-    var bodyText:String?
+    //repsot & comment & like
+    @IBOutlet weak var repostCount: UILabel!
+    @IBOutlet weak var commentCount: UILabel!
+    @IBOutlet weak var likeCout: UILabel!
     
+    //Spacing
+    @IBOutlet weak var bottomSpacingView: UIView!
+    
+    var bodyText:String?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+//        self.bottomSpacingView.layer.borderWidth = 1
+//        self.bottomSpacingView.layer.borderColor = UIColor.grayColor().CGColor
+//        self.bottomSpacingView.backgroundColor = self.tintColor
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -46,5 +56,14 @@ class NBWTableViewBasicCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    @IBAction func repostWeibo(sender: UIButton) {
+    }
+    
+    @IBAction func commentWeibo(sender: UIButton) {
+    }
+    
+    @IBAction func likeWeibo(sender: UIButton) {
+    }
+    
 }
