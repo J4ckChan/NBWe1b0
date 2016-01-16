@@ -39,16 +39,10 @@ class NBWTableViewBasicCell: UITableViewCell {
     @IBOutlet weak var commentCount: UILabel!
     @IBOutlet weak var likeCout: UILabel!
     
-    //Spacing
-    @IBOutlet weak var bottomSpacingView: UIView!
-    
     var bodyText:String?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-//        self.bottomSpacingView.layer.borderWidth = 1
-//        self.bottomSpacingView.layer.borderColor = UIColor.grayColor().CGColor
-//        self.bottomSpacingView.backgroundColor = self.tintColor
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
