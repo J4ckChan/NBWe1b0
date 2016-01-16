@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import CoreData
 
 class NBWHomeViewController: UIViewController {
     
@@ -31,25 +32,26 @@ class NBWHomeViewController: UIViewController {
         
         numberOfImageStackView = 2
         
-//        self.getHomeTimeline()
+        getHomeTimeline()
     }
     
     func getHomeTimeline(){
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":2], encoding:ParameterEncoding.URLEncodedInURL, headers: nil)
-            .response { (request, response, data, error) -> Void in
-                do{
-                    let  json = try NSJSONSerialization.JSONObjectWithData(data!, options:.MutableContainers)
-                    let statuesArray = json["statuses"]
-                    print(statuesArray)
-                }catch let error as NSError {
-                    print("error: \(error.localizedDescription)")
+        
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":1], encoding: ParameterEncoding.URL, headers: nil)
+            .responseJSON { (response) -> Void in
+                
+                do {
+                   let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
+                    let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
+                    
+                    print(statusesArrary)
+                    
+                    self.importJSONInCoreData(statusesArrary)
+                    
+                }catch let error as NSError{
+                    print("Error:\(error.localizedDescription)")
                 }
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
@@ -59,7 +61,91 @@ class NBWHomeViewController: UIViewController {
         
         WeiboSDK.sendRequest(request)
     }
+    
+    //MARK: - CoreData
+    func importJSONInCoreData(statuesArray:NSArray){
+       
+        //init CoreData
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managerContext = appDelegate.managedObjectContext
+        
+        let weiboStatusEntity = NSEntityDescription.entityForName("WeiboStatus", inManagedObjectContext: managerContext)
+        
+        let userEntity = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext)
+        
+        let weiboUser = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
+        
+        let weiboStatus = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
+        
+        // weibo status is stored in WeiboStatus from CoreData
+        weiboStatusPesistentlyStoreInCoreData(weiboUser,weibostatus: weiboStatus,statuesArray: statuesArray)
+        
+        do{
+            try managerContext.save()
+        }catch let error as NSError {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func weiboStatusPesistentlyStoreInCoreData(weiboUser:WeiboUser,weibostatus:WeiboStatus,statuesArray:NSArray){
+        
+        for jsonDict in statuesArray {
+            
+            // imageurl 变成 UIImage
+            weibostatus.created_at      = jsonDict["created_at"] as? String
+            weibostatus.id              = jsonDict["idstr"] as? String
+            weibostatus.text            = jsonDict["text"] as? String// text 转化成中文
+            weibostatus.source          = jsonDict["source"] as? String
+            weibostatus.favorited       = jsonDict["favorited"] as? NSNumber
+            weibostatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
+            weibostatus.comments_count  = jsonDict["comments_count"] as? NSNumber
+            weibostatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
+            weibostatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
+            weibostatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
+            weibostatus.original_pic    = jsonDict["original_pic"] as? String
+            weibostatus.user            = weiboUser
+            
+            let userDict = jsonDict["user"] as! NSDictionary
+
+            weiboUser.id                 = userDict["id"] as? NSNumber
+            weiboUser.idstr              = userDict["idstr"] as? String
+            weiboUser.screen_name        = userDict["screen_name"] as? String
+            weiboUser.name               = userDict["name"] as? String
+            weiboUser.province           = userDict["province"] as? NSNumber
+            weiboUser.city               = userDict["city"] as? NSNumber
+            weiboUser.location           = userDict["location"] as? String// 转换成 中文
+            weiboUser.user_description   = userDict["description"] as? String
+            weiboUser.url                = userDict["url"] as? String
+            weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
+            weiboUser.profile_url        = userDict["profile_url"] as? String
+            weiboUser.domain             = userDict["domain"] as? String
+            weiboUser.weihao             = userDict["weihao"] as? String
+            weiboUser.gender             = userDict["gender"] as? String
+            weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
+            weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
+            weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
+            weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
+            weiboUser.created_at         = userDict["created_at"] as? String
+            weiboUser.following          = userDict["following"] as? NSNumber
+            weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
+            weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
+            weiboUser.verified           = userDict["verified"] as? NSNumber
+            weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
+            weiboUser.remark             = userDict["remark"] as? String
+            weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
+            weiboUser.avatar_large       = userDict["avatar_large"] as? String
+            weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
+            weiboUser.verified_reason    = userDict["verified_reason"] as? String
+            weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
+            weiboUser.online_status      = userDict["online_status"] as? NSNumber
+            weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
+            weiboUser.lang               = userDict["lang"] as? String
+            weiboUser.status?.setByAddingObject(weibostatus)
+        }
+    }
 }
+
 
     //MARK: - UITableViewDataSource
 
@@ -135,7 +221,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         let labelText = cell.bodyTextLabel.text
         let labelTextNSString = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
         
-//        cell.bodyTextLabel.backgroundColor = UIColor.lightGrayColor()
+        cell.bodyTextLabel.backgroundColor = UIColor.lightGrayColor()
         
         let labelFont = UIFont.systemFontOfSize(17)
         let attributesDictionary = [NSFontAttributeName:labelFont]

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Automatic">
-    <entity name="WeiboStatus" syncable="YES">
+    <entity name="WeiboStatus" representedClassName=".WeiboStatus" syncable="YES">
         <attribute name="attitudes_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bmiddle_pic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="comments_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -17,7 +17,7 @@
         <attribute name="thumbnail_pic" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboUser" syncable="YES"/>
     </entity>
-    <entity name="WeiboUser" syncable="YES">
+    <entity name="WeiboUser" representedClassName=".WeiboUser" syncable="YES">
         <attribute name="allow_all_act_msg" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="allow_all_comment" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="avatar_hd" optional="YES" attributeType="String" syncable="YES"/>
