@@ -20,6 +20,8 @@ class NBWHomeViewController: UIViewController {
     
     var cellCache:NSCache?
     var numberOfImageStackView:CGFloat?
+    var weiboStatusesArray = [WeiboStatus]()
+    var managerContext:NSManagedObjectContext?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,18 +35,24 @@ class NBWHomeViewController: UIViewController {
         numberOfImageStackView = 2
         
         getHomeTimeline()
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        self.managerContext = appDelegate.managedObjectContext
+        
+        fetchDataFromCoreData()
     }
     
     func getHomeTimeline(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":1], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":2], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
                     let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
                     
-                    print(statusesArrary)
+                    print("......\(statusesArrary)")
                     
                     self.importJSONInCoreData(statusesArrary)
                     
@@ -64,84 +72,106 @@ class NBWHomeViewController: UIViewController {
     
     //MARK: - CoreData
     func importJSONInCoreData(statuesArray:NSArray){
-       
-        //init CoreData
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managerContext = appDelegate.managedObjectContext
-        
-        let weiboStatusEntity = NSEntityDescription.entityForName("WeiboStatus", inManagedObjectContext: managerContext)
-        
-        let userEntity = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext)
-        
-        let weiboUser = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
-        
-        let weiboStatus = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
-        
+    
         // weibo status is stored in WeiboStatus from CoreData
-        weiboStatusPesistentlyStoreInCoreData(weiboUser,weibostatus: weiboStatus,statuesArray: statuesArray)
+        weiboStatusPesistentlyStoreInCoreData(statuesArray)
         
         do{
-            try managerContext.save()
+            try self.managerContext!.save()
         }catch let error as NSError {
             print("Error: \(error.localizedDescription)")
         }
+        
+        fetchDataFromCoreData()
+        
+        self.tableView.reloadData()
     }
     
-    func weiboStatusPesistentlyStoreInCoreData(weiboUser:WeiboUser,weibostatus:WeiboStatus,statuesArray:NSArray){
+    func weiboStatusPesistentlyStoreInCoreData(statuesArray:NSArray){
         
         for jsonDict in statuesArray {
             
-            // imageurl 变成 UIImage
-            weibostatus.created_at      = jsonDict["created_at"] as? String
-            weibostatus.id              = jsonDict["idstr"] as? String
-            weibostatus.text            = jsonDict["text"] as? String// text 转化成中文
-            weibostatus.source          = jsonDict["source"] as? String
-            weibostatus.favorited       = jsonDict["favorited"] as? NSNumber
-            weibostatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
-            weibostatus.comments_count  = jsonDict["comments_count"] as? NSNumber
-            weibostatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
-            weibostatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
-            weibostatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
-            weibostatus.original_pic    = jsonDict["original_pic"] as? String
-            weibostatus.user            = weiboUser
+            //compare idstr
+            var flag = 1
+            for status in weiboStatusesArray {
+                let id = jsonDict["idstr"] as? String
+                if id == status.id {
+                    flag = 0
+                }
+            }
             
-            let userDict = jsonDict["user"] as! NSDictionary
-
-            weiboUser.id                 = userDict["id"] as? NSNumber
-            weiboUser.idstr              = userDict["idstr"] as? String
-            weiboUser.screen_name        = userDict["screen_name"] as? String
-            weiboUser.name               = userDict["name"] as? String
-            weiboUser.province           = userDict["province"] as? NSNumber
-            weiboUser.city               = userDict["city"] as? NSNumber
-            weiboUser.location           = userDict["location"] as? String// 转换成 中文
-            weiboUser.user_description   = userDict["description"] as? String
-            weiboUser.url                = userDict["url"] as? String
-            weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
-            weiboUser.profile_url        = userDict["profile_url"] as? String
-            weiboUser.domain             = userDict["domain"] as? String
-            weiboUser.weihao             = userDict["weihao"] as? String
-            weiboUser.gender             = userDict["gender"] as? String
-            weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
-            weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
-            weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
-            weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
-            weiboUser.created_at         = userDict["created_at"] as? String
-            weiboUser.following          = userDict["following"] as? NSNumber
-            weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
-            weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
-            weiboUser.verified           = userDict["verified"] as? NSNumber
-            weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
-            weiboUser.remark             = userDict["remark"] as? String
-            weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
-            weiboUser.avatar_large       = userDict["avatar_large"] as? String
-            weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
-            weiboUser.verified_reason    = userDict["verified_reason"] as? String
-            weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
-            weiboUser.online_status      = userDict["online_status"] as? NSNumber
-            weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
-            weiboUser.lang               = userDict["lang"] as? String
-            weiboUser.status?.setByAddingObject(weibostatus)
+            if flag == 1 {
+                //create NSManagedObject
+                let weiboStatusEntity = NSEntityDescription.entityForName("WeiboStatus", inManagedObjectContext: managerContext!)
+                
+                let userEntity = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
+                
+                let weiboUser = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
+                
+                let weiboStatus = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
+                
+                // 补充 imageurl 变成 UIImage
+                weiboStatus.created_at      = jsonDict["created_at"] as? String
+                print(weiboStatus.created_at)
+                weiboStatus.id              = jsonDict["idstr"] as? String
+                weiboStatus.text            = jsonDict["text"] as? String
+                weiboStatus.source          = jsonDict["source"] as? String
+                weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
+                weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
+                weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
+                weiboStatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
+                weiboStatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
+                weiboStatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
+                weiboStatus.original_pic    = jsonDict["original_pic"] as? String
+                weiboStatus.user            = weiboUser
+                
+                let userDict = jsonDict["user"] as! NSDictionary
+                
+                weiboUser.id                 = userDict["id"] as? NSNumber
+                weiboUser.idstr              = userDict["idstr"] as? String
+                weiboUser.screen_name        = userDict["screen_name"] as? String
+                weiboUser.name               = userDict["name"] as? String
+                weiboUser.province           = userDict["province"] as? NSNumber
+                weiboUser.city               = userDict["city"] as? NSNumber
+                weiboUser.location           = userDict["location"] as? String
+                weiboUser.user_description   = userDict["description"] as? String
+                weiboUser.url                = userDict["url"] as? String
+                weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
+                weiboUser.profile_url        = userDict["profile_url"] as? String
+                weiboUser.domain             = userDict["domain"] as? String
+                weiboUser.weihao             = userDict["weihao"] as? String
+                weiboUser.gender             = userDict["gender"] as? String
+                weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
+                weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
+                weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
+                weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
+                weiboUser.created_at         = userDict["created_at"] as? String
+                weiboUser.following          = userDict["following"] as? NSNumber
+                weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
+                weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
+                weiboUser.verified           = userDict["verified"] as? NSNumber
+                weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
+                weiboUser.remark             = userDict["remark"] as? String
+                weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
+                weiboUser.avatar_large       = userDict["avatar_large"] as? String
+                weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
+                weiboUser.verified_reason    = userDict["verified_reason"] as? String
+                weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
+                weiboUser.online_status      = userDict["online_status"] as? NSNumber
+                weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
+                weiboUser.lang               = userDict["lang"] as? String
+                weiboUser.status             = weiboUser.status?.setByAddingObject(weiboStatus)
+            }
+        }
+    }
+    
+    func fetchDataFromCoreData(){
+        
+        do{
+            let request = NSFetchRequest(entityName: "WeiboStatus")
+            weiboStatusesArray = try managerContext!.executeFetchRequest(request) as! [WeiboStatus]
+        }catch let error as NSError {
+            print("Fetching error: \(error.localizedDescription)")
         }
     }
 }
@@ -152,7 +182,8 @@ class NBWHomeViewController: UIViewController {
 extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UINavigationBarDelegate{
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        weiboStatusesArray = weiboStatusesArray.reverse()
+        return weiboStatusesArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -163,9 +194,9 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         if cell == nil {
             cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
-            configureHomeTableViewCell(cell!)
+            configureHomeTableViewCell(cell!,indexPath: indexPath)
         }else {
-            configureHomeTableViewCell(cell!)
+            configureHomeTableViewCell(cell!,indexPath: indexPath)
         }
         
         
@@ -188,9 +219,10 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
         
         if cell == nil {
-            cell = tableView.dequeueReusableCellWithIdentifier("BasicCell") as? NBWTableViewBasicCell
-            cell = configureHomeTableViewCell(cell!)
+            cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
+            cell = configureHomeTableViewCell(cell!,indexPath: indexPath)
             cellCache?.setObject(cell!, forKey: key)
+
         }
         
         let headerHeight:CGFloat = 40
@@ -209,19 +241,20 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         return cellHeight
     }
     
-    func configureHomeTableViewCell(cell:NBWTableViewBasicCell)-> NBWTableViewBasicCell {
+    func configureHomeTableViewCell(cell:NBWTableViewBasicCell,indexPath:NSIndexPath)-> NBWTableViewBasicCell {
+        
+        let weiboStatus = weiboStatusesArray[indexPath.row]
+        print(weiboStatus)
         
         //Setup Header
+        cell.screenNameLable.text = (weiboStatus.user as! WeiboUser).screen_name
+        cell.sourceLabel.text = weiboStatus.source
         
         //Setup bodyTextLabel
-        let text = "NSCache 一言蔽之是一个很傻瓜式的缓存控件，存取方式类似于NSDictionary，工作方式与苹果的内存管理体系相一致，在内存吃紧的时候，它会自动释放存储的对象。所以"
-        
-        cell.bodyTextLabel.text = text
+        cell.bodyTextLabel.text = weiboStatus.text
         
         let labelText = cell.bodyTextLabel.text
         let labelTextNSString = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
-        
-        cell.bodyTextLabel.backgroundColor = UIColor.lightGrayColor()
         
         let labelFont = UIFont.systemFontOfSize(17)
         let attributesDictionary = [NSFontAttributeName:labelFont]
@@ -234,6 +267,11 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         //Setup ImageStackView
         configureImageStakView(cell)
+
+        //Setup bottomView
+        cell.repostCount.text =  "\(weiboStatus.reposts_count!)"
+        cell.commentCount.text = "\(weiboStatus.comments_count!)"
+        cell.likeCout.text = "\(weiboStatus.attitudes_count!)"
         
         return cell
     }
