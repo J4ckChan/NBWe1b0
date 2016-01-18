@@ -4,7 +4,7 @@
         <attribute name="attitudes_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bmiddle_pic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="comments_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="created_at" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="favorited" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="in_reply_to_screen_name" optional="YES" attributeType="String" syncable="YES"/>

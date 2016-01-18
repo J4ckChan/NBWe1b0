@@ -32,7 +32,7 @@ class NBWHomeViewController: UIViewController {
         
         cellCache = NSCache.init()
         
-        numberOfImageStackView = 2
+        numberOfImageStackView = 1
         
         getHomeTimeline()
         
@@ -42,10 +42,10 @@ class NBWHomeViewController: UIViewController {
         
         fetchDataFromCoreData()
     }
-    
+
     func getHomeTimeline(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":2], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":4], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -111,8 +111,7 @@ class NBWHomeViewController: UIViewController {
                 let weiboStatus = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
                 
                 // 补充 imageurl 变成 UIImage
-                weiboStatus.created_at      = jsonDict["created_at"] as? String
-                print(weiboStatus.created_at)
+                weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
                 weiboStatus.id              = jsonDict["idstr"] as? String
                 weiboStatus.text            = jsonDict["text"] as? String
                 weiboStatus.source          = jsonDict["source"] as? String
@@ -174,6 +173,27 @@ class NBWHomeViewController: UIViewController {
             print("Fetching error: \(error.localizedDescription)")
         }
     }
+    
+    //MARK: - AssitedFunction
+    func createdAtDateStringToNSDate(created_at:String?)->NSDate{
+        
+        let monthToNum = ["Jan":"01","Feb":"02","Mar":"03","Apr":"04","May":"05","Jun":"06","Jul":"07","Aug":"08","Sep":"09","Oct":"10","Nov":"11","Dec":"12"]
+        
+        let dateEn = (created_at! as NSString).substringFromIndex(4)
+        let monthEn = (dateEn as NSString).substringToIndex(3)
+        let monthNum = monthToNum[monthEn]
+        let yearNumIndex = created_at!.characters.count - 4
+        let year = (created_at! as NSString).substringFromIndex(yearNumIndex)
+        let ddHHmmss = (created_at! as NSString).substringWithRange(NSRange(location: 8,length: 17))
+        
+        let yyyyMMddmmss = "\(year)-\(monthNum!)-\(ddHHmmss)"
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +0800"
+        let date = dateFormatter.dateFromString(yyyyMMddmmss)
+        
+        return date!
+    }
 }
 
 
@@ -182,7 +202,15 @@ class NBWHomeViewController: UIViewController {
 extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UINavigationBarDelegate{
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weiboStatusesArray = weiboStatusesArray.reverse()
+        
+        weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
+            if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
+                return true
+            }else{
+                return false
+            }
+        })
+
         return weiboStatusesArray.count
     }
     
@@ -222,7 +250,6 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
             cell = configureHomeTableViewCell(cell!,indexPath: indexPath)
             cellCache?.setObject(cell!, forKey: key)
-
         }
         
         let headerHeight:CGFloat = 40
@@ -244,10 +271,10 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     func configureHomeTableViewCell(cell:NBWTableViewBasicCell,indexPath:NSIndexPath)-> NBWTableViewBasicCell {
         
         let weiboStatus = weiboStatusesArray[indexPath.row]
-        print(weiboStatus)
+        print(weiboStatus.created_at)
         
         //Setup Header
-        cell.screenNameLable.text = (weiboStatus.user as! WeiboUser).screen_name
+        cell.screenNameLable.text = weiboStatus.user?.screen_name
         cell.sourceLabel.text = weiboStatus.source
         
         //Setup bodyTextLabel
