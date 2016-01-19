@@ -22,7 +22,10 @@ class NBWHomeViewController: UIViewController {
     var numberOfImageStackView:CGFloat?
     var weiboStatusesArray = [WeiboStatus]()
     var managerContext:NSManagedObjectContext?
+    var searchController:UISearchController?
 
+    
+    //MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,16 +37,27 @@ class NBWHomeViewController: UIViewController {
         
         numberOfImageStackView = 1
         
-        getHomeTimeline()
+        homeTimelineFetchDataFromWeibo()
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         self.managerContext = appDelegate.managedObjectContext
+
         
         fetchDataFromCoreData()
     }
-
-    func getHomeTimeline(){
+    
+    @IBAction func weiboLogin(sender: UIBarButtonItem) {
+        let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
+        request.redirectURI = redirectURL
+        request.scope       = "all"
+        
+        WeiboSDK.sendRequest(request)
+    }
+    
+    
+    //MARK: - Weibo.com
+    func homeTimelineFetchDataFromWeibo(){
         
         Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":4], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
@@ -62,13 +76,7 @@ class NBWHomeViewController: UIViewController {
         }
     }
     
-    @IBAction func weiboLogin(sender: UIBarButtonItem) {
-        let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
-        request.redirectURI = redirectURL
-        request.scope       = "all"
-        
-        WeiboSDK.sendRequest(request)
-    }
+    
     
     //MARK: - CoreData
     func importJSONInCoreData(statuesArray:NSArray){
@@ -103,18 +111,19 @@ class NBWHomeViewController: UIViewController {
             if flag == 1 {
                 //create NSManagedObject
                 let weiboStatusEntity = NSEntityDescription.entityForName("WeiboStatus", inManagedObjectContext: managerContext!)
-                
-                let userEntity = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
-                
-                let weiboUser = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
-                
-                let weiboStatus = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
+
+                let userEntity        = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
+
+                let weiboUser         = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
+
+                let weiboStatus       = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
                 
                 // 补充 imageurl 变成 UIImage
+                
                 weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
                 weiboStatus.id              = jsonDict["idstr"] as? String
                 weiboStatus.text            = jsonDict["text"] as? String
-                weiboStatus.source          = jsonDict["source"] as? String
+                weiboStatus.source          = sourceStringModifiedWithString((jsonDict["source"] as? String)!)
                 weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
                 weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
                 weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
@@ -177,22 +186,27 @@ class NBWHomeViewController: UIViewController {
     //MARK: - AssitedFunction
     func createdAtDateStringToNSDate(created_at:String?)->NSDate{
         
-        let monthToNum = ["Jan":"01","Feb":"02","Mar":"03","Apr":"04","May":"05","Jun":"06","Jul":"07","Aug":"08","Sep":"09","Oct":"10","Nov":"11","Dec":"12"]
-        
-        let dateEn = (created_at! as NSString).substringFromIndex(4)
-        let monthEn = (dateEn as NSString).substringToIndex(3)
-        let monthNum = monthToNum[monthEn]
-        let yearNumIndex = created_at!.characters.count - 4
-        let year = (created_at! as NSString).substringFromIndex(yearNumIndex)
-        let ddHHmmss = (created_at! as NSString).substringWithRange(NSRange(location: 8,length: 17))
-        
-        let yyyyMMddmmss = "\(year)-\(monthNum!)-\(ddHHmmss)"
-        
+        // created_at:Tue Jan 19 09:35:19 +0800 2016
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +0800"
-        let date = dateFormatter.dateFromString(yyyyMMddmmss)
+        let locale = NSLocale(localeIdentifier: "en_US")
+        dateFormatter.locale = locale
+        dateFormatter.dateFormat = "EEE MMM dd HH:mm:ss Z yyyy"
+        let date = dateFormatter.dateFromString(created_at!)
         
         return date!
+    }
+    
+    func sourceStringModifiedWithString(source:String)->String {
+        
+        if source.characters.count > 0 {
+            let locationStart = source.rangeOfString(">")?.endIndex
+            let locationEnd = source.rangeOfString("</")?.startIndex
+            let sourceName = source.substringWithRange(Range(start: locationStart!,end: locationEnd!))
+            
+            return sourceName
+        }else{
+            return "Unknown sources"
+        }
     }
 }
 
@@ -268,37 +282,46 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         return cellHeight
     }
     
+    //The Background of selected Cell disappear
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    }
+    
     func configureHomeTableViewCell(cell:NBWTableViewBasicCell,indexPath:NSIndexPath)-> NBWTableViewBasicCell {
         
         let weiboStatus = weiboStatusesArray[indexPath.row]
         print(weiboStatus.created_at)
         
         //Setup Header
-        cell.screenNameLable.text = weiboStatus.user?.screen_name
-        cell.sourceLabel.text = weiboStatus.source
+        cell.thumbnailHeadImageView.clipsToBounds      = true
+        cell.thumbnailHeadImageView.layer.borderWidth  = 1.0
+        cell.thumbnailHeadImageView.layer.borderColor  = UIColor.lightGrayColor().CGColor
+        cell.thumbnailHeadImageView.layer.cornerRadius = 20
+        cell.screenNameLable.text                      = weiboStatus.user?.screen_name
+        cell.sourceLabel.text                          = weiboStatus.source
         
         //Setup bodyTextLabel
-        cell.bodyTextLabel.text = weiboStatus.text
-        
-        let labelText = cell.bodyTextLabel.text
-        let labelTextNSString = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
-        
-        let labelFont = UIFont.systemFontOfSize(17)
-        let attributesDictionary = [NSFontAttributeName:labelFont]
-        let labelSize = CGSize(width: self.tableView.frame.width-16, height:CGFloat.max)
+        cell.bodyTextLabel.text            = weiboStatus.text
+
+        let labelText                      = cell.bodyTextLabel.text
+        let labelTextNSString              = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
+
+        let labelFont                      = UIFont.systemFontOfSize(15)
+        let attributesDictionary           = [NSFontAttributeName:labelFont]
+        let labelSize                      = CGSize(width: self.tableView.frame.width-16, height:CGFloat.max)
         let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
-        
-        let labelRect = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
-        
-        cell.bodyTextLabel.frame = labelRect
+
+        let labelRect                      = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
+
+        cell.bodyTextLabel.frame           = labelRect
         
         //Setup ImageStackView
         configureImageStakView(cell)
 
         //Setup bottomView
-        cell.repostCount.text =  "\(weiboStatus.reposts_count!)"
+        cell.repostCount.text  = "\(weiboStatus.reposts_count!)"
         cell.commentCount.text = "\(weiboStatus.comments_count!)"
-        cell.likeCout.text = "\(weiboStatus.attitudes_count!)"
+        cell.likeCout.text     = "\(weiboStatus.attitudes_count!)"
         
         return cell
     }
