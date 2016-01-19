@@ -5,3 +5,5 @@
 
 #include "WeiboSDK.h"
 #include "WeiboUser.h"
+#import "MJRefresh.h"
+#import "MJExtension.h"
