@@ -18,11 +18,6 @@ class NBWTableViewBasicCell: UITableViewCell {
     //bodyLable
     @IBOutlet weak var bodyTextLabel: UILabel!
     
-    // 3 imageStackView
-    @IBOutlet weak var imageStackView: UIStackView!
-    @IBOutlet weak var imageStack2: UIStackView!
-    @IBOutlet weak var imageStack3: UIStackView!
-    
     //image Array (max:9)
     @IBOutlet weak var imageViewOne: UIImageView!
     @IBOutlet weak var imageViewTwo: UIImageView!

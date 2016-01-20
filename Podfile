@@ -10,5 +10,4 @@ pod 'SDWebImage', '~>3.7'
 use_frameworks!
 
 pod 'MJExtension'
-pod 'MJRefresh'
 

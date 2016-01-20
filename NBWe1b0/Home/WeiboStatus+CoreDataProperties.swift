@@ -2,7 +2,7 @@
 //  WeiboStatus+CoreDataProperties.swift
 //  NBWe1b0
 //
-//  Created by ChanLiang on 1/18/16.
+//  Created by ChanLiang on 1/19/16.
 //  Copyright © 2016 JackChan. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -29,5 +29,6 @@ extension WeiboStatus {
     @NSManaged var text: String?
     @NSManaged var thumbnail_pic: String?
     @NSManaged var user: WeiboUser?
+    @NSManaged var pics: NSSet?
 
 }

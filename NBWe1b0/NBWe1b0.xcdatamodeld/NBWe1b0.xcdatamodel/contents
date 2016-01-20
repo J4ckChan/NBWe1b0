@@ -15,7 +15,12 @@
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail_pic" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WeiboStatusPics" inverseName="status" inverseEntity="WeiboStatusPics" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboUser" inverseName="status" inverseEntity="WeiboUser" syncable="YES"/>
+    </entity>
+    <entity name="WeiboStatusPics" representedClassName=".WeiboStatusPics" syncable="YES">
+        <attribute name="pic" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboStatus" inverseName="pics" inverseEntity="WeiboStatus" syncable="YES"/>
     </entity>
     <entity name="WeiboUser" representedClassName=".WeiboUser" syncable="YES">
         <attribute name="allow_all_act_msg" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -54,7 +59,8 @@
         <relationship name="status" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WeiboStatus" inverseName="user" inverseEntity="WeiboStatus" syncable="YES"/>
     </entity>
     <elements>
-        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="270"/>
+        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="285"/>
         <element name="WeiboUser" positionX="225" positionY="-63" width="128" height="555"/>
+        <element name="WeiboStatusPics" positionX="583" positionY="69" width="128" height="73"/>
     </elements>
 </model>

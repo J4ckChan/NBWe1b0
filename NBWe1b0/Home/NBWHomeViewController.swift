@@ -9,6 +9,9 @@
 import UIKit
 import Alamofire
 import CoreData
+import MJExtension
+import MJRefresh
+import SDWebImage
 
 class NBWHomeViewController: UIViewController {
     
@@ -18,12 +21,12 @@ class NBWHomeViewController: UIViewController {
     let homeTimeline     = "https://api.weibo.com/2/statuses/home_timeline.json"
     let resuseIdentifier = "BasicCell"
     
+    var refreshController:UIRefreshControl?
     var cellCache:NSCache?
-    var numberOfImageStackView:CGFloat?
+    var numberOfImageRow:CGFloat?
     var weiboStatusesArray = [WeiboStatus]()
     var managerContext:NSManagedObjectContext?
     var searchController:UISearchController?
-
     
     //MARK: - View
     override func viewDidLoad() {
@@ -35,16 +38,26 @@ class NBWHomeViewController: UIViewController {
         
         cellCache = NSCache.init()
         
-        numberOfImageStackView = 1
-        
-        homeTimelineFetchDataFromWeibo()
+        setUpRefresh()
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         self.managerContext = appDelegate.managedObjectContext
-
+    }
+    
+    func setUpRefresh(){
         
-        fetchDataFromCoreData()
+        self.refreshController = UIRefreshControl.init()
+        self.tableView.addSubview(self.refreshController!)
+        self.refreshController?.tintColor = UIColor.orangeColor()
+        let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
+        self.refreshController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
+        
+        self.refreshController!.addTarget(self, action: Selector(homeTimelineFetchDataFromWeibo()), forControlEvents: UIControlEvents.ValueChanged)
+
+        self.refreshController!.beginRefreshing()
+        
+        self.homeTimelineFetchDataFromWeibo()
     }
     
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
@@ -66,13 +79,12 @@ class NBWHomeViewController: UIViewController {
                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
                     let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
                     
-                    print("......\(statusesArrary)")
-                    
                     self.importJSONInCoreData(statusesArrary)
                     
                 }catch let error as NSError{
                     print("Error:\(error.localizedDescription)")
                 }
+                self.refreshController?.endRefreshing()
         }
     }
     
@@ -114,12 +126,26 @@ class NBWHomeViewController: UIViewController {
 
                 let userEntity        = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
 
+                let picEntity         = NSEntityDescription.entityForName("WeiboStatusPics", inManagedObjectContext: managerContext!)
+
                 let weiboUser         = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
 
                 let weiboStatus       = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
+
+                //pic_urls
+                let dictArray         = jsonDict["pic_urls"] as? Array<[String:String]>
+                let pic_urlsArray     = picUrlsJSONToString(dictArray!)
                 
-                // 补充 imageurl 变成 UIImage
+                if pic_urlsArray.count > 0 {
+                    for pic_url in pic_urlsArray {
+                        let weiboStatusPic    = NSManagedObject(entity: picEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboStatusPics
+                        weiboStatusPic.pic    = pic_url.thumbnail_pic
+                        weiboStatusPic.status = weiboStatus
+                        weiboStatus.pics      = weiboStatus.pics?.setByAddingObject(weiboStatusPic)
+                    }
+                }
                 
+                //status
                 weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
                 weiboStatus.id              = jsonDict["idstr"] as? String
                 weiboStatus.text            = jsonDict["text"] as? String
@@ -133,6 +159,8 @@ class NBWHomeViewController: UIViewController {
                 weiboStatus.original_pic    = jsonDict["original_pic"] as? String
                 weiboStatus.user            = weiboUser
                 
+                
+                //user
                 let userDict = jsonDict["user"] as! NSDictionary
                 
                 weiboUser.id                 = userDict["id"] as? NSNumber
@@ -208,6 +236,13 @@ class NBWHomeViewController: UIViewController {
             return "Unknown sources"
         }
     }
+    
+    func picUrlsJSONToString(dictArray:Array<[String:String]>) -> Array<NBWPics>{
+        
+        let picURLs = NBWPics.mj_objectArrayWithKeyValuesArray(dictArray) as! Array<NBWPics>
+
+        return picURLs
+    }
 }
 
 
@@ -247,7 +282,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     
     //HeightForRow
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if numberOfImageStackView > 0 {
+        if numberOfImageRow > 0 {
             return 330.0
         }else{
             return 100.0
@@ -270,14 +305,15 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         let bodyLabelHeight:CGFloat = (cell?.bodyTextLabel.frame.height)!
         
-        let imageHeight:CGFloat = ((self.tableView.frame.width/3.0)-12)*numberOfImageStackView!
+        let imageHeight:CGFloat = ((self.view.frame.width - 28)/3)*numberOfImageRow! + numberOfImageRow! * 6
         
         let spacingHeight:CGFloat = 8
         
-        let cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + 22+32
+        let bottomHeight:CGFloat = 32 + 8
+        
+        let cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 30
         
         print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
-        print(cell?.imageStackView.frame.height)
         
         return cellHeight
     }
@@ -290,9 +326,9 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     func configureHomeTableViewCell(cell:NBWTableViewBasicCell,indexPath:NSIndexPath)-> NBWTableViewBasicCell {
         
         let weiboStatus = weiboStatusesArray[indexPath.row]
-        print(weiboStatus.created_at)
         
         //Setup Header
+        cell.thumbnailHeadImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
         cell.thumbnailHeadImageView.clipsToBounds      = true
         cell.thumbnailHeadImageView.layer.borderWidth  = 1.0
         cell.thumbnailHeadImageView.layer.borderColor  = UIColor.lightGrayColor().CGColor
@@ -306,7 +342,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         let labelText                      = cell.bodyTextLabel.text
         let labelTextNSString              = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
 
-        let labelFont                      = UIFont.systemFontOfSize(15)
+        let labelFont                      = UIFont.systemFontOfSize(17)
         let attributesDictionary           = [NSFontAttributeName:labelFont]
         let labelSize                      = CGSize(width: self.tableView.frame.width-16, height:CGFloat.max)
         let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
@@ -316,46 +352,53 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         cell.bodyTextLabel.frame           = labelRect
         
         //Setup ImageStackView
-        configureImageStakView(cell)
+        configureImageStakView(cell,weiboStatus: weiboStatus)
 
         //Setup bottomView
-        cell.repostCount.text  = "\(weiboStatus.reposts_count!)"
-        cell.commentCount.text = "\(weiboStatus.comments_count!)"
-        cell.likeCout.text     = "\(weiboStatus.attitudes_count!)"
+//        cell.repostCount.text  = "\(weiboStatus.reposts_count!)"
+//        cell.commentCount.text = "\(weiboStatus.comments_count!)"
+//        cell.likeCout.text     = "\(weiboStatus.attitudes_count!)"
         
         return cell
     }
 
-    func configureImageStakView(cell:NBWTableViewBasicCell){
+    func configureImageStakView(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus){
         
-        if numberOfImageStackView == 1 {
-            cell.imageViewOne.image   = UIImage(named: "cloud_1")
-            cell.imageViewTwo.image   = UIImage(named: "cloud_2")
-            cell.imageViewThree.image = UIImage(named: "cloud_3")
-            cell.imageStack2.hidden   = true
-            cell.imageStack3.hidden   = true
-        }else if numberOfImageStackView == 2 {
-            cell.imageViewOne.image   = UIImage(named: "cloud_1")
-            cell.imageViewTwo.image   = UIImage(named: "cloud_2")
-            cell.imageViewThree.image = UIImage(named: "cloud_3")
-            cell.imageViewFour.image  = UIImage(named: "cloud_4")
-            cell.imageViewFive.image  = UIImage(named: "cloud_5")
-            cell.imageViewSix.image   = UIImage(named: "cloud_6")
-            cell.imageStack3.hidden = true
-        }else if numberOfImageStackView == 3{
-            cell.imageViewOne.image   = UIImage(named: "cloud_1")
-            cell.imageViewTwo.image   = UIImage(named: "cloud_2")
-            cell.imageViewThree.image = UIImage(named: "cloud_3")
-            cell.imageViewFour.image  = UIImage(named: "cloud_4")
-            cell.imageViewFive.image  = UIImage(named: "cloud_5")
-            cell.imageViewSix.image   = UIImage(named: "cloud_6")
-            cell.imageViewSeven.image = UIImage(named: "cloud_7")
-            cell.imageViewEight.image = UIImage(named: "cloud_8")
-            cell.imageViewNine.image  = UIImage(named: "cloud_9")
-        }else{
-            cell.imageStackView.hidden = true
-            cell.imageStack2.hidden    = true
-            cell.imageStack3.hidden    = true
+        let imageViewArray = [cell.imageViewOne,cell.imageViewTwo,cell.imageViewThree,cell.imageViewFour,cell.imageViewFive,cell.imageViewSix,cell.imageViewSeven,cell.imageViewEight,cell.imageViewNine]
+        
+        let weiboStatusSet = weiboStatus.pics as! Set<WeiboStatusPics>
+
+        let picsCount      = weiboStatusSet.count
+        
+        if picsCount == 1 || picsCount == 2 || picsCount == 3{
+            
+            numberOfImageRow = 1
+            var picsCount = 0
+            for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                    picsCount += 1
+            }
+            
+        }else if picsCount == 4 || picsCount == 5 || picsCount == 6 {
+            
+            numberOfImageRow = 2
+            var picsCount = 0
+            for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                picsCount += 1
+            }
+            
+        }else if picsCount == 7 || picsCount == 8 || picsCount == 9 {
+            
+            numberOfImageRow = 3
+            var picsCount = 0
+            for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                picsCount += 1
+            }
+        }else {
+            numberOfImageRow = 0
+
         }
     }
 }
