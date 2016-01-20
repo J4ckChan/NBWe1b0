@@ -20,14 +20,14 @@ class NBWTableViewBasicCell: UITableViewCell {
     
     //image Array (max:9)
     @IBOutlet weak var imageViewOne: UIImageView!
-    @IBOutlet weak var imageViewTwo: UIImageView!
-    @IBOutlet weak var imageViewThree: UIImageView!
-    @IBOutlet weak var imageViewFour: UIImageView!
-    @IBOutlet weak var imageViewFive: UIImageView!
-    @IBOutlet weak var imageViewSix: UIImageView!
-    @IBOutlet weak var imageViewSeven: UIImageView!
-    @IBOutlet weak var imageViewEight: UIImageView!
-    @IBOutlet weak var imageViewNine: UIImageView!
+//    @IBOutlet weak var imageViewTwo: UIImageView!
+//    @IBOutlet weak var imageViewThree: UIImageView!
+//    @IBOutlet weak var imageViewFour: UIImageView!
+//    @IBOutlet weak var imageViewFive: UIImageView!
+//    @IBOutlet weak var imageViewSix: UIImageView!
+//    @IBOutlet weak var imageViewSeven: UIImageView!
+//    @IBOutlet weak var imageViewEight: UIImageView!
+//    @IBOutlet weak var imageViewNine: UIImageView!
     
     //repsot & comment & like
     @IBOutlet weak var repostCount: UILabel!

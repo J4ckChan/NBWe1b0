@@ -27,6 +27,7 @@ class NBWHomeViewController: UIViewController {
     var weiboStatusesArray = [WeiboStatus]()
     var managerContext:NSManagedObjectContext?
     var searchController:UISearchController?
+    var hasImage:Bool?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -72,7 +73,7 @@ class NBWHomeViewController: UIViewController {
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":4], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":10], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -112,15 +113,15 @@ class NBWHomeViewController: UIViewController {
         for jsonDict in statuesArray {
             
             //compare idstr
-            var flag = 1
+            var flag = true
             for status in weiboStatusesArray {
                 let id = jsonDict["idstr"] as? String
                 if id == status.id {
-                    flag = 0
+                    flag = false
                 }
             }
             
-            if flag == 1 {
+            if flag == true {
                 //create NSManagedObject
                 let weiboStatusEntity = NSEntityDescription.entityForName("WeiboStatus", inManagedObjectContext: managerContext!)
 
@@ -276,18 +277,19 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             configureHomeTableViewCell(cell!,indexPath: indexPath)
         }
         
-        
+        self.cellCache?.setObject(cell!, forKey: key)
+
         return cell!
     }
     
     //HeightForRow
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if numberOfImageRow > 0 {
-            return 330.0
-        }else{
-            return 100.0
-        }
-    }
+//    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        if numberOfImageRow > 0 {
+//            return 240.0
+//        }else{
+//            return 150.0
+//        }
+//    }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
@@ -297,25 +299,30 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         if cell == nil {
             cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
-            cell = configureHomeTableViewCell(cell!,indexPath: indexPath)
-            cellCache?.setObject(cell!, forKey: key)
+            configureHomeTableViewCell(cell!, indexPath: indexPath)
+            self.cellCache?.setObject(cell!, forKey: key)
         }
         
         let headerHeight:CGFloat = 40
         
         let bodyLabelHeight:CGFloat = (cell?.bodyTextLabel.frame.height)!
         
-        let imageHeight:CGFloat = ((self.view.frame.width - 28)/3)*numberOfImageRow! + numberOfImageRow! * 6
-        
         let spacingHeight:CGFloat = 8
+        
+        let imageHeight:CGFloat = 200
         
         let bottomHeight:CGFloat = 32 + 8
         
-        let cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 30
+        var cellHeight:CGFloat?
+        if hasImage == true  {
+           cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 16
+        }else{
+           cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight + 16
+        }
         
         print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
         
-        return cellHeight
+        return cellHeight!
     }
     
     //The Background of selected Cell disappear
@@ -352,7 +359,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         cell.bodyTextLabel.frame           = labelRect
         
         //Setup ImageStackView
-        configureImageStakView(cell,weiboStatus: weiboStatus)
+        configureImageView(cell,weiboStatus: weiboStatus)
 
         //Setup bottomView
 //        cell.repostCount.text  = "\(weiboStatus.reposts_count!)"
@@ -362,43 +369,63 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         return cell
     }
 
-    func configureImageStakView(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus){
+    func configureImageView(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus){
         
-        let imageViewArray = [cell.imageViewOne,cell.imageViewTwo,cell.imageViewThree,cell.imageViewFour,cell.imageViewFive,cell.imageViewSix,cell.imageViewSeven,cell.imageViewEight,cell.imageViewNine]
+//        let imageViewArray = [cell.imageViewOne,cell.imageViewTwo,cell.imageViewThree,cell.imageViewFour,cell.imageViewFive,cell.imageViewSix,cell.imageViewSeven,cell.imageViewEight,cell.imageViewNine]
+//        
+//        let weiboStatusSet = weiboStatus.pics as! Set<WeiboStatusPics>
+//
+//        let picsCount      = weiboStatusSet.count
+//        
+//        if picsCount == 1 || picsCount == 2 || picsCount == 3{
+//            
+//            numberOfImageRow = 1
+//            var picsCount = 0
+//            for weiboStatusPic in  weiboStatusSet {
+//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+//                    picsCount += 1
+//            }
+//            
+//            
+//            for var i = 3; i < 9; i = i+1 {
+//               imageViewArray[i].removeFromSuperview()
+//            }
+//            
+//        }else if picsCount == 4 || picsCount == 5 || picsCount == 6 {
+//            
+//            numberOfImageRow = 2
+//            var picsCount = 0
+//            for weiboStatusPic in  weiboStatusSet {
+//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+//                picsCount += 1
+//            }
+//            
+//            for var i = 6; i < 9; i = i+1 {
+//                imageViewArray[i].removeFromSuperview()
+//            }
+//            
+//        }else if picsCount == 7 || picsCount == 8 || picsCount == 9 {
+//            
+//            numberOfImageRow = 3
+//            var picsCount = 0
+//            for weiboStatusPic in  weiboStatusSet {
+//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+//                picsCount += 1
+//            }
+//        
+//        }else {
+//            numberOfImageRow = 0
+//            for var i = 0; i < 9; i = i+1 {
+//                imageViewArray[i].removeFromSuperview()
+//            }
+//        }
         
-        let weiboStatusSet = weiboStatus.pics as! Set<WeiboStatusPics>
-
-        let picsCount      = weiboStatusSet.count
-        
-        if picsCount == 1 || picsCount == 2 || picsCount == 3{
-            
-            numberOfImageRow = 1
-            var picsCount = 0
-            for weiboStatusPic in  weiboStatusSet {
-                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-                    picsCount += 1
-            }
-            
-        }else if picsCount == 4 || picsCount == 5 || picsCount == 6 {
-            
-            numberOfImageRow = 2
-            var picsCount = 0
-            for weiboStatusPic in  weiboStatusSet {
-                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-                picsCount += 1
-            }
-            
-        }else if picsCount == 7 || picsCount == 8 || picsCount == 9 {
-            
-            numberOfImageRow = 3
-            var picsCount = 0
-            for weiboStatusPic in  weiboStatusSet {
-                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-                picsCount += 1
-            }
-        }else {
-            numberOfImageRow = 0
-
+        if (weiboStatus.bmiddle_pic != nil) {
+            cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
+            self.hasImage = true
+        }else{
+            cell.imageViewOne.removeFromSuperview()
+            self.hasImage = false
         }
     }
 }
