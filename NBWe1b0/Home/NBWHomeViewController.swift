@@ -17,9 +17,9 @@ class NBWHomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    
     let homeTimeline     = "https://api.weibo.com/2/statuses/home_timeline.json"
-    let resuseIdentifier = "BasicCell"
+    let basicReuseIdentifier = "BasicCell"
+    let multiImageReuseIdetifier = "ImageCell"
     
     var refreshController:UIRefreshControl?
     var cellCache:NSCache?
@@ -28,6 +28,7 @@ class NBWHomeViewController: UIViewController {
     var managerContext:NSManagedObjectContext?
     var searchController:UISearchController?
     var hasImage:Bool?
+    var hasMultiImage:Bool?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -73,7 +74,7 @@ class NBWHomeViewController: UIViewController {
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":10], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":1], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -113,6 +114,8 @@ class NBWHomeViewController: UIViewController {
         for jsonDict in statuesArray {
             
             //compare idstr
+            fetchDataFromCoreData()
+            
             var flag = true
             for status in weiboStatusesArray {
                 let id = jsonDict["idstr"] as? String
@@ -244,6 +247,29 @@ class NBWHomeViewController: UIViewController {
 
         return picURLs
     }
+    
+    func hasImageAndhasMutilImage(weiboStatus:WeiboStatus){
+        
+        if weiboStatus.pics?.count < 1 {
+            self.hasImage = false
+            self.hasMultiImage = false
+            self.numberOfImageRow = 0
+        }else if weiboStatus.pics?.count == 1{
+            self.hasImage = true
+            self.hasMultiImage = false
+            self.numberOfImageRow = 1
+        }else if weiboStatus.pics?.count > 1{
+            self.hasImage = true
+            self.hasMultiImage = true
+            if weiboStatus.pics?.count > 3 {
+                self.numberOfImageRow = 2
+            }else{
+                self.numberOfImageRow = 1
+            }
+        }
+        
+        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!)")
+    }
 }
 
 
@@ -261,6 +287,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             }
         })
 
+        print(weiboStatusesArray.count)
         return weiboStatusesArray.count
     }
     
@@ -268,59 +295,68 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         let key:String = "\(indexPath.section)-\(indexPath.row)"
         
-        var cell = self.cellCache?.objectForKey(key) as? NBWTableViewBasicCell
+        let weiboStatus = weiboStatusesArray[indexPath.row]
         
-        if cell == nil {
-            cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
-            configureHomeTableViewCell(cell!,indexPath: indexPath)
-        }else {
-            configureHomeTableViewCell(cell!,indexPath: indexPath)
+        hasImageAndhasMutilImage(weiboStatus)
+        
+        if hasMultiImage == false{
+            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewBasicCell
+            
+            if cell == nil {
+                cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
+            }else {
+                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
+            }
+            
+            return cell!
+        }else{
+            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
+            
+            if cell == nil {
+                cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdetifier) as? NBWTableViewImageCell
+                cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+            }else{
+                cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+            }
+            
+            return cell!
         }
-        
-        self.cellCache?.setObject(cell!, forKey: key)
-
-        return cell!
     }
     
     //HeightForRow
-//    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        if numberOfImageRow > 0 {
-//            return 240.0
-//        }else{
-//            return 150.0
-//        }
-//    }
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         let key:String = "\(indexPath.section)-\(indexPath.row)"
         
-        var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
+        let weiboStatus = self.weiboStatusesArray[indexPath.row]
         
-        if cell == nil {
-            cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier) as? NBWTableViewBasicCell
-            configureHomeTableViewCell(cell!, indexPath: indexPath)
-            self.cellCache?.setObject(cell!, forKey: key)
-        }
-        
-        let headerHeight:CGFloat = 40
-        
-        let bodyLabelHeight:CGFloat = (cell?.bodyTextLabel.frame.height)!
-        
-        let spacingHeight:CGFloat = 8
-        
-        let imageHeight:CGFloat = 200
-        
-        let bottomHeight:CGFloat = 32 + 8
+        hasImageAndhasMutilImage(weiboStatus)
         
         var cellHeight:CGFloat?
-        if hasImage == true  {
-           cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 16
-        }else{
-           cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight + 16
-        }
         
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
+        if hasMultiImage == false{
+            var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
+
+            if cell == nil {
+                cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus,tableView: tableView, hasImage: self.hasImage!)
+                self.cellCache?.setObject(cell!, forKey: key)
+                cellHeight = cell?.calculateBasicCell(cell!, hasImage: hasImage!)
+            }else{
+                cellHeight = cell?.calculateBasicCell(cell!, hasImage: self.hasImage!)
+            }
+        }else{
+            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
+            
+            if cell == nil {
+                cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdetifier) as? NBWTableViewImageCell
+                self.cellCache?.setObject(cell!, forKey: key)
+                cellHeight = cell?.calculateImageCell(cell!,numberOfImageRow: self.numberOfImageRow!)
+            }else{
+                cellHeight = cell?.calculateImageCell(cell!, numberOfImageRow: self.numberOfImageRow!)
+            }
+        }
         
         return cellHeight!
     }
@@ -328,104 +364,5 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     //The Background of selected Cell disappear
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-    }
-    
-    func configureHomeTableViewCell(cell:NBWTableViewBasicCell,indexPath:NSIndexPath)-> NBWTableViewBasicCell {
-        
-        let weiboStatus = weiboStatusesArray[indexPath.row]
-        
-        //Setup Header
-        cell.thumbnailHeadImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
-        cell.thumbnailHeadImageView.clipsToBounds      = true
-        cell.thumbnailHeadImageView.layer.borderWidth  = 1.0
-        cell.thumbnailHeadImageView.layer.borderColor  = UIColor.lightGrayColor().CGColor
-        cell.thumbnailHeadImageView.layer.cornerRadius = 20
-        cell.screenNameLable.text                      = weiboStatus.user?.screen_name
-        cell.sourceLabel.text                          = weiboStatus.source
-        
-        //Setup bodyTextLabel
-        cell.bodyTextLabel.text            = weiboStatus.text
-
-        let labelText                      = cell.bodyTextLabel.text
-        let labelTextNSString              = NSString(CString:labelText!, encoding: NSUTF8StringEncoding)
-
-        let labelFont                      = UIFont.systemFontOfSize(17)
-        let attributesDictionary           = [NSFontAttributeName:labelFont]
-        let labelSize                      = CGSize(width: self.tableView.frame.width-16, height:CGFloat.max)
-        let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
-
-        let labelRect                      = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
-
-        cell.bodyTextLabel.frame           = labelRect
-        
-        //Setup ImageStackView
-        configureImageView(cell,weiboStatus: weiboStatus)
-
-        //Setup bottomView
-//        cell.repostCount.text  = "\(weiboStatus.reposts_count!)"
-//        cell.commentCount.text = "\(weiboStatus.comments_count!)"
-//        cell.likeCout.text     = "\(weiboStatus.attitudes_count!)"
-        
-        return cell
-    }
-
-    func configureImageView(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus){
-        
-//        let imageViewArray = [cell.imageViewOne,cell.imageViewTwo,cell.imageViewThree,cell.imageViewFour,cell.imageViewFive,cell.imageViewSix,cell.imageViewSeven,cell.imageViewEight,cell.imageViewNine]
-//        
-//        let weiboStatusSet = weiboStatus.pics as! Set<WeiboStatusPics>
-//
-//        let picsCount      = weiboStatusSet.count
-//        
-//        if picsCount == 1 || picsCount == 2 || picsCount == 3{
-//            
-//            numberOfImageRow = 1
-//            var picsCount = 0
-//            for weiboStatusPic in  weiboStatusSet {
-//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-//                    picsCount += 1
-//            }
-//            
-//            
-//            for var i = 3; i < 9; i = i+1 {
-//               imageViewArray[i].removeFromSuperview()
-//            }
-//            
-//        }else if picsCount == 4 || picsCount == 5 || picsCount == 6 {
-//            
-//            numberOfImageRow = 2
-//            var picsCount = 0
-//            for weiboStatusPic in  weiboStatusSet {
-//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-//                picsCount += 1
-//            }
-//            
-//            for var i = 6; i < 9; i = i+1 {
-//                imageViewArray[i].removeFromSuperview()
-//            }
-//            
-//        }else if picsCount == 7 || picsCount == 8 || picsCount == 9 {
-//            
-//            numberOfImageRow = 3
-//            var picsCount = 0
-//            for weiboStatusPic in  weiboStatusSet {
-//                imageViewArray[picsCount].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
-//                picsCount += 1
-//            }
-//        
-//        }else {
-//            numberOfImageRow = 0
-//            for var i = 0; i < 9; i = i+1 {
-//                imageViewArray[i].removeFromSuperview()
-//            }
-//        }
-        
-        if (weiboStatus.bmiddle_pic != nil) {
-            cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
-            self.hasImage = true
-        }else{
-            cell.imageViewOne.removeFromSuperview()
-            self.hasImage = false
-        }
     }
 }

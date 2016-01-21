@@ -18,6 +18,7 @@
 		3D92C95C1C4E0B490007A12C /* WeiboUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D92C9561C4E0B480007A12C /* WeiboUser.swift */; };
 		3D92C95D1C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D92C9571C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift */; };
 		3D92C95F1C4E109F0007A12C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D92C95E1C4E109F0007A12C /* Assets.xcassets */; };
+		3DABDB001C507C9D001BC23E /* NBWTableViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */; };
 		3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */; };
 		3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE1C53A1C3D4CC8008E3A94 /* AppDelegate.swift */; };
 		3DE1C5401C3D4CC8008E3A94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */; };
@@ -56,6 +57,7 @@
 		3D92C9561C4E0B480007A12C /* WeiboUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeiboUser.swift; path = Home/WeiboUser.swift; sourceTree = "<group>"; };
 		3D92C9571C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "WeiboUser+CoreDataProperties.swift"; path = "Home/WeiboUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3D92C95E1C4E109F0007A12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWTableViewImageCell.swift; path = Home/NBWTableViewImageCell.swift; sourceTree = "<group>"; };
 		3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NBWe1b0-Bridging-Header.h"; sourceTree = "<group>"; };
 		3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWTabBarController.swift; sourceTree = "<group>"; };
 		3DE1C5371C3D4CC8008E3A94 /* NBWe1b0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NBWe1b0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +109,15 @@
 				7F4B1336DE0F1420E794259B /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		3DABDB011C507E70001BC23E /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */,
+				3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */,
+			);
+			name = TableViewCell;
 			sourceTree = "<group>";
 		};
 		3DE1C52E1C3D4CC7008E3A94 = {
@@ -168,7 +179,7 @@
 		3DF22D971C4AA1A700DD53D2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */,
+				3DABDB011C507E70001BC23E /* TableViewCell */,
 				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
 				3D92C9541C4E0B480007A12C /* WeiboStatus.swift */,
 				3D92C9551C4E0B480007A12C /* WeiboStatus+CoreDataProperties.swift */,
@@ -371,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D92C95D1C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift in Sources */,
+				3DABDB001C507C9D001BC23E /* NBWTableViewImageCell.swift in Sources */,
 				3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */,
 				3D5D43371C4E777300DA8834 /* NBWPics.swift in Sources */,
 				3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */,
