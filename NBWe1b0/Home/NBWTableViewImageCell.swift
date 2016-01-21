@@ -99,7 +99,7 @@ class NBWTableViewImageCell: UITableViewCell {
         
         let picsCount      = weiboStatusSet.count
         
-        if picsCount == 1 || picsCount == 2 || picsCount == 3{
+        if  picsCount == 2 || picsCount == 3{
  
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
@@ -107,11 +107,22 @@ class NBWTableViewImageCell: UITableViewCell {
                 count += 1
             }
             
-            for var i = 3; i < 7; i = i+1 {
+            for var i = 3; i < 6; i = i+1 {
                 imageViewArray[i].removeFromSuperview()
             }
             
-        }else if picsCount == 4 || picsCount == 5 || picsCount == 6 {
+        }else if picsCount == 4 {
+            
+            var count = 0
+            for WeiboStatusPic in weiboStatusSet {
+               imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
+                count += 1
+                if count == 2 {
+                    count = 3
+                }
+            }
+            
+        }else if  picsCount == 5 || picsCount == 6 {
 
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
