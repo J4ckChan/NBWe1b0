@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Automatic">
     <entity name="WeiboStatus" representedClassName=".WeiboStatus" syncable="YES">
         <attribute name="attitudes_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bmiddle_pic" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,6 +16,7 @@
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail_pic" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="pics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WeiboStatusPics" inverseName="status" inverseEntity="WeiboStatusPics" syncable="YES"/>
+        <relationship name="retweeted_status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboStatus" inverseName="retweeted_status" inverseEntity="WeiboStatus" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboUser" inverseName="status" inverseEntity="WeiboUser" syncable="YES"/>
     </entity>
     <entity name="WeiboStatusPics" representedClassName=".WeiboStatusPics" syncable="YES">
@@ -59,8 +60,8 @@
         <relationship name="status" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WeiboStatus" inverseName="user" inverseEntity="WeiboStatus" syncable="YES"/>
     </entity>
     <elements>
-        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="285"/>
-        <element name="WeiboUser" positionX="225" positionY="-63" width="128" height="555"/>
+        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="298"/>
         <element name="WeiboStatusPics" positionX="583" positionY="69" width="128" height="73"/>
+        <element name="WeiboUser" positionX="225" positionY="-63" width="128" height="555"/>
     </elements>
 </model>

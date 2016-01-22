@@ -48,7 +48,7 @@ class NBWTableViewBasicCell: UITableViewCell {
         
         let imageHeight:CGFloat = cell.imageViewOne.frame.height
         
-        let bottomHeight:CGFloat = 32 + 8
+        let bottomHeight:CGFloat = 32 + 10
         
         var cellHeight:CGFloat?
         if hasImage == true  {

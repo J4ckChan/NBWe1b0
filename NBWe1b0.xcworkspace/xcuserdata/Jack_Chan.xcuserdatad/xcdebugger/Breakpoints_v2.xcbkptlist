@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NBWe1b0/Home/NBWHomeViewController.swift"
-            timestampString = "475056339.777311"
+            filePath = "NBWe1b0/Home/NBWTableViewRepostCell.swift"
+            timestampString = "475145909.839998"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "configureRepostStatusImageView(_:weiboStatus:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NBWe1b0/Home/NBWHomeViewController.swift"
-            timestampString = "475057094.978915"
+            filePath = "NBWe1b0/Home/NBWTableViewRepostCell.swift"
+            timestampString = "475146072.154363"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
-            landmarkName = "tableView(_:heightForRowAtIndexPath:)"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "calculateRepostCellHeight(_:numberOfImageRow:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -17,18 +17,21 @@ class NBWHomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    let homeTimeline     = "https://api.weibo.com/2/statuses/home_timeline.json"
-    let basicReuseIdentifier = "BasicCell"
-    let multiImageReuseIdetifier = "ImageCell"
+    let homeTimeline              = "https://api.weibo.com/2/statuses/home_timeline.json"
+    let basicReuseIdentifier      = "BasicCell"
+    let multiImageReuseIdentifier = "ImageCell"
+    let repostReuseIdentifier     = "RepostCell"
     
     var refreshController:UIRefreshControl?
     var cellCache:NSCache?
     var numberOfImageRow:CGFloat?
+    var numberOfRespostCellImageRow:CGFloat?
     var weiboStatusesArray = [WeiboStatus]()
     var managerContext:NSManagedObjectContext?
     var searchController:UISearchController?
     var hasImage:Bool?
     var hasMultiImage:Bool?
+    var hasRepost:Bool?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -87,7 +90,7 @@ class NBWHomeViewController: UIViewController {
                     print("Error:\(error.localizedDescription)")
                 }
                 self.refreshController?.endRefreshing()
-        }
+            }
     }
     
     
@@ -130,79 +133,108 @@ class NBWHomeViewController: UIViewController {
 
                 let userEntity        = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
 
-                let picEntity         = NSEntityDescription.entityForName("WeiboStatusPics", inManagedObjectContext: managerContext!)
-
                 let weiboUser         = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
 
                 let weiboStatus       = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
-
-                //pic_urls
-                let dictArray         = jsonDict["pic_urls"] as? Array<[String:String]>
-                let pic_urlsArray     = picUrlsJSONToString(dictArray!)
                 
-                if pic_urlsArray.count > 0 {
-                    for pic_url in pic_urlsArray {
-                        let weiboStatusPic    = NSManagedObject(entity: picEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboStatusPics
-                        weiboStatusPic.pic    = pic_url.thumbnail_pic
-                        weiboStatusPic.status = weiboStatus
-                        weiboStatus.pics      = weiboStatus.pics?.setByAddingObject(weiboStatusPic)
-                    }
-                }
-                
-                //status
-                weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
-                weiboStatus.id              = jsonDict["idstr"] as? String
-                weiboStatus.text            = jsonDict["text"] as? String
-                weiboStatus.source          = sourceStringModifiedWithString((jsonDict["source"] as? String)!)
-                weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
-                weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
-                weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
-                weiboStatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
-                weiboStatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
-                weiboStatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
-                weiboStatus.original_pic    = jsonDict["original_pic"] as? String
+                importStatusDataFromJSON(weiboStatus, jsonDict: jsonDict as! NSDictionary)
                 weiboStatus.user            = weiboUser
                 
+                //retweeted_status
+                let retweeted_statusDict = jsonDict["retweeted_status"] as? NSDictionary
+                
+                if retweeted_statusDict == nil{
+                    weiboStatus.retweeted_status = nil
+                }else{
+                    let retweetedStatus             = NSManagedObject(entity: weiboStatusEntity!, insertIntoManagedObjectContext:managerContext) as! WeiboStatus
+                    let retweedtedUser               = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
+                    
+                    importStatusDataFromJSON(retweetedStatus, jsonDict: retweeted_statusDict!)
+                    
+                    weiboStatus.retweeted_status     = retweetedStatus
+                    
+                    let retweetedUserDict = retweeted_statusDict!["user"] as! NSDictionary
+                
+                    importUserDataFromJSON(retweedtedUser, userDict: retweetedUserDict)
+                    retweedtedUser.status = retweedtedUser.status?.setByAddingObject(retweetedStatus)
+                }
                 
                 //user
                 let userDict = jsonDict["user"] as! NSDictionary
                 
-                weiboUser.id                 = userDict["id"] as? NSNumber
-                weiboUser.idstr              = userDict["idstr"] as? String
-                weiboUser.screen_name        = userDict["screen_name"] as? String
-                weiboUser.name               = userDict["name"] as? String
-                weiboUser.province           = userDict["province"] as? NSNumber
-                weiboUser.city               = userDict["city"] as? NSNumber
-                weiboUser.location           = userDict["location"] as? String
-                weiboUser.user_description   = userDict["description"] as? String
-                weiboUser.url                = userDict["url"] as? String
-                weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
-                weiboUser.profile_url        = userDict["profile_url"] as? String
-                weiboUser.domain             = userDict["domain"] as? String
-                weiboUser.weihao             = userDict["weihao"] as? String
-                weiboUser.gender             = userDict["gender"] as? String
-                weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
-                weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
-                weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
-                weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
-                weiboUser.created_at         = userDict["created_at"] as? String
-                weiboUser.following          = userDict["following"] as? NSNumber
-                weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
-                weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
-                weiboUser.verified           = userDict["verified"] as? NSNumber
-                weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
-                weiboUser.remark             = userDict["remark"] as? String
-                weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
-                weiboUser.avatar_large       = userDict["avatar_large"] as? String
-                weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
-                weiboUser.verified_reason    = userDict["verified_reason"] as? String
-                weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
-                weiboUser.online_status      = userDict["online_status"] as? NSNumber
-                weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
-                weiboUser.lang               = userDict["lang"] as? String
-                weiboUser.status             = weiboUser.status?.setByAddingObject(weiboStatus)
+                importUserDataFromJSON(weiboUser, userDict: userDict)
+                
+                weiboUser.status = weiboUser.status?.setByAddingObject(weiboStatus)
             }
         }
+    }
+    
+    func importStatusDataFromJSON(weiboStatus:WeiboStatus,jsonDict:NSDictionary){
+        //status
+        weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
+        weiboStatus.id              = jsonDict["idstr"] as? String
+        weiboStatus.text            = jsonDict["text"] as? String
+        weiboStatus.source          = sourceStringModifiedWithString((jsonDict["source"] as? String)!)
+        weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
+        weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
+        weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
+        weiboStatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
+        weiboStatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
+        weiboStatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
+        weiboStatus.original_pic    = jsonDict["original_pic"] as? String
+        
+        //pic_urls
+        let dictArray         = jsonDict["pic_urls"] as? Array<[String:String]>
+        let pic_urlsArray     = picUrlsJSONToString(dictArray!)
+        
+        if pic_urlsArray.count > 0 {
+            for pic_url in pic_urlsArray {
+                
+                let picEntity         = NSEntityDescription.entityForName("WeiboStatusPics", inManagedObjectContext: managerContext!)
+                let weiboStatusPic    = NSManagedObject(entity: picEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboStatusPics
+                
+                weiboStatusPic.pic    = pic_url.thumbnail_pic
+                weiboStatusPic.status = weiboStatus
+                weiboStatus.pics      = weiboStatus.pics?.setByAddingObject(weiboStatusPic)
+            }
+        }
+    }
+    
+    func importUserDataFromJSON(weiboUser:WeiboUser,userDict:NSDictionary){
+
+        weiboUser.id                 = userDict["id"] as? NSNumber
+        weiboUser.idstr              = userDict["idstr"] as? String
+        weiboUser.screen_name        = userDict["screen_name"] as? String
+        weiboUser.name               = userDict["name"] as? String
+        weiboUser.province           = userDict["province"] as? NSNumber
+        weiboUser.city               = userDict["city"] as? NSNumber
+        weiboUser.location           = userDict["location"] as? String
+        weiboUser.user_description   = userDict["description"] as? String
+        weiboUser.url                = userDict["url"] as? String
+        weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
+        weiboUser.profile_url        = userDict["profile_url"] as? String
+        weiboUser.domain             = userDict["domain"] as? String
+        weiboUser.weihao             = userDict["weihao"] as? String
+        weiboUser.gender             = userDict["gender"] as? String
+        weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
+        weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
+        weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
+        weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
+        weiboUser.created_at         = userDict["created_at"] as? String
+        weiboUser.following          = userDict["following"] as? NSNumber
+        weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
+        weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
+        weiboUser.verified           = userDict["verified"] as? NSNumber
+        weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
+        weiboUser.remark             = userDict["remark"] as? String
+        weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
+        weiboUser.avatar_large       = userDict["avatar_large"] as? String
+        weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
+        weiboUser.verified_reason    = userDict["verified_reason"] as? String
+        weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
+        weiboUser.online_status      = userDict["online_status"] as? NSNumber
+        weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
+        weiboUser.lang               = userDict["lang"] as? String
     }
     
     func fetchDataFromCoreData(){
@@ -245,10 +277,14 @@ class NBWHomeViewController: UIViewController {
         
         let picURLs = NBWPics.mj_objectArrayWithKeyValuesArray(dictArray) as! Array<NBWPics>
 
+        for picURL in picURLs {
+            picURL.thumbnail_pic = picURL.thumbnail_pic?.stringByReplacingOccurrencesOfString("thumbnail", withString: "bmiddle")
+        }
+        
         return picURLs
     }
     
-    func hasImageAndhasMutilImage(weiboStatus:WeiboStatus){
+    func hasImageOrMutilImageAndRepostOrNot(weiboStatus:WeiboStatus){
         
         if weiboStatus.pics?.count < 1 {
             self.hasImage = false
@@ -268,7 +304,20 @@ class NBWHomeViewController: UIViewController {
             }
         }
         
-        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!)")
+        if weiboStatus.retweeted_status == nil {
+            self.hasRepost = false
+        }else{
+            self.hasRepost = true
+            if weiboStatus.retweeted_status?.pics?.count > 0 {
+                self.numberOfRespostCellImageRow = 1
+            }else if weiboStatus.retweeted_status?.pics?.count > 3 {
+                self.numberOfRespostCellImageRow = 2
+            }else{
+                self.numberOfRespostCellImageRow = 0
+            }
+        }
+        
+        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!) hasRepost:\(hasRepost!) pic number in repost:\(self.numberOfRespostCellImageRow)")
     }
 }
 
@@ -287,7 +336,6 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             }
         })
 
-        print(weiboStatusesArray.count)
         return weiboStatusesArray.count
     }
     
@@ -297,29 +345,40 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         let weiboStatus = weiboStatusesArray[indexPath.row]
         
-        hasImageAndhasMutilImage(weiboStatus)
+        hasImageOrMutilImageAndRepostOrNot(weiboStatus)
         
-        if hasMultiImage == false{
-            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewBasicCell
-            
-            if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
-                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
-            }else {
-                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
-            }
-            
-            return cell!
-        }else{
-            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
-            
-            if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdetifier) as? NBWTableViewImageCell
-                cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+        if hasRepost == false {
+            if hasMultiImage == false{
+                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewBasicCell
+                
+                if cell == nil {
+                    cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
+                }else {
+                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
+                }
+                
+                return cell!
             }else{
-                cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
+                
+                if cell == nil {
+                    cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
+                    cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+                }else{
+                    cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+                }
+                return cell!
             }
+        }else{
+            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewRepostCell
             
+            if cell == nil {
+                cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+            }else{
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+            }
             return cell!
         }
     }
@@ -331,30 +390,44 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         let weiboStatus = self.weiboStatusesArray[indexPath.row]
         
-        hasImageAndhasMutilImage(weiboStatus)
+        hasImageOrMutilImageAndRepostOrNot(weiboStatus)
         
         var cellHeight:CGFloat?
         
-        if hasMultiImage == false{
-            var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
-
-            if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
-                cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus,tableView: tableView, hasImage: self.hasImage!)
-                self.cellCache?.setObject(cell!, forKey: key)
-                cellHeight = cell?.calculateBasicCell(cell!, hasImage: hasImage!)
+        if hasRepost == false {
+            if hasMultiImage == false {
+                var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
+                
+                if cell == nil {
+                    cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus,tableView: tableView, hasImage: self.hasImage!)
+                    self.cellCache?.setObject(cell!, forKey: key)
+                    cellHeight = cell?.calculateBasicCell(cell!, hasImage: hasImage!)
+                }else{
+                    cellHeight = cell?.calculateBasicCell(cell!, hasImage: self.hasImage!)
+                }
             }else{
-                cellHeight = cell?.calculateBasicCell(cell!, hasImage: self.hasImage!)
+                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
+                
+                if cell == nil {
+                    cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
+                    cell?.configureMultiImageCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+                    self.cellCache?.setObject(cell!, forKey: key)
+                    cellHeight = cell?.calculateImageCell(cell!,numberOfImageRow: self.numberOfImageRow!)
+                }else{
+                    cellHeight = cell?.calculateImageCell(cell!, numberOfImageRow: self.numberOfImageRow!)
+                }
             }
         }else{
-            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
+            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewRepostCell
             
             if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdetifier) as? NBWTableViewImageCell
+                cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
                 self.cellCache?.setObject(cell!, forKey: key)
-                cellHeight = cell?.calculateImageCell(cell!,numberOfImageRow: self.numberOfImageRow!)
+                cellHeight = cell?.calculateRepostCellHeight(cell!, numberOfImageRow: self.numberOfRespostCellImageRow!)
             }else{
-                cellHeight = cell?.calculateImageCell(cell!, numberOfImageRow: self.numberOfImageRow!)
+                cellHeight = cell?.calculateRepostCellHeight(cell!, numberOfImageRow: self.numberOfRespostCellImageRow!)
             }
         }
         

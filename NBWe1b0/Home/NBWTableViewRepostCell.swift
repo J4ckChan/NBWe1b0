@@ -1,32 +1,32 @@
 //
-//  NBWTableViewImageCell.swift
+//  NBWTableViewRepostCell.swift
 //  NBWe1b0
 //
-//  Created by ChanLiang on 1/21/16.
+//  Created by ChanLiang on 1/22/16.
 //  Copyright © 2016 JackChan. All rights reserved.
 //
 
 import UIKit
 
-class NBWTableViewImageCell: UITableViewCell {
-
-    //headerView
+class NBWTableViewRepostCell: UITableViewCell {
+    
+    //header
     @IBOutlet weak var headerImageView: UIImageView!
-    @IBOutlet weak var screenNameLabel: UILabel!    
+    @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var sourceLabel: UILabel!
-
-    //bodyText
+    
+    //TextLabel
     @IBOutlet weak var bodyTextLabel: UILabel!
     
-    //imageView
+    //RepostStatus
+    @IBOutlet weak var repostView: UIView!
+    @IBOutlet weak var repostTextLabel: UILabel!
     @IBOutlet weak var imageViewOne: UIImageView!
     @IBOutlet weak var imageViewTwo: UIImageView!
     @IBOutlet weak var imageViewThree: UIImageView!
     @IBOutlet weak var imageViewFour: UIImageView!
     @IBOutlet weak var imageViewFive: UIImageView!
     @IBOutlet weak var imageViewSix: UIImageView!
-    
-    //bottomView
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -39,7 +39,7 @@ class NBWTableViewImageCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func calculateImageCell(cell:NBWTableViewImageCell,numberOfImageRow:CGFloat) -> CGFloat{
+    func calculateRepostCellHeight(cell:NBWTableViewRepostCell,numberOfImageRow:CGFloat) -> CGFloat{
         
         let headerHeight:CGFloat = 40
         
@@ -47,18 +47,29 @@ class NBWTableViewImageCell: UITableViewCell {
         
         let spacingHeight:CGFloat = 8
         
-        let imageHeight:CGFloat = cell.imageViewOne.frame.height
+        let repostTextLableHeight:CGFloat = cell.repostTextLabel.frame.height
+        
+        var imageHeight:CGFloat?
+        if numberOfImageRow == 1 {
+           imageHeight = cell.imageViewOne.frame.height * numberOfImageRow
+        }else if numberOfImageRow == 2{
+           imageHeight = cell.imageViewOne.frame.height * numberOfImageRow + 8
+        }else{
+            imageHeight = 0
+        }
+        
+        let repostHeight:CGFloat = repostTextLableHeight + imageHeight!
         
         let bottomHeight:CGFloat = 32 + 10
         
-        let cellHeight = headerHeight + bodyLabelHeight + imageHeight * numberOfImageRow + spacingHeight * 3 + bottomHeight + 12
-            
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight * numberOfImageRow)")
+        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 4 + bottomHeight
+        
+        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight! * numberOfImageRow)")
         
         return cellHeight
     }
     
-    func configureMultiImageCell(cell:NBWTableViewImageCell,weiboStatus:WeiboStatus,tableView:UITableView){
+    func configureRespostCell(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus,tableView:UITableView){
         
         //Setup Header
         cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
@@ -84,14 +95,28 @@ class NBWTableViewImageCell: UITableViewCell {
         
         cell.bodyTextLabel.frame           = labelRect
         
+        //Setup repostTextLabel
+        cell.repostTextLabel.text      = "@\((weiboStatus.retweeted_status?.user?.screen_name)!):\((weiboStatus.retweeted_status?.text)!)"
+
+        let repostLabelText            = cell.repostTextLabel.text
+        let repostLabelNSString        = NSString(CString: repostLabelText!, encoding: NSUTF8StringEncoding)
+
+        let repostLabelFont            = UIFont.systemFontOfSize(15)
+        let repostAttributesDictionary = [NSFontAttributeName:repostLabelFont]
+
+        let repostLabelRect            = repostLabelNSString!.boundingRectWithSize(labelSize, options: options, attributes: repostAttributesDictionary, context: nil)
+
+        cell.repostTextLabel.frame     = repostLabelRect
+        
+        
         //Setup ImageStackView
-        configureMultiImageView(cell, weiboStatus: weiboStatus)
+        configureRepostStatusImageView(cell, weiboStatus: weiboStatus.retweeted_status!)
         
         //Setup bottomView
         
     }
     
-    func configureMultiImageView(cell:NBWTableViewImageCell,weiboStatus:WeiboStatus){
+    func configureRepostStatusImageView(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus){
         
         let imageViewArray = [cell.imageViewOne,cell.imageViewTwo,cell.imageViewThree,cell.imageViewFour,cell.imageViewFive,cell.imageViewSix]
         
@@ -99,8 +124,16 @@ class NBWTableViewImageCell: UITableViewCell {
         
         let picsCount      = weiboStatusSet.count
         
-        if  picsCount == 2 || picsCount == 3{
- 
+        if picsCount == 1 {
+            
+            cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
+        
+            for var i = 1; i < 6; i = i+1 {
+                imageViewArray[i].removeFromSuperview()
+            }
+            
+        }else if  picsCount == 2 || picsCount == 3{
+            
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 print(weiboStatusPic.pic)
@@ -116,7 +149,7 @@ class NBWTableViewImageCell: UITableViewCell {
             
             var count = 0
             for WeiboStatusPic in weiboStatusSet {
-               imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
+                imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
                 count += 1
                 if count == 2 {
                     count = 3
@@ -124,7 +157,7 @@ class NBWTableViewImageCell: UITableViewCell {
             }
             
         }else if  picsCount > 4 && picsCount < 10{
-
+            
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
@@ -135,4 +168,6 @@ class NBWTableViewImageCell: UITableViewCell {
             }
         }
     }
+
+
 }
