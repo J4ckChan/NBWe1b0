@@ -77,7 +77,7 @@ class NBWHomeViewController: UIViewController {
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":10], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -299,6 +299,8 @@ class NBWHomeViewController: UIViewController {
             self.hasMultiImage = true
             if weiboStatus.pics?.count > 3 {
                 self.numberOfImageRow = 2
+            }else if weiboStatus.pics?.count == 0{
+                self.numberOfImageRow = 0
             }else{
                 self.numberOfImageRow = 1
             }
@@ -308,16 +310,16 @@ class NBWHomeViewController: UIViewController {
             self.hasRepost = false
         }else{
             self.hasRepost = true
-            if weiboStatus.retweeted_status?.pics?.count > 0 {
-                self.numberOfRespostCellImageRow = 1
-            }else if weiboStatus.retweeted_status?.pics?.count > 3 {
+            if weiboStatus.retweeted_status?.pics?.count > 3 {
                 self.numberOfRespostCellImageRow = 2
-            }else{
+            }else if weiboStatus.retweeted_status?.pics?.count == 0 {
                 self.numberOfRespostCellImageRow = 0
+            }else{
+                self.numberOfRespostCellImageRow = 1
             }
         }
-        
-        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!) hasRepost:\(hasRepost!) pic number in repost:\(self.numberOfRespostCellImageRow)")
+      
+//        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!) hasRepost:\(hasRepost!) pic number in repost:\(self.numberOfRespostCellImageRow!)")
     }
 }
 
@@ -375,9 +377,9 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             
             if cell == nil {
                 cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
             }else{
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
             }
             return cell!
         }
@@ -423,7 +425,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             
             if cell == nil {
                 cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
                 self.cellCache?.setObject(cell!, forKey: key)
                 cellHeight = cell?.calculateRepostCellHeight(cell!, numberOfImageRow: self.numberOfRespostCellImageRow!)
             }else{

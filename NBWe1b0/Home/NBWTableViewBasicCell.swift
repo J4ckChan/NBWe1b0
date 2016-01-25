@@ -22,9 +22,7 @@ class NBWTableViewBasicCell: UITableViewCell {
     @IBOutlet weak var imageViewOne: UIImageView!
     
     //repsot & comment & like
-    @IBOutlet weak var repostCount: UILabel!
-    @IBOutlet weak var commentCount: UILabel!
-    @IBOutlet weak var likeCout: UILabel!
+    @IBOutlet weak var countForRepostCommentLike: UILabel!
     
     var bodyText:String?
     override func awakeFromNib() {
@@ -52,12 +50,12 @@ class NBWTableViewBasicCell: UITableViewCell {
         
         var cellHeight:CGFloat?
         if hasImage == true  {
-            cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 10
+            cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 10 + 25
         }else{
-            cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight + 10
+            cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight + 10 + 25
         }
         
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
+//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
         
         return cellHeight!
     }
@@ -92,6 +90,7 @@ class NBWTableViewBasicCell: UITableViewCell {
         cell.configureSingleImageView(cell, weiboStatus: weiboStatus, hasImage:hasImage)
         
         //Setup bottomView
+        cell.countForRepostCommentLike.text = "\((weiboStatus.reposts_count)!) Repost, \((weiboStatus.comments_count)!) Comment, \((weiboStatus.attitudes_count)!) Likes"
         
     }
 

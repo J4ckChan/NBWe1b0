@@ -113,6 +113,20 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3D467BF61C560045007A1797 /* WeiboCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				3D92C9541C4E0B480007A12C /* WeiboStatus.swift */,
+				3D92C9551C4E0B480007A12C /* WeiboStatus+CoreDataProperties.swift */,
+				3D92C9561C4E0B480007A12C /* WeiboUser.swift */,
+				3D92C9571C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift */,
+				3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */,
+				3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */,
+				3D5D43361C4E777300DA8834 /* NBWPics.swift */,
+			);
+			name = WeiboCoreData;
+			sourceTree = "<group>";
+		};
 		3DABDB011C507E70001BC23E /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,15 +196,9 @@
 		3DF22D971C4AA1A700DD53D2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3D467BF61C560045007A1797 /* WeiboCoreData */,
 				3DABDB011C507E70001BC23E /* TableViewCell */,
 				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
-				3D92C9541C4E0B480007A12C /* WeiboStatus.swift */,
-				3D92C9551C4E0B480007A12C /* WeiboStatus+CoreDataProperties.swift */,
-				3D92C9561C4E0B480007A12C /* WeiboUser.swift */,
-				3D92C9571C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift */,
-				3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */,
-				3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */,
-				3D5D43361C4E777300DA8834 /* NBWPics.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";

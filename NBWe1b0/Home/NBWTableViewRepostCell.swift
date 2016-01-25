@@ -28,6 +28,9 @@ class NBWTableViewRepostCell: UITableViewCell {
     @IBOutlet weak var imageViewFive: UIImageView!
     @IBOutlet weak var imageViewSix: UIImageView!
     
+    //bottom
+    @IBOutlet weak var countForRepostComemntLike: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -47,29 +50,29 @@ class NBWTableViewRepostCell: UITableViewCell {
         
         let spacingHeight:CGFloat = 8
         
-        let repostTextLableHeight:CGFloat = cell.repostTextLabel.frame.height
+        let repostTextLabelHeight:CGFloat = cell.repostTextLabel.frame.height
         
         var imageHeight:CGFloat?
         if numberOfImageRow == 1 {
-           imageHeight = cell.imageViewOne.frame.height * numberOfImageRow
+            imageHeight = (cell.imageViewOne.frame.height + 8) * numberOfImageRow
         }else if numberOfImageRow == 2{
-           imageHeight = cell.imageViewOne.frame.height * numberOfImageRow + 8
+           imageHeight = (cell.imageViewOne.frame.height  + 8) * numberOfImageRow
         }else{
             imageHeight = 0
         }
         
-        let repostHeight:CGFloat = repostTextLableHeight + imageHeight!
+        let repostHeight:CGFloat = repostTextLabelHeight + 8 + imageHeight!
         
-        let bottomHeight:CGFloat = 32 + 10
+        let bottomHeight:CGFloat = 17 + 32 + 10
         
-        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 4 + bottomHeight
-        
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight! * numberOfImageRow)")
+        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 6 + bottomHeight
+
+        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight) repostLabelHeight:\(repostTextLabelHeight)\n )")
         
         return cellHeight
     }
     
-    func configureRespostCell(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus,tableView:UITableView){
+    func configureRespostCell(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus,tableView:UITableView,numberOfImageRow:CGFloat){
         
         //Setup Header
         cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
@@ -108,11 +111,11 @@ class NBWTableViewRepostCell: UITableViewCell {
 
         cell.repostTextLabel.frame     = repostLabelRect
         
-        
         //Setup ImageStackView
         configureRepostStatusImageView(cell, weiboStatus: weiboStatus.retweeted_status!)
-        
+
         //Setup bottomView
+        cell.countForRepostComemntLike.text = "\((weiboStatus.retweeted_status?.reposts_count)!) Repost, \((weiboStatus.retweeted_status?.comments_count)!) Comments, \((weiboStatus.retweeted_status?.attitudes_count)!) Likes"
         
     }
     
@@ -124,19 +127,17 @@ class NBWTableViewRepostCell: UITableViewCell {
         
         let picsCount      = weiboStatusSet.count
         
-        if picsCount == 1 {
+        if picsCount == 0 {
             
-            cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
-        
-            for var i = 1; i < 6; i = i+1 {
-                imageViewArray[i].removeFromSuperview()
+            for imageViewPic in imageViewArray {
+                imageViewPic?.removeFromSuperview()
             }
             
-        }else if  picsCount == 2 || picsCount == 3{
+        }else if  picsCount == 1 || picsCount == 2 || picsCount == 3{
             
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
-                print(weiboStatusPic.pic)
+    
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
             }

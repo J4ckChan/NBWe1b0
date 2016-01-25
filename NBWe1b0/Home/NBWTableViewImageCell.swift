@@ -27,6 +27,7 @@ class NBWTableViewImageCell: UITableViewCell {
     @IBOutlet weak var imageViewSix: UIImageView!
     
     //bottomView
+    @IBOutlet weak var countForRepostCommentLikes: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,11 +50,11 @@ class NBWTableViewImageCell: UITableViewCell {
         
         let imageHeight:CGFloat = cell.imageViewOne.frame.height
         
-        let bottomHeight:CGFloat = 32 + 10
+        let bottomHeight:CGFloat = 32 + 10 + 25
         
         let cellHeight = headerHeight + bodyLabelHeight + imageHeight * numberOfImageRow + spacingHeight * 3 + bottomHeight + 12
             
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight * numberOfImageRow)")
+//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight * numberOfImageRow)")
         
         return cellHeight
     }
@@ -88,6 +89,7 @@ class NBWTableViewImageCell: UITableViewCell {
         configureMultiImageView(cell, weiboStatus: weiboStatus)
         
         //Setup bottomView
+        cell.countForRepostCommentLikes.text = "\((weiboStatus.reposts_count)!) Repost, \((weiboStatus.comments_count)!) Comment, \((weiboStatus.attitudes_count)!) Likes"
         
     }
     
@@ -103,7 +105,7 @@ class NBWTableViewImageCell: UITableViewCell {
  
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
-                print(weiboStatusPic.pic)
+       
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
             }
