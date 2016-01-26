@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Alamofire
 
 let appKey = "727947860"
 let appSecret = "357abfd7118c26498b91d9dc3b409546"
@@ -16,11 +17,13 @@ let redirectURL = "https://api.weibo.com/oauth2/default.html"
 var accessToken:String = "2.00HKoGiB0WU5Qn25f63843bdEJB58C"
 var userID:String = "1567914411"
 var refreshToken:String?
+var userScreenName:String = "Jack_Chan"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
 
-  var window: UIWindow?
+    var window: UIWindow?
+    let userShow                  = "https://api.weibo.com/2/users/show.json"
     
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     // Override point for customization after application launch.
@@ -140,7 +143,28 @@ extension AppDelegate: WeiboSDKDelegate{
             refreshToken = (response as! WBAuthorizeResponse).refreshToken
             
             print("accessToken = \(accessToken), userID = \(userID)")
+            
+            //Fetch userInfo
+            usersShow()
         }
+    }
+    
+    func usersShow(){
+        
+        Alamofire.request(.GET, userShow, parameters: ["access_token":accessToken,"uid":Int(userID)!], encoding: ParameterEncoding.URL, headers: nil)
+            .responseJSON { (Response) -> Void in
+                
+                do{
+                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(Response.data!, options: NSJSONReadingOptions.AllowFragments) as! NSDictionary
+                    
+                    userScreenName = (jsonDictionary["screen_name"] as? String)!
+                    
+                    print(jsonDictionary)
+                    
+                }catch let error as NSError {
+                    print("Error:\(error.localizedDescription)")
+                }
+         }
     }
 }
 

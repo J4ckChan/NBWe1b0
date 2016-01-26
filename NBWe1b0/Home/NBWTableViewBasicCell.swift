@@ -18,7 +18,7 @@ class NBWTableViewBasicCell: UITableViewCell {
     //bodyLable
     @IBOutlet weak var bodyTextLabel: UILabel!
     
-    //image Array (max:9)
+    //image
     @IBOutlet weak var imageViewOne: UIImageView!
     
     //repsot & comment & like
@@ -46,13 +46,13 @@ class NBWTableViewBasicCell: UITableViewCell {
         
         let imageHeight:CGFloat = cell.imageViewOne.frame.height
         
-        let bottomHeight:CGFloat = 32 + 10
+        let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
         
         var cellHeight:CGFloat?
         if hasImage == true  {
-            cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 10 + 25
+            cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 4 + bottomHeight
         }else{
-            cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight + 10 + 25
+            cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight
         }
         
 //        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")

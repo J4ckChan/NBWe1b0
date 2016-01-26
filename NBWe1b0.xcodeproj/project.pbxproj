@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
+		3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */; };
 		3D5D43371C4E777300DA8834 /* NBWPics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43361C4E777300DA8834 /* NBWPics.swift */; };
 		3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */; };
 		3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
+		3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWeiboContextBasicViewController.swift; path = Home/NBWeiboContextBasicViewController.swift; sourceTree = "<group>"; };
 		3D5D43361C4E777300DA8834 /* NBWPics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWPics.swift; path = Home/NBWPics.swift; sourceTree = "<group>"; };
 		3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "WeiboStatusPics+CoreDataProperties.swift"; path = "Home/WeiboStatusPics+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeiboStatusPics.swift; path = Home/WeiboStatusPics.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				3D467BF61C560045007A1797 /* WeiboCoreData */,
 				3DABDB011C507E70001BC23E /* TableViewCell */,
 				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
+				3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				3D92C95B1C4E0B490007A12C /* WeiboStatus+CoreDataProperties.swift in Sources */,
 				3DE1C5431C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld in Sources */,
 				3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */,
+				3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */,
 				3D92C9591C4E0B490007A12C /* NBWTableViewBasicCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

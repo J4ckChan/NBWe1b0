@@ -16,6 +16,7 @@ import SDWebImage
 class NBWHomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var userNameButton: UIButton!
     
     let homeTimeline              = "https://api.weibo.com/2/statuses/home_timeline.json"
     let basicReuseIdentifier      = "BasicCell"
@@ -41,13 +42,15 @@ class NBWHomeViewController: UIViewController {
         self.tableView.dataSource = self
         self.tableView.delegate   = self
         
-        cellCache = NSCache.init()
+        self.userNameButton.setTitle(userScreenName, forState: .Normal)
         
-        setUpRefresh()
+        cellCache = NSCache.init()
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         self.managerContext = appDelegate.managedObjectContext
+        
+        setUpRefresh()
     }
     
     func setUpRefresh(){
@@ -62,7 +65,7 @@ class NBWHomeViewController: UIViewController {
 
         self.refreshController!.beginRefreshing()
         
-        self.homeTimelineFetchDataFromWeibo()
+        self.fetchDataFromCoreData()
     }
     
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
@@ -92,8 +95,6 @@ class NBWHomeViewController: UIViewController {
                 self.refreshController?.endRefreshing()
             }
     }
-    
-    
     
     //MARK: - CoreData
     func importJSONInCoreData(statuesArray:NSArray){

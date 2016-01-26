@@ -63,9 +63,9 @@ class NBWTableViewRepostCell: UITableViewCell {
         
         let repostHeight:CGFloat = repostTextLabelHeight + 8 + imageHeight!
         
-        let bottomHeight:CGFloat = 17 + 32 + 10
+        let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
         
-        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 6 + bottomHeight
+        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 5 + bottomHeight
 
         print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight) repostLabelHeight:\(repostTextLabelHeight)\n )")
         
@@ -91,7 +91,7 @@ class NBWTableViewRepostCell: UITableViewCell {
         
         let labelFont                      = UIFont.systemFontOfSize(17)
         let attributesDictionary           = [NSFontAttributeName:labelFont]
-        let labelSize                      = CGSize(width: tableView.frame.width-16, height:CGFloat.max)
+        let labelSize                      = CGSize(width: tableView.frame.width - 16, height:CGFloat.max)
         let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
         
         let labelRect                      = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
