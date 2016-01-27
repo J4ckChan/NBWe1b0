@@ -66,8 +66,8 @@ class NBWTableViewRepostCell: UITableViewCell {
         let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
         
         let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 5 + bottomHeight
-
-        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight) repostLabelHeight:\(repostTextLabelHeight)\n )")
+        
+//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight) repostLabelHeight:\(repostTextLabelHeight)\n )")
         
         return cellHeight
     }

@@ -13,6 +13,8 @@ import MJExtension
 import MJRefresh
 import SDWebImage
 
+var managerContext:NSManagedObjectContext?
+
 class NBWHomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -28,7 +30,6 @@ class NBWHomeViewController: UIViewController {
     var numberOfImageRow:CGFloat?
     var numberOfRespostCellImageRow:CGFloat?
     var weiboStatusesArray = [WeiboStatus]()
-    var managerContext:NSManagedObjectContext?
     var searchController:UISearchController?
     var hasImage:Bool?
     var hasMultiImage:Bool?
@@ -46,9 +47,9 @@ class NBWHomeViewController: UIViewController {
         
         cellCache = NSCache.init()
         
+        //CoreData
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        self.managerContext = appDelegate.managedObjectContext
+        managerContext = appDelegate.managedObjectContext
         
         setUpRefresh()
     }
@@ -66,6 +67,15 @@ class NBWHomeViewController: UIViewController {
         self.refreshController!.beginRefreshing()
         
         self.fetchDataFromCoreData()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "WeiboContextSegue" {
+            let destinationController = segue.destinationViewController as! NBWeiboContextBasicViewController
+            let indexPath = self.tableView.indexPathForSelectedRow
+            let weiboStatus = self.weiboStatusesArray[(indexPath?.row)!]
+            destinationController.id = weiboStatus.id
+        }
     }
     
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
@@ -103,7 +113,7 @@ class NBWHomeViewController: UIViewController {
         weiboStatusPesistentlyStoreInCoreData(statuesArray)
         
         do{
-            try self.managerContext!.save()
+            try managerContext!.save()
         }catch let error as NSError {
             print("Error: \(error.localizedDescription)")
         }
@@ -261,7 +271,7 @@ class NBWHomeViewController: UIViewController {
         return date!
     }
     
-    func sourceStringModifiedWithString(source:String)->String {
+   func sourceStringModifiedWithString(source:String)->String {
         
         if source.characters.count > 0 {
             let locationStart = source.rangeOfString(">")?.endIndex
