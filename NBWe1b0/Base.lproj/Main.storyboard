@@ -298,7 +298,6 @@
                                             <outlet property="screenNameLable" destination="DwO-8K-eI8" id="fv4-Ss-axo"/>
                                             <outlet property="sourceLabel" destination="pOq-s0-GXO" id="uJ2-CC-SAt"/>
                                             <outlet property="thumbnailHeadImageView" destination="YbW-sF-RqI" id="PUZ-m6-ZTc"/>
-                                            <segue destination="NWQ-32-N7W" kind="show" identifier="WeiboContextSegue" id="eP3-Mz-UPp"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageCell" rowHeight="186" id="Q8V-3f-gfW" customClass="NBWTableViewImageCell" customModule="NBWe1b0" customModuleProvider="target">
@@ -792,7 +791,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d3E-Nn-fxd">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bottomCellBackgroundByOther" translatesAutoresizingMaskIntoConstraints="NO" id="y4f-uK-agA">
@@ -836,7 +835,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dM-wJ-zI0">
                                                             <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                             <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
-                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JJH-8C-HTK">
@@ -1295,10 +1294,10 @@
             </objects>
             <point key="canvasLocation" x="-3486" y="-750"/>
         </scene>
-        <!--Weibo Context Basic View Controller-->
+        <!--View Controller-->
         <scene sceneID="hDD-RW-PAP">
             <objects>
-                <viewController storyboardIdentifier="WeiboContextBasic" hidesBottomBarWhenPushed="YES" id="NWQ-32-N7W" customClass="NBWeiboContextBasicViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WeiboContextBasic" hidesBottomBarWhenPushed="YES" id="NWQ-32-N7W" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ki4-Um-8Fb"/>
                         <viewControllerLayoutGuide type="bottom" id="8X1-5S-94y"/>
@@ -1329,7 +1328,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KDd-Q5-PeT">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xZL-bB-blF">
+                                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="209.5" translatesAutoresizingMaskIntoConstraints="NO" id="xZL-bB-blF">
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JzN-tF-Vaf">
@@ -1395,7 +1394,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0x-tI-Bkp">
                                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s5G-2g-gRU">
@@ -1430,6 +1429,7 @@
                                                     <constraint firstItem="jtT-zm-GIc" firstAttribute="leading" secondItem="JzN-tF-Vaf" secondAttribute="trailing" constant="8" id="Xup-cM-cZa"/>
                                                     <constraint firstItem="r0x-tI-Bkp" firstAttribute="top" secondItem="jtT-zm-GIc" secondAttribute="bottom" constant="8" id="Zql-5w-q7J"/>
                                                     <constraint firstItem="r0x-tI-Bkp" firstAttribute="leading" secondItem="xZL-bB-blF" secondAttribute="leading" constant="8" id="hAN-k0-ilz"/>
+                                                    <constraint firstAttribute="bottom" secondItem="r0x-tI-Bkp" secondAttribute="bottom" priority="999" constant="20" identifier="LabelBottomToViewBottom" id="l4T-qc-GeY"/>
                                                     <constraint firstAttribute="bottom" secondItem="s5G-2g-gRU" secondAttribute="bottom" constant="20" id="puy-Xe-cNT"/>
                                                     <constraint firstItem="s5G-2g-gRU" firstAttribute="leading" secondItem="xZL-bB-blF" secondAttribute="leading" constant="8" id="s2e-hT-lJM"/>
                                                     <constraint firstItem="jtT-zm-GIc" firstAttribute="leading" secondItem="JzN-tF-Vaf" secondAttribute="trailing" constant="8" id="wcA-Es-exz"/>
@@ -1448,6 +1448,7 @@
                                                         <exclude reference="0h9-a7-mHK"/>
                                                         <exclude reference="Zql-5w-q7J"/>
                                                         <exclude reference="hAN-k0-ilz"/>
+                                                        <exclude reference="l4T-qc-GeY"/>
                                                         <exclude reference="7zj-Gb-wPh"/>
                                                         <exclude reference="NGs-NS-nTf"/>
                                                         <exclude reference="2Pl-Uf-n2h"/>
@@ -1472,6 +1473,7 @@
                                                         <include reference="0h9-a7-mHK"/>
                                                         <include reference="Zql-5w-q7J"/>
                                                         <include reference="hAN-k0-ilz"/>
+                                                        <include reference="l4T-qc-GeY"/>
                                                         <include reference="7zj-Gb-wPh"/>
                                                         <include reference="NGs-NS-nTf"/>
                                                         <include reference="2Pl-Uf-n2h"/>
@@ -1537,7 +1539,8 @@
                                         <exclude reference="prE-rN-BGY"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="400" height="694"/>
                                     <mask key="subviews">
                                         <include reference="KDd-Q5-PeT"/>
                                     </mask>

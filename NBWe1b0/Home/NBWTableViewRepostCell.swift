@@ -83,6 +83,7 @@ class NBWTableViewRepostCell: UITableViewCell {
         cell.screenNameLabel.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
+        
         //Setup bodyTextLabel
         cell.bodyTextLabel.text            = weiboStatus.text
         

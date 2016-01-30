@@ -69,15 +69,6 @@ class NBWHomeViewController: UIViewController {
         self.fetchDataFromCoreData()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "WeiboContextSegue" {
-            let destinationController = segue.destinationViewController as! NBWeiboContextBasicViewController
-            let indexPath = self.tableView.indexPathForSelectedRow
-            let weiboStatus = self.weiboStatusesArray[(indexPath?.row)!]
-            destinationController.id = weiboStatus.id
-        }
-    }
-    
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
         let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
         request.redirectURI = redirectURL
@@ -90,7 +81,7 @@ class NBWHomeViewController: UIViewController {
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":10], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -450,5 +441,9 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     //The Background of selected Cell disappear
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        
+        let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: "")
+        weiboContextBasicViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(weiboContextBasicViewController, animated: true)
     }
 }
