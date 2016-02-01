@@ -442,7 +442,9 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         
-        let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: "")
+        let weiboStatus = weiboStatusesArray[indexPath.row]
+        
+        let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: weiboStatus.id!)
         weiboContextBasicViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(weiboContextBasicViewController, animated: true)
     }

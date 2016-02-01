@@ -1443,17 +1443,17 @@
                                                         <exclude reference="s5G-2g-gRU"/>
                                                     </mask>
                                                     <mask key="constraints">
-                                                        <exclude reference="1bk-HX-Ufw"/>
-                                                        <exclude reference="3tJ-es-rpX"/>
+                                                        <exclude reference="2Pl-Uf-n2h"/>
+                                                        <exclude reference="Xup-cM-cZa"/>
+                                                        <exclude reference="wcA-Es-exz"/>
                                                         <exclude reference="0h9-a7-mHK"/>
                                                         <exclude reference="Zql-5w-q7J"/>
                                                         <exclude reference="hAN-k0-ilz"/>
                                                         <exclude reference="l4T-qc-GeY"/>
                                                         <exclude reference="7zj-Gb-wPh"/>
                                                         <exclude reference="NGs-NS-nTf"/>
-                                                        <exclude reference="2Pl-Uf-n2h"/>
-                                                        <exclude reference="Xup-cM-cZa"/>
-                                                        <exclude reference="wcA-Es-exz"/>
+                                                        <exclude reference="1bk-HX-Ufw"/>
+                                                        <exclude reference="3tJ-es-rpX"/>
                                                         <exclude reference="Chw-r3-dnm"/>
                                                         <exclude reference="puy-Xe-cNT"/>
                                                         <exclude reference="s2e-hT-lJM"/>
@@ -1468,17 +1468,17 @@
                                                         <include reference="s5G-2g-gRU"/>
                                                     </mask>
                                                     <mask key="constraints">
-                                                        <include reference="1bk-HX-Ufw"/>
-                                                        <include reference="3tJ-es-rpX"/>
+                                                        <include reference="2Pl-Uf-n2h"/>
+                                                        <exclude reference="Xup-cM-cZa"/>
+                                                        <include reference="wcA-Es-exz"/>
                                                         <include reference="0h9-a7-mHK"/>
                                                         <include reference="Zql-5w-q7J"/>
                                                         <include reference="hAN-k0-ilz"/>
                                                         <include reference="l4T-qc-GeY"/>
                                                         <include reference="7zj-Gb-wPh"/>
                                                         <include reference="NGs-NS-nTf"/>
-                                                        <include reference="2Pl-Uf-n2h"/>
-                                                        <exclude reference="Xup-cM-cZa"/>
-                                                        <include reference="wcA-Es-exz"/>
+                                                        <include reference="1bk-HX-Ufw"/>
+                                                        <include reference="3tJ-es-rpX"/>
                                                         <include reference="Chw-r3-dnm"/>
                                                         <include reference="puy-Xe-cNT"/>
                                                         <include reference="s2e-hT-lJM"/>
@@ -1539,8 +1539,7 @@
                                         <exclude reference="prE-rN-BGY"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="64" width="400" height="694"/>
+                                <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="KDd-Q5-PeT"/>
                                     </mask>
