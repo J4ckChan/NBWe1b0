@@ -1662,7 +1662,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" selectedImage="tabbar_compose" id="SWl-0K-pke"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="" id="SWl-0K-pke"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JmD-sH-ZAW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1795,7 +1795,6 @@
     </scenes>
     <resources>
         <image name="bottomCellBackgroundByOther" width="346" height="41"/>
-        <image name="tabbar_compose" width="25" height="25"/>
         <image name="tabbar_compose_close" width="25" height="25"/>
         <image name="tabbar_discover" width="30" height="30"/>
         <image name="tabbar_discover_highlighted" width="30" height="30"/>
