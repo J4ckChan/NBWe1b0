@@ -20,7 +20,7 @@ class NBWHomeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var userNameButton: UIButton!
     
-    let homeTimeline              = "https://api.weibo.com/2/statuses/home_timeline.json"
+    let homeTimelineURL              = "https://api.weibo.com/2/statuses/home_timeline.json"
     let basicReuseIdentifier      = "BasicCell"
     let multiImageReuseIdentifier = "ImageCell"
     let repostReuseIdentifier     = "RepostCell"
@@ -81,7 +81,7 @@ class NBWHomeViewController: UIViewController {
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(){
         
-        Alamofire.request(.GET, homeTimeline, parameters: ["access_token":accessToken,"count":10], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, homeTimelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {

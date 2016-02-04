@@ -1796,13 +1796,13 @@
     <resources>
         <image name="bottomCellBackgroundByOther" width="346" height="41"/>
         <image name="tabbar_compose_close" width="25" height="25"/>
-        <image name="tabbar_discover" width="30" height="30"/>
-        <image name="tabbar_discover_highlighted" width="30" height="30"/>
+        <image name="tabbar_discover" width="20" height="20"/>
+        <image name="tabbar_discover_highlighted" width="18" height="18"/>
         <image name="tabbar_home" width="30" height="30"/>
         <image name="tabbar_home_selected" width="30" height="30"/>
-        <image name="tabbar_message_center" width="30" height="30"/>
-        <image name="tabbar_message_center_highlighted" width="30" height="30"/>
+        <image name="tabbar_message_center" width="24" height="20"/>
+        <image name="tabbar_message_center_highlighted" width="24" height="18"/>
         <image name="tabbar_profile" width="30" height="30"/>
-        <image name="tabbar_profile_highlighted" width="30" height="30"/>
+        <image name="tabbar_profile_highlighted" width="22" height="24"/>
     </resources>
 </document>

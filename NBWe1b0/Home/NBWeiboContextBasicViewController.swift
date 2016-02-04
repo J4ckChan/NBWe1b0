@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SDWebImage
+import Alamofire
 
 class NBWeiboContextBasicViewController: UIViewController {
     
@@ -20,6 +21,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     var navigationBarHeight:CGFloat?
     var viewWidth:CGFloat?
     var viewHeight:CGFloat?
+    var statusViewHeight:CGFloat?
     
     //BaseLayer (ScrollView & ContextView & Repost_Comment_like bar)
     var scrollView: UIScrollView?
@@ -43,9 +45,28 @@ class NBWeiboContextBasicViewController: UIViewController {
     var repostView:UIView?
     var repostLabel:UILabel?
     
+    //Swith Repost & Comment & Like Bar
+    var switchRepostCommentLikeBar:UIView?
+    enum repostCommentLikeCondition{
+        case Repost
+        case Comment
+        case Like
+    }
+    var switchBarCondition:repostCommentLikeCondition?
+    
+    //TableView for Repost & Comment & Like
+    var tableView:UITableView?
+    let repostURL = "https://api.weibo.com/2/statuses/repost_timeline.json"
+    let commentURL = "https://api.weibo.com/2/comments/show.json"
+    let reuseIdentifier = "RepostCommentLikeCell"
+    
+    var weiboStatusComment = [NBWComment]()
+    
+    //MARK: - ViewController LifeCycle
     init(id:String){
         super.init(nibName: nil, bundle: nil)
         self.id = id
+        self.switchBarCondition = .Comment
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -62,7 +83,17 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.viewHeight = self.view.bounds.height
         self.viewWidth  = self.view.bounds.width
         
+        
         fetchDataFromCoreData()
+        
+        switch switchBarCondition!{
+        case .Repost:
+            print("repost")
+        case .Comment:
+            fetchCommentDataFromWeibo()
+        case .Like:
+            print("Like")
+        }
         
         setupWeiboStatus()
     }
@@ -79,7 +110,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         //ScrollView & ContextView & Repost_Comment_like bar
         setupBaseLayer()
         
-        //StatusView ( StatusView & headerImageView & screenNameLabel & sourceLabel & bodyTextLabel & imageView )
+        //HeaderImageView & screenNameLabel & sourceLabel & bodyTextLabel
         let bodyTextLabelHeight:CGFloat = setupStatusViewHeaderPart()
         
         //ImageView Part
@@ -91,6 +122,12 @@ class NBWeiboContextBasicViewController: UIViewController {
            
             setupRepostStatusView(bodyTextLabelHeight)
         }
+        
+        //Swith Repost & Comment & Like Bar
+        setupSwithRepostCommentLikeBar()
+        
+        //TableView for Repost & Comment & Like
+        setupTableViewForRepostCommentLike()
     }
     
     func setupBaseLayer(){
@@ -98,7 +135,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         //ScrollView & ContextView & Repost_Comment_like bar
         self.scrollView                       = UIScrollView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: viewHeight! - 42))
         scrollView!.contentSize               = CGSize(width: viewWidth!, height: 1.5 * viewHeight!)
-        scrollView!.backgroundColor           = UIColor.lightGrayColor()
+        scrollView!.backgroundColor           = UIColor(red: 242/250, green: 242/250, blue: 242/250, alpha: 1)
         self.view.addSubview(scrollView!)
         
         self.repostCommentLikeBar             = UIImageView.init(frame: CGRect(x: 0, y: viewHeight! - 42, width: viewWidth!, height: 42))
@@ -140,13 +177,11 @@ class NBWeiboContextBasicViewController: UIViewController {
         bodyTextLabel!.font                 = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
         bodyTextLabel!.text                 = weiboStatus?.text
         
-        
         return  bodyTextLabel!.frame.height
     }
     
     func setupImageViewInStatusView(bodyTextLabelHeight:CGFloat){
         
-        var statusViewHeight:CGFloat = 0
         let picsCount = self.weiboStatus?.pics?.count
         let weiboStatusPicsSet = self.weiboStatus!.pics as! Set<WeiboStatusPics>
         
@@ -163,7 +198,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         
         if picsCount == 0 {
             
-            statusViewHeight = 56 + bodyTextLabel!.frame.height + 8
+            self.statusViewHeight = 56 + bodyTextLabel!.frame.height + 8
             
         }else if picsCount == 1 {
             
@@ -172,7 +207,7 @@ class NBWeiboContextBasicViewController: UIViewController {
             self.imageView1!.sd_setImageWithURL(NSURL(string: (self.weiboStatus?.bmiddle_pic)!))
             self.imageView1!.contentMode = UIViewContentMode.ScaleAspectFit
             
-            statusViewHeight             = 64 + bodyTextLabel!.frame.height + imageView1!.frame.height + 8
+            self.statusViewHeight             = 64 + bodyTextLabel!.frame.height + imageView1!.frame.height + 8
             
         }else if picsCount == 2 || picsCount == 3 {
             
@@ -182,7 +217,7 @@ class NBWeiboContextBasicViewController: UIViewController {
                 i = i + 1
             }
             
-            statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth + 8
+            self.statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth + 8
             
         }else if picsCount == 4  {
             
@@ -195,7 +230,7 @@ class NBWeiboContextBasicViewController: UIViewController {
                 }
             }
             
-            statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth * 2 + 16
+            self.statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth * 2 + 16
             
         }else if picsCount > 4 {
             
@@ -208,11 +243,11 @@ class NBWeiboContextBasicViewController: UIViewController {
                 }
             }
             
-            statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth * 2 + 16
+            self.statusViewHeight = 64 + bodyTextLabelHeight + imageViewWidth * 2 + 16
             
         }
         
-        let statusView = UIView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: statusViewHeight))
+        let statusView = UIView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: self.statusViewHeight!))
         
         self.scrollView!.addSubview(statusView)
         statusView.addSubview(headerImageView!)
@@ -285,7 +320,6 @@ class NBWeiboContextBasicViewController: UIViewController {
         let repostPicsCountCGFloat = CGFloat(repostPicsCount)
         
         var repostViewHeight:CGFloat?
-        var statusViewHeight:CGFloat?
         
         var imageViewArray = [UIImageView]()
         let imageViewWidth:CGFloat = (self.view.frame.width - 32)/3.0
@@ -359,12 +393,12 @@ class NBWeiboContextBasicViewController: UIViewController {
             repostViewHeight = 24 + repostLabelHeight + imageViewWidth*2 + 8
         }
         
-        statusViewHeight = 64 + bodyTextLabelHeight + repostViewHeight!
+        self.statusViewHeight = 64 + bodyTextLabelHeight + repostViewHeight!
         
         self.repostView             = UIView.init(frame: CGRect(x: 0, y: 64 + bodyTextLabelHeight, width: viewWidth!, height: repostViewHeight!))
         repostView!.backgroundColor = UIColor(red: 230/250, green: 230/250, blue: 230/250, alpha: 1)
         
-        let statusView             = UIView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: statusViewHeight!))
+        let statusView             = UIView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: self.statusViewHeight!))
         statusView.backgroundColor = UIColor.whiteColor()
         
         self.scrollView!.addSubview(statusView)
@@ -400,6 +434,87 @@ class NBWeiboContextBasicViewController: UIViewController {
             }
         }
     }
+    
+    func setupSwithRepostCommentLikeBar(){
+        
+        //Swith RepostCommentLikes Bar
+        self.switchRepostCommentLikeBar = UIView.init(frame: CGRect(x: 0, y: self.statusViewHeight!+16, width: viewWidth!, height: 32))
+        self.switchRepostCommentLikeBar?.backgroundColor = UIColor.whiteColor()
+        
+        //Buttons
+        let repostButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 80, height: 32))
+        repostButton.setTitle("Repost \((weiboStatus?.reposts_count)!)", forState: UIControlState.Normal)
+        repostButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        repostButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        
+        let commentButton = UIButton.init(frame: CGRect(x: 80, y: 0, width: 100, height: 32))
+        commentButton.setTitle("Comment \((weiboStatus?.comments_count)!)", forState: .Normal)
+        commentButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        commentButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        commentButton.titleLabel?.textColor = UIColor.lightGrayColor()
+        
+        let likeButton = UIButton.init(frame: CGRect(x: viewWidth! - 80, y: 0, width: 80, height: 32))
+        likeButton.setTitle("Likes \((weiboStatus?.attitudes_count)!)", forState: .Normal)
+        likeButton.setTitleColor(UIColor.lightGrayColor(), forState:
+        .Normal)
+        likeButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        
+        self.switchRepostCommentLikeBar?.addSubview(repostButton)
+        self.switchRepostCommentLikeBar?.addSubview(commentButton)
+        self.switchRepostCommentLikeBar?.addSubview(likeButton)
+        
+        self.scrollView?.addSubview(self.switchRepostCommentLikeBar!)
+    }
+    
+    func setupTableViewForRepostCommentLike(){
+        self.tableView = UITableView.init(frame: CGRect(x: 0, y: self.statusViewHeight! + 48, width: viewWidth!, height: 1.5 * viewHeight! - (self.statusViewHeight! + 48)))
+        
+        self.tableView?.delegate = self
+        self.tableView?.dataSource = self
+        
+        self.scrollView?.addSubview(self.tableView!)
+    }
+    
+    //MARK: - TableView for Repost & Comment & Like
+    func fetchCommentDataFromWeibo(){
+        
+        Alamofire.request(.GET, commentURL, parameters: ["access_token":accessToken,"id":Int(self.id)!,"count":20], encoding: ParameterEncoding.URL, headers: nil)
+        .responseJSON(options: NSJSONReadingOptions.AllowFragments) { (response) -> Void in
+            do{
+                let commentJSONDict = try NSJSONSerialization.JSONObjectWithData(response.data!, options: NSJSONReadingOptions.AllowFragments) as! NSDictionary
+                
+                let commentArray = commentJSONDict["comments"] as! NSArray
+                
+                self.commentJSONToDataModel(commentArray)
+                
+            }catch let error as NSError {
+                print("Fetching Error:\(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func commentJSONToDataModel(commentArray:NSArray){
+        
+        if commentArray.count > 0 {
+            
+            for dict in commentArray {
+
+                let text = dict["text"] as? String
+                var createdAt = dict["created_at"] as? String
+                createdAt = (createdAt! as NSString).substringWithRange(NSMakeRange(4, 12))
+                
+                let userDict = dict["user"] as? NSDictionary
+                let screenName = userDict!["screen_name"] as! String
+                let avatarLargerURL = userDict!["avatar_large"] as! String
+                
+                let comment = NBWComment.init(screenName: screenName, createdAt: createdAt!, avatarLargerURL: avatarLargerURL, text: text!)
+    
+                weiboStatusComment.append(comment)
+            }
+        }
+        
+        self.tableView?.reloadData()
+    }
 
     //MARK: - Core Data
     func fetchDataFromCoreData(){
@@ -418,3 +533,32 @@ class NBWeiboContextBasicViewController: UIViewController {
         
     }
 }
+
+extension NBWeiboContextBasicViewController:UITableViewDelegate,UITableViewDataSource {
+   
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        switch switchBarCondition! {
+        case .Repost:
+            return 0
+        case .Comment:
+            self.tableView?.registerNib(UINib(nibName: "NBWCommentTableViewCell", bundle: nil), forCellReuseIdentifier: self.reuseIdentifier)
+            return self.weiboStatusComment.count
+        case .Like:
+            return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell                  = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath) as! NBWCommentTableViewCell
+
+        let comment               = self.weiboStatusComment[indexPath.row]
+
+        cell.configureCommentTableViewCell(comment)
+        
+        return cell
+    }
+        
+}
+
