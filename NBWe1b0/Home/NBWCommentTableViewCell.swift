@@ -27,9 +27,7 @@ class NBWCommentTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func configureCommentTableViewCell(comment:NBWComment){
-        
-//        print(self.headerImageView)
+    func configureCommentTableViewCell(comment:NBWComment,viewWidth:CGFloat){
 
         self.headerImageView.sd_setImageWithURL(NSURL(string: comment.avatarLargerURL!))
         self.headerImageView.clipsToBounds = true
@@ -41,7 +39,20 @@ class NBWCommentTableViewCell: UITableViewCell {
         self.createdAt.text       = comment.createdAt
         
         self.bodyTextLabel.text   = comment.text
+        self.bodyTextLabel.numberOfLines = 0
         
+        let labelText = comment.text
+        let labelTextNSString = NSString(CString: labelText!, encoding: NSUTF8StringEncoding)
+        
+        let labelFont = UIFont.systemFontOfSize(17)
+        let attributesDictionary = [NSFontAttributeName:labelFont]
+        let labelSize = CGSize(width: viewWidth - 56, height: CGFloat.max)
+        
+        let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
+        
+        let labelRect = labelTextNSString?.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary , context: nil)
+        
+        self.bodyTextLabel.frame = labelRect!
     }
     
 }

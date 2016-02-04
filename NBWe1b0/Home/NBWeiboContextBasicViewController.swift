@@ -59,6 +59,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     let repostURL = "https://api.weibo.com/2/statuses/repost_timeline.json"
     let commentURL = "https://api.weibo.com/2/comments/show.json"
     let reuseIdentifier = "RepostCommentLikeCell"
+    var commentCache:NSCache?
     
     var weiboStatusComment = [NBWComment]()
     
@@ -82,7 +83,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.navigationBarHeight = self.navigationController?.navigationBar.frame.height
         self.viewHeight = self.view.bounds.height
         self.viewWidth  = self.view.bounds.width
-        
+        self.commentCache = NSCache.init()
         
         fetchDataFromCoreData()
         
@@ -551,13 +552,32 @@ extension NBWeiboContextBasicViewController:UITableViewDelegate,UITableViewDataS
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell                  = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath) as! NBWCommentTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath) as! NBWCommentTableViewCell
 
         let comment               = self.weiboStatusComment[indexPath.row]
 
-        cell.configureCommentTableViewCell(comment)
+        cell.configureCommentTableViewCell(comment,viewWidth:viewWidth!)
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+
+        let comment = self.weiboStatusComment[indexPath.row]
+        
+        let labelText = comment.text
+        let labelTextNSString = NSString(CString: labelText!, encoding: NSUTF8StringEncoding)
+        
+        let labelFont = UIFont.systemFontOfSize(13)
+        let attributesDictionary = [NSFontAttributeName:labelFont]
+        let labelSize = CGSize(width: viewWidth! - 56, height: CGFloat.max)
+        
+        let options:NSStringDrawingOptions = [.UsesLineFragmentOrigin,.UsesFontLeading]
+        
+        let labelRect = labelTextNSString?.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary , context: nil)
+    
+        return 50 + (labelRect?.height)!
+
     }
         
 }
