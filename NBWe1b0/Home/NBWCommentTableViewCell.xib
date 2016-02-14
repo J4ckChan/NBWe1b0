@@ -8,7 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepostCommentLikeCell" rowHeight="116" id="KGk-i7-Jjw" customClass="NBWCommentTableViewCell" customModule="NBWe1b0" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CommentCell" rowHeight="116" id="KGk-i7-Jjw" customClass="NBWCommentTableViewCell" customModule="NBWe1b0" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="332" height="102"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -121,7 +121,7 @@
                 <outlet property="headerImageView" destination="gLf-h7-Lgu" id="qQT-1m-2vY"/>
                 <outlet property="screenNameLabel" destination="eHi-zm-c3A" id="FAq-gJ-p9p"/>
             </connections>
-            <point key="canvasLocation" x="167" y="252"/>
+            <point key="canvasLocation" x="146" y="198"/>
         </tableViewCell>
     </objects>
 </document>

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
+		3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */; };
+		3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */; };
 		3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */; };
 		3D5D43371C4E777300DA8834 /* NBWPics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43361C4E777300DA8834 /* NBWPics.swift */; };
 		3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */; };
@@ -52,6 +54,8 @@
 
 /* Begin PBXFileReference section */
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
+		3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWRepostTableViewCell.swift; path = Home/NBWRepostTableViewCell.swift; sourceTree = "<group>"; };
+		3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWRepostTableViewCell.xib; path = Home/NBWRepostTableViewCell.xib; sourceTree = "<group>"; };
 		3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWeiboContextBasicViewController.swift; path = Home/NBWeiboContextBasicViewController.swift; sourceTree = "<group>"; };
 		3D5D43361C4E777300DA8834 /* NBWPics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWPics.swift; path = Home/NBWPics.swift; sourceTree = "<group>"; };
 		3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "WeiboStatusPics+CoreDataProperties.swift"; path = "Home/WeiboStatusPics+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 		3D9EA31C1C62FADA00A8383A /* WeiboContextCell */ = {
 			isa = PBXGroup;
 			children = (
+				3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */,
+				3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */,
 				3D9EA3201C630AF900A8383A /* NBWCommentTableViewCell.swift */,
 				3D9EA3211C630AF900A8383A /* NBWCommentTableViewCell.xib */,
 			);
@@ -364,6 +370,7 @@
 			files = (
 				3D92C95F1C4E109F0007A12C /* Assets.xcassets in Resources */,
 				3DE1C5401C3D4CC8008E3A94 /* Main.storyboard in Resources */,
+				3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */,
 				3D9EA3231C630AF900A8383A /* NBWCommentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +454,7 @@
 				3DABDB031C51E68F001BC23E /* NBWTableViewRepostCell.swift in Sources */,
 				3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */,
 				3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */,
+				3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */,
 				3D92C9581C4E0B490007A12C /* NBWHomeViewController.swift in Sources */,
 				3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */,
 				3D92C95B1C4E0B490007A12C /* WeiboStatus+CoreDataProperties.swift in Sources */,
