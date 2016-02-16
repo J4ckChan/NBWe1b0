@@ -23,9 +23,9 @@ class NBWeiboContextBasicViewController: UIViewController {
     var viewHeight:CGFloat?
     var statusViewHeight:CGFloat?
     
-    //BaseLayer (ScrollView & ContextView & Repost_Comment_like bar)
+    //BaseLayer (ScrollView & ContextView)
     var scrollView: UIScrollView?
-    var repostCommentLikeBar:UIImageView?
+    
     
     //StatusView - HeaderPart
     var headerImageView:UIImageView?
@@ -47,15 +47,16 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     //Swith Repost & Comment & Like Bar
     var switchRepostCommentLikeBar:UIView?
-    var repostButton:UIButton?
-    var commentButton:UIButton?
-    var likeButton:UIButton?
+    var repostSwitchButton:UIButton?
+    var commentSwitchButton:UIButton?
+    var likeSwitchButton:UIButton?
     enum repostCommentLikeCondition{
         case Repost
         case Comment
         case Like
     }
     var switchBarCondition:repostCommentLikeCondition?
+    var orangeAnimationBar:UIView?
     
     //TableView for Repost & Comment & Like
     var tableView:UITableView?
@@ -67,6 +68,16 @@ class NBWeiboContextBasicViewController: UIViewController {
     var commentCache:NSCache?
     
     var weiboStatusrRepostOrComment = [NBWComment]()
+    
+    //Repost & Comment & Like Bar
+    var repostCommentLikeBar:UIView?
+    
+    var repostButton:UIButton?
+    var commentButton:UIButton?
+    var likeButton:UIButton?
+    
+    var likeFlag:Bool?
+    
     
     //MARK: - ViewController LifeCycle
     init(id:String){
@@ -85,6 +96,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.navigationItem.title = "Weibo Context"
         self.navigationController?.navigationBar.tintColor = UIColor.grayColor()
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: Selector("navigationAction"))
         self.navigationBarHeight = self.navigationController?.navigationBar.frame.height
         self.viewHeight = self.view.bounds.height
         self.viewWidth  = self.view.bounds.width
@@ -134,6 +146,9 @@ class NBWeiboContextBasicViewController: UIViewController {
         
         //TableView for Repost & Comment & Like
         setupTableViewForRepostCommentLike()
+        
+        //RepostCommentLikeBar
+        setupRepostCommentLikeBar()
     }
     
     func setupBaseLayer(){
@@ -144,8 +159,9 @@ class NBWeiboContextBasicViewController: UIViewController {
         scrollView!.backgroundColor           = UIColor(red: 242/250, green: 242/250, blue: 242/250, alpha: 1)
         self.view.addSubview(scrollView!)
         
-        self.repostCommentLikeBar             = UIImageView.init(frame: CGRect(x: 0, y: viewHeight! - 42, width: viewWidth!, height: 42))
-        repostCommentLikeBar!.backgroundColor = UIColor.whiteColor()
+        self.repostCommentLikeBar             = UIView.init(frame: CGRect(x: 0, y: viewHeight! - 42, width: viewWidth!, height: 42))
+        repostCommentLikeBar!.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 1.0)
+
         self.view.addSubview(repostCommentLikeBar!)
         
     }
@@ -444,41 +460,47 @@ class NBWeiboContextBasicViewController: UIViewController {
     func setupSwithRepostCommentLikeBar(){
         
         //Swith RepostCommentLikes Bar
-        self.switchRepostCommentLikeBar = UIView.init(frame: CGRect(x: 0, y: self.statusViewHeight!+16, width: viewWidth!, height: 32))
+        self.switchRepostCommentLikeBar = UIView.init(frame: CGRect(x: 0, y: self.statusViewHeight!+16, width: viewWidth!, height: 34))
         self.switchRepostCommentLikeBar?.backgroundColor = UIColor.whiteColor()
         
         //Buttons
-        self.repostButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 80, height: 32))
-        repostButton!.setTitle("Repost \((weiboStatus?.reposts_count)!)", forState: UIControlState.Normal)
-        repostButton!.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        repostButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
-        repostButton!.addTarget(self, action: Selector("refreshRepostTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.repostSwitchButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 80, height: 32))
+        repostSwitchButton!.setTitle("Repost \((weiboStatus?.reposts_count)!)", forState: UIControlState.Normal)
+        repostSwitchButton!.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        repostSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
+        repostSwitchButton!.addTarget(self, action: Selector("refreshRepostTableView"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.commentButton = UIButton.init(frame: CGRect(x: 80, y: 0, width: 100, height: 32))
-        commentButton!.setTitle("Comment \((weiboStatus?.comments_count)!)", forState: .Normal)
-        commentButton!.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        commentButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
-        commentButton!.titleLabel?.textColor = UIColor.lightGrayColor()
+        self.commentSwitchButton = UIButton.init(frame: CGRect(x: 80, y: 0, width: 100, height: 32))
+        commentSwitchButton!.setTitle("Comment \((weiboStatus?.comments_count)!)", forState: .Normal)
+        commentSwitchButton!.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        commentSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
+        commentSwitchButton!.titleLabel?.textColor = UIColor.lightGrayColor()
         
-        commentButton!.addTarget(self, action: Selector("refreshCommentTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        commentSwitchButton!.addTarget(self, action: Selector("refreshCommentTableView"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.likeButton = UIButton.init(frame: CGRect(x: viewWidth! - 80, y: 0, width: 80, height: 32))
-        likeButton!.setTitle("Likes \((weiboStatus?.attitudes_count)!)", forState: .Normal)
-        likeButton!.setTitleColor(UIColor.lightGrayColor(), forState:
+        self.likeSwitchButton = UIButton.init(frame: CGRect(x: viewWidth! - 80, y: 0, width: 80, height: 32))
+        likeSwitchButton!.setTitle("Likes \((weiboStatus?.attitudes_count)!)", forState: .Normal)
+        likeSwitchButton!.setTitleColor(UIColor.lightGrayColor(), forState:
         .Normal)
-        likeButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
-        likeButton!.addTarget(self, action: Selector("refreshLikeTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        likeSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
+        likeSwitchButton!.addTarget(self, action: Selector("refreshLikeTableView"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.switchRepostCommentLikeBar?.addSubview(repostButton!)
-        self.switchRepostCommentLikeBar?.addSubview(commentButton!)
-        self.switchRepostCommentLikeBar?.addSubview(likeButton!)
+        self.switchRepostCommentLikeBar?.addSubview(repostSwitchButton!)
+        self.switchRepostCommentLikeBar?.addSubview(commentSwitchButton!)
+        self.switchRepostCommentLikeBar?.addSubview(likeSwitchButton!)
+        
+        //Orange Animation
+        self.orangeAnimationBar = UIView.init(frame: CGRect(x: 90, y: 32, width: 80, height: 2))
+        self.orangeAnimationBar?.backgroundColor = UIColor.orangeColor()
+        
+        self.switchRepostCommentLikeBar?.addSubview(self.orangeAnimationBar!)
         
         self.scrollView?.addSubview(self.switchRepostCommentLikeBar!)
     }
     
     func setupTableViewForRepostCommentLike(){
         
-        self.tableView = UITableView.init(frame: CGRect(x: 0, y: self.statusViewHeight! + 48, width: viewWidth!, height: 1.5 * viewHeight! - (self.statusViewHeight! + 48)))
+        self.tableView = UITableView.init(frame: CGRect(x: 0, y: self.statusViewHeight! + 50, width: viewWidth!, height: 1.5 * viewHeight! - (self.statusViewHeight! + 48)))
         
         self.tableView?.delegate = self
         self.tableView?.dataSource = self
@@ -486,22 +508,75 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.scrollView?.addSubview(self.tableView!)
     }
     
+    func setupRepostCommentLikeBar(){
+        
+        self.repostButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: self.viewWidth!/3.0, height: 42))
+        self.repostButton?.setTitle("  Repost", forState: UIControlState.Normal)
+        self.repostButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.repostButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.repostButton?.setImage(UIImage(named: "repost32"), forState: .Normal)
+        self.repostButton?.addTarget(self, action: Selector("repostWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.commentButton = UIButton.init(frame: CGRect(x: self.viewWidth!/3.0, y: 0, width: self.viewWidth!/3.0, height: 42))
+        self.commentButton?.setTitle("  Comment", forState: .Normal)
+        self.commentButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.commentButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.commentButton?.setImage(UIImage(named: "comment32"), forState: .Normal)
+        self.commentButton?.addTarget(self, action: Selector("commentWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.likeButton = UIButton.init(frame: CGRect(x: (self.viewWidth!/3.0)*2, y: 0, width: self.viewWidth!/3.0, height: 42))
+        self.likeButton?.setTitle("  like", forState: .Normal)
+        self.likeButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.likeButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
+        self.likeButton?.addTarget(self, action: Selector("likeWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.likeFlag = false
+        
+        let separator1 = UIView(frame: CGRect(x: self.viewWidth!/3.0, y: 13, width: 1, height: 16))
+        separator1.backgroundColor = UIColor.lightGrayColor()
+        
+        let separator2 = UIView(frame: CGRect(x: 2.0*self.viewWidth!/3.0, y: 13, width: 1, height: 16))
+        separator2.backgroundColor = UIColor.lightGrayColor()
+
+        self.repostCommentLikeBar?.addSubview(self.repostButton!)
+        self.repostCommentLikeBar?.addSubview(self.commentButton!)
+        self.repostCommentLikeBar?.addSubview(self.likeButton!)
+        self.repostCommentLikeBar?.addSubview(separator1)
+        self.repostCommentLikeBar?.addSubview(separator2)
+    }
+    
+    
+    //MARK: - TableView & UIButton for Repost & Comment & Like
+    
     //Repost Comment Like Button Function
     func refreshRepostTableView(){
         self.switchBarCondition = .Repost
         switchButtonTitleColor()
+        UIView.animateWithDuration(0.5, delay: 0, options: [], animations: { () -> Void in
+            self.orangeAnimationBar?.frame.size.width = 60
+            self.orangeAnimationBar?.center.x = 40
+            }, completion: nil)
         fetchRepostDataFromWeibo()
     }
     
     func refreshCommentTableView(){
         self.switchBarCondition = .Comment
         switchButtonTitleColor()
+        UIView.animateWithDuration(0.5, delay: 0, options: [], animations: { () -> Void in
+            self.orangeAnimationBar?.frame.size.width = 80
+            self.orangeAnimationBar?.center.x = 130
+            }, completion: nil)
         fetchCommentDataFromWeibo()
     }
     
     func refreshLikeTableView(){
         self.switchBarCondition = .Like
         switchButtonTitleColor()
+        UIView.animateWithDuration(0.5, delay: 0, options: [], animations: { () -> Void in
+            self.orangeAnimationBar?.frame.size.width = 60
+            self.orangeAnimationBar?.center.x = self.viewWidth! - 40
+            }, completion: nil)
         print("The like API not found")
         self.tableView?.reloadData()
     }
@@ -510,21 +585,20 @@ class NBWeiboContextBasicViewController: UIViewController {
         
         switch self.switchBarCondition! {
         case .Repost:
-            self.repostButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            self.commentButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-            self.likeButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.repostSwitchButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            self.commentSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.likeSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         case .Comment:
-            self.repostButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-            self.commentButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            self.likeButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.repostSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.commentSwitchButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            self.likeSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         case .Like:
-            self.repostButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-            self.commentButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-            self.likeButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            self.repostSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.commentSwitchButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+            self.likeSwitchButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         }
     }
     
-    //MARK: - TableView for Repost & Comment & Like
     func fetchRepostDataFromWeibo(){
         
         Alamofire.request(.GET, repostURL, parameters: ["access_token":accessToken,"id":Int(self.id)!,"count":10], encoding: ParameterEncoding.URL, headers: nil)
@@ -583,6 +657,31 @@ class NBWeiboContextBasicViewController: UIViewController {
         
         self.tableView?.reloadData()
     }
+    
+    //MARK: - Repost & Comment & Like Bar
+    func repostWeiboStatus(){
+        
+    }
+    
+    func commentWeiboStatus(){
+        
+    }
+    
+    func likeWeiboStatus(){
+        
+        if self.likeFlag == false {
+            self.likeFlag = true
+        }else{
+            self.likeFlag = false
+        }
+       
+        if likeFlag == true {
+            self.likeButton?.setImage(UIImage(named: "like32_selected"), forState: .Normal)
+        }else {
+            self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
+        }
+        
+    }
 
     //MARK: - Core Data
     func fetchDataFromCoreData(){
@@ -621,7 +720,7 @@ extension NBWeiboContextBasicViewController:UITableViewDelegate,UITableViewDataS
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let repostOrComment               = self.weiboStatusrRepostOrComment[indexPath.row]
+        let repostOrComment = self.weiboStatusrRepostOrComment[indexPath.row]
         
         switch switchBarCondition! {
         case .Comment:

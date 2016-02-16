@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import CoreData
 import MJExtension
-import MJRefresh
 import SDWebImage
 
 var managerContext:NSManagedObjectContext?
@@ -20,7 +19,7 @@ class NBWHomeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var userNameButton: UIButton!
     
-    let homeTimelineURL              = "https://api.weibo.com/2/statuses/home_timeline.json"
+    let homeTimelineURL           = "https://api.weibo.com/2/statuses/home_timeline.json"
     let basicReuseIdentifier      = "BasicCell"
     let multiImageReuseIdentifier = "ImageCell"
     let repostReuseIdentifier     = "RepostCell"
