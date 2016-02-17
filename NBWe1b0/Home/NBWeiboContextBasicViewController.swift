@@ -660,10 +660,15 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     //MARK: - Repost & Comment & Like Bar
     func repostWeiboStatus(){
-        
+       
+        let repostViewController = NBWRespotViewController.init(id: self.id, navigationBarHeight: self.navigationBarHeight!)
+        self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
     }
     
     func commentWeiboStatus(){
+        
+        let commentViewController = NBWCommentViewController.init(id: self.id,navigationBarHeight: self.navigationBarHeight!)
+        self.navigationController?.presentViewController(commentViewController, animated: true, completion: nil)
         
     }
     
