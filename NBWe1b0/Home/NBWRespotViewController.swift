@@ -13,11 +13,20 @@ class NBWRespotViewController: NBWBasicViewController {
     
     let repostURLString = "https://api.weibo.com/2/statuses/repost.json"
     var isComment = 0
+    var weiboStatus:WeiboStatus?
+    
+    //WeiboStatusView
+    var weiboStatusView:UIView?
+    var weiboStatusImageView:UIImageView?
+    var screenNameLabel:UILabel?
+    var bodyTextLabel:UILabel?
+    
     var alsoCommentButton:UIButton?
     var alsoCommentBool = false
     
-    override init(id: String, navigationBarHeight: CGFloat) {
-        super.init(id: id, navigationBarHeight: navigationBarHeight)
+    init(weiboStatus:WeiboStatus, navigationBarHeight: CGFloat) {
+        super.init(id:weiboStatus.id!, navigationBarHeight: navigationBarHeight)
+        self.weiboStatus = weiboStatus
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +39,7 @@ class NBWRespotViewController: NBWBasicViewController {
         // Do any additional setup after loading the view.
         self.navigationBasicItem?.title = "Repost"
         
-        
+        setupWeiboRepost()
         
         setupAlsoCommentButton()
     }
@@ -48,6 +57,52 @@ class NBWRespotViewController: NBWBasicViewController {
         }
         
         Alamofire.request(.POST, repostURLString, parameters:["access_token":accessToken,"id":self.id!,"status":(self.textView?.text)!,"is_comment":self.isComment], encoding: ParameterEncoding.URL, headers: nil)
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func setupWeiboRepost(){
+       
+        self.weiboStatusView = UIView.init(frame: CGRect(x: 8, y: 200, width: self.view.frame.width - 16, height: 80))
+        self.weiboStatusView?.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+        
+        self.weiboStatusImageView = UIImageView.init(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        
+        self.weiboStatusView?.addSubview(self.weiboStatusImageView!)
+        
+        self.screenNameLabel = UILabel.init(frame: CGRect(x: 88, y: 8, width: self.view.frame.width-112, height: 20))
+        self.weiboStatusView?.addSubview(self.screenNameLabel!)
+        
+        self.bodyTextLabel = UILabel.init(frame: CGRect(x: 88, y: 32, width: self.view.frame.width-112, height: 48))
+        self.bodyTextLabel?.numberOfLines = 0
+        self.bodyTextLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
+        self.bodyTextLabel?.textColor = UIColor.lightGrayColor()
+        self.weiboStatusView?.addSubview(self.bodyTextLabel!)
+        
+        self.view.addSubview(self.weiboStatusView!)
+        
+        if self.weiboStatus?.retweeted_status != nil {
+            
+            self.textView?.text = "//\((self.weiboStatus?.text)!)"
+            self.screenNameLabel?.text = "@\((self.weiboStatus?.retweeted_status?.user?.screen_name)!)"
+            self.bodyTextLabel?.text = self.weiboStatus?.retweeted_status?.text
+            
+            if self.weiboStatus?.retweeted_status?.bmiddle_pic != nil {
+                self.weiboStatusImageView?.sd_setImageWithURL(NSURL(string: (self.weiboStatus?.retweeted_status?.bmiddle_pic)!))
+            }else{
+                self.weiboStatusImageView?.sd_setImageWithURL(NSURL(string: (self.weiboStatus?.user?.avatar_large)!))
+            }
+        }else{
+            
+            self.screenNameLabel?.text = "@\((self.weiboStatus?.user?.screen_name)!)"
+            self.bodyTextLabel?.text = self.weiboStatus?.text
+            
+            if self.weiboStatus?.bmiddle_pic != nil {
+                self.weiboStatusImageView?.sd_setImageWithURL(NSURL(string: (self.weiboStatus?.bmiddle_pic)!))
+            }else{
+                self.weiboStatusImageView?.sd_setImageWithURL(NSURL(string: (self.weiboStatus?.user?.avatar_large)!))
+            }
+        }
     }
     
     func setupAlsoCommentButton(){

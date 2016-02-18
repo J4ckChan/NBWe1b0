@@ -150,6 +150,16 @@
 			name = "Repost&Comment";
 			sourceTree = "<group>";
 		};
+		3D5F620F1C7557B300BDED94 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */,
+				3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */,
+				3DABDB021C51E68F001BC23E /* NBWTableViewRepostCell.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
 		3D9EA31C1C62FADA00A8383A /* WeiboContextCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,21 +171,10 @@
 			name = WeiboContextCell;
 			sourceTree = "<group>";
 		};
-		3D9EA31D1C62FB0B00A8383A /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */,
-				3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */,
-				3DABDB021C51E68F001BC23E /* NBWTableViewRepostCell.swift */,
-			);
-			name = Home;
-			sourceTree = "<group>";
-		};
 		3DABDB011C507E70001BC23E /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				3D5F620C1C74597C00BDED94 /* Repost&Comment */,
-				3D9EA31D1C62FB0B00A8383A /* Home */,
+				3D5F620F1C7557B300BDED94 /* Home */,
 				3D9EA31C1C62FADA00A8383A /* WeiboContextCell */,
 			);
 			name = TableViewCell;
@@ -262,6 +261,7 @@
 		3DF22D971C4AA1A700DD53D2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3D5F620C1C74597C00BDED94 /* Repost&Comment */,
 				3D467BF61C560045007A1797 /* WeiboDataModel */,
 				3DABDB011C507E70001BC23E /* TableViewCell */,
 				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,

@@ -547,6 +547,11 @@ class NBWeiboContextBasicViewController: UIViewController {
     }
     
     
+    //MARK: - NavigationBarAction
+    func navigationAction(){
+        
+    }
+    
     //MARK: - TableView & UIButton for Repost & Comment & Like
     
     //Repost Comment Like Button Function
@@ -661,7 +666,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     //MARK: - Repost & Comment & Like Bar
     func repostWeiboStatus(){
        
-        let repostViewController = NBWRespotViewController.init(id: self.id, navigationBarHeight: self.navigationBarHeight!)
+        let repostViewController = NBWRespotViewController.init(weiboStatus: self.weiboStatus!, navigationBarHeight: self.navigationBarHeight!)
         self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
     }
     
