@@ -11,6 +11,12 @@ import CoreData
 
 class NBWContactTableViewController: UITableViewController {
     
+    struct InitialList{
+        var initial:String?
+        var array:[String]?
+    }
+    
+    var tableViewArray = [InitialList]()
     var contactArray = [WeiboUser]()
     
     init(contactArray:[WeiboUser]){
@@ -37,7 +43,9 @@ class NBWContactTableViewController: UITableViewController {
         setupSearchController()
         
         // Sort
-        sortContactData()
+        sortContactData(self.contactArray)
+        
+        self.tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "reuseIdentifier")
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,15 +62,60 @@ class NBWContactTableViewController: UITableViewController {
         self.tableView.tableHeaderView = searchController.searchBar
     }
     
-    func sortContactData(){
+    func sortContactData(contactArray:[WeiboUser]){
         
-        let chinese = "陈良"
-        let chineseCFString = NSMutableString(string: chinese) as CFMutableStringRef
         
-        CFStringTransform(chineseCFString, nil, kCFStringTransformMandarinLatin, false)
-        CFStringTransform(chineseCFString, nil, kCFStringTransformStripCombiningMarks, false)
-        print(chineseCFString)
+        for user in contactArray {
+            
+            let chinese = user.screen_name
+            let chineseCFString = NSMutableString(string: chinese!) as CFMutableStringRef
+            
+            CFStringTransform(chineseCFString, nil, kCFStringTransformMandarinLatin, false)
+            CFStringTransform(chineseCFString, nil, kCFStringTransformStripCombiningMarks, false)
+            print(chineseCFString)
+            
+            let chineseString = chineseCFString as String
+            
+            let index = chineseString.startIndex.advancedBy(1)
+            let initialUppercase = chineseString.substringToIndex(index).uppercaseString
+            print(initialUppercase)
+            
+            if tableViewArray.count == 0 {
+                
+                var initial = InitialList()
+                initial.initial = initialUppercase
+                initial.array = [chinese!]
+                tableViewArray.append(initial)
+                
+            }else{
+                var flag = 0
+                for var index = 0; index < tableViewArray.count; index++ {
+                    
+                    if tableViewArray[index].initial == initialUppercase {
+                        flag = 1
+                        tableViewArray[index].array?.append(chinese!)
+                    }
+                }
+                if flag == 0 {
+                    var initial = InitialList()
+                    initial.initial = initialUppercase
+                    initial.array = [chinese!]
+                    tableViewArray.append(initial)
+                }
+                
+            }
+        }
         
+        self.tableViewArray.sortInPlace { (list1, list2) -> Bool in
+            if list1.initial < list2.initial {
+                return true
+            }else{
+                return false
+            }
+        }
+        
+        print(self.tableViewArray)
+
     }
     
     func dismissSelf(){
@@ -73,23 +126,29 @@ class NBWContactTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return self.tableViewArray.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return (self.tableViewArray[section].array)!.count
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.tableViewArray[section].initial
     }
 
-    /*
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
+        let screenName = self.tableViewArray[indexPath.section].array![indexPath.row]
+        cell.textLabel?.text = screenName
 
         return cell
     }
-    */
+
 
     /*
     // Override to support conditional editing of the table view.

@@ -57,7 +57,7 @@ class NBWCommentViewController: NBWBasicViewController {
     
         self.keyboardSize = value.CGRectValue().size
         
-        print(self.keyboardSize!.height)
+//        print(self.keyboardSize!.height)
         
     }
     
@@ -67,7 +67,7 @@ class NBWCommentViewController: NBWBasicViewController {
         let value = info.objectForKey(UIKeyboardFrameBeginUserInfoKey) as! NSValue
         self.keyboardSize = value.CGRectValue().size
         
-        print(self.keyboardSize?.height)
+//        print(self.keyboardSize?.height)
     }
     
     func setupAlsoRepostButton(){
