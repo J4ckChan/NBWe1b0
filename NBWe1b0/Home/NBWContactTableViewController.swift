@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+protocol SendScreenNameToTextViewDelegate{
+    func sendScreenName(screenName:String)
+}
+
 class NBWContactTableViewController: UITableViewController {
     
     struct InitialList{
@@ -18,6 +22,14 @@ class NBWContactTableViewController: UITableViewController {
     
     var tableViewArray = [InitialList]()
     var contactArray = [WeiboUser]()
+    var contactResultController:NBWContactResultTableViewController?
+    var searchController :UISearchController?
+    var searchControllerWasActive:Bool?
+    var searchControllerSearchFieldWasFirstResponder:Bool?
+    var screenNameArray = [String]()
+    var searchResults = [String]()
+    var selectedScreenName:String?
+    var sendScreenNameDelegate:SendScreenNameToTextViewDelegate?
     
     init(contactArray:[WeiboUser]){
         super.init(nibName: nil, bundle: nil)
@@ -47,6 +59,20 @@ class NBWContactTableViewController: UITableViewController {
         
         self.tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "reuseIdentifier")
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if (self.searchControllerWasActive != nil) {
+            self.searchControllerWasActive = false
+            self.searchController?.active = self.searchControllerWasActive!
+            
+            if (self.searchControllerSearchFieldWasFirstResponder != nil) {
+                self.searchController?.searchBar.becomeFirstResponder()
+                self.searchControllerSearchFieldWasFirstResponder = false
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -54,16 +80,22 @@ class NBWContactTableViewController: UITableViewController {
     }
     
     func setupSearchController(){
-        let contactResultController = NBWContactResultTableViewController.init()
-        let searchController = UISearchController.init(searchResultsController: contactResultController)
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.sizeToFit()
-        searchController.searchBar.searchBarStyle = .Minimal
-        self.tableView.tableHeaderView = searchController.searchBar
+        self.contactResultController = NBWContactResultTableViewController.init()
+        self.searchController = UISearchController.init(searchResultsController: contactResultController)
+        searchController!.searchResultsUpdater = self
+        searchController!.searchBar.sizeToFit()
+        searchController!.searchBar.searchBarStyle = .Minimal
+        self.tableView.tableHeaderView = searchController!.searchBar
+        
+        self.contactResultController?.tableView.delegate = self
+        self.searchController?.delegate = self
+        self.searchController?.dimsBackgroundDuringPresentation = false
+        self.searchController?.searchBar.delegate = self
+        self.definesPresentationContext = true
+
     }
     
     func sortContactData(contactArray:[WeiboUser]){
-        
         
         for user in contactArray {
             
@@ -72,13 +104,11 @@ class NBWContactTableViewController: UITableViewController {
             
             CFStringTransform(chineseCFString, nil, kCFStringTransformMandarinLatin, false)
             CFStringTransform(chineseCFString, nil, kCFStringTransformStripCombiningMarks, false)
-            print(chineseCFString)
             
             let chineseString = chineseCFString as String
             
             let index = chineseString.startIndex.advancedBy(1)
             let initialUppercase = chineseString.substringToIndex(index).uppercaseString
-            print(initialUppercase)
             
             if tableViewArray.count == 0 {
                 
@@ -114,11 +144,17 @@ class NBWContactTableViewController: UITableViewController {
             }
         }
         
-        print(self.tableViewArray)
-
+        for item in self.tableViewArray {
+            if (item.array != nil) {
+                for screenName in item.array! {
+                    self.screenNameArray.append(screenName)
+                }
+            }
+        }
     }
     
     func dismissSelf(){
+
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
@@ -148,58 +184,58 @@ class NBWContactTableViewController: UITableViewController {
 
         return cell
     }
-
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if self.tableView == tableView {
+            self.selectedScreenName = self.tableViewArray[indexPath.section].array![indexPath.row]
+        }
+        
+        if self.contactResultController?.tableView == tableView {
+            self.selectedScreenName = self.searchResults[indexPath.row]
+            dismissSelf()
+        }
+        
+        self.sendScreenNameDelegate?.sendScreenName(self.selectedScreenName!)
+        dismissSelf()
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension NBWContactTableViewController:UISearchControllerDelegate,UISearchBarDelegate,UISearchResultsUpdating{
     
+    //UISearchBarDelegate
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    //UISearchControllerDelegate
+    
+    
+    //UISearchResultsUpdating
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+        let searchText =  searchController.searchBar.text
+        self.searchResults = self.screenNameArray
         
+        let strippedString = searchText?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        var searchItems:[String]?
+        if strippedString?.characters.count > 0 {
+            searchItems = strippedString?.componentsSeparatedByString(" ")
+        }
+        
+        if searchItems != nil {
+            for stringSearch in searchItems! {
+                searchResults = searchResults.filter({ (String) -> Bool in
+                    if ((String.rangeOfString(stringSearch)?.startIndex) != nil) {
+                        return true
+                    }else{
+                        return false
+                    }
+                })
+            }
+        }
+        
+        let resultVC = self.contactResultController
+        resultVC?.results = self.searchResults
+        resultVC?.tableView.reloadData()
     }
 }

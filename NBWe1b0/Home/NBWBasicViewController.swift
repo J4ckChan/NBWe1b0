@@ -46,6 +46,10 @@ class NBWBasicViewController: UIViewController {
         setupTextViewAndToolBar()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        self.textView?.becomeFirstResponder()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -141,6 +145,8 @@ class NBWBasicViewController: UIViewController {
                 
                 let contactViewController = NBWContactTableViewController.init(contactArray: self.friendsYouFollowArray)
                 
+                contactViewController.sendScreenNameDelegate = self
+                
                 let navigationController = UINavigationController.init(rootViewController: contactViewController)
                 
                 self.presentViewController(navigationController, animated: true, completion: nil)
@@ -166,6 +172,8 @@ class NBWBasicViewController: UIViewController {
     
     //MARK:- Data
     func importUserData(friendsArray:NSArray){
+        
+        self.friendsYouFollowArray = []
         
         for userDict in friendsArray {
             
@@ -215,5 +223,11 @@ extension NBWBasicViewController:UIImagePickerControllerDelegate,UINavigationCon
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         
+    }
+}
+
+extension NBWBasicViewController:SendScreenNameToTextViewDelegate {
+    func sendScreenName(screenName: String) {
+        self.textView?.text.appendContentsOf("@\(screenName) ")
     }
 }
