@@ -222,7 +222,7 @@ class NBWBasicViewController: UIViewController {
 extension NBWBasicViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        
+        print("API not found")
     }
 }
 

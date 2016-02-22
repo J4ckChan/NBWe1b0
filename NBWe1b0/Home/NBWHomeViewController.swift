@@ -13,6 +13,8 @@ import MJExtension
 import SDWebImage
 
 var managerContext:NSManagedObjectContext?
+var tableViewCellWidth:CGFloat?
+var navigationBarHeight:CGFloat?
 
 class NBWHomeViewController: UIViewController {
     
@@ -34,6 +36,8 @@ class NBWHomeViewController: UIViewController {
     var hasMultiImage:Bool?
     var hasRepost:Bool?
     
+    var selectedWeiboStatus:WeiboStatus?
+    
     //MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +47,8 @@ class NBWHomeViewController: UIViewController {
         self.tableView.delegate   = self
         
         self.userNameButton.setTitle(userScreenName, forState: .Normal)
+        tableViewCellWidth = self.view.frame.width
+        navigationBarHeight = self.navigationController?.navigationBar.frame.height
         
         cellCache = NSCache.init()
         
@@ -356,6 +362,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
                 
                 if cell == nil {
                     cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                    cell?.viewController = self
                     cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
                 }else {
                     cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
@@ -446,5 +453,15 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: weiboStatus.id!)
         weiboContextBasicViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(weiboContextBasicViewController, animated: true)
+    }
+    
+    func repostWeiboStatus(){
+        
+        let indexPath = self.tableView.indexPathForSelectedRow
+        
+        self.selectedWeiboStatus = self.weiboStatusesArray[(indexPath?.row)!]
+        
+        let repostViewController = NBWRespotViewController.init(weiboStatus: self.selectedWeiboStatus!, navigationBarHeight: navigationBarHeight!)
+        self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
     }
 }

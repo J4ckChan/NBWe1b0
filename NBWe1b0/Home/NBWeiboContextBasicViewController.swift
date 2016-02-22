@@ -18,7 +18,6 @@ class NBWeiboContextBasicViewController: UIViewController {
     var id:String = ""
     var weiboStatusArray:[WeiboStatus]?
     var weiboStatus:WeiboStatus?
-    var navigationBarHeight:CGFloat?
     var viewWidth:CGFloat?
     var viewHeight:CGFloat?
     var statusViewHeight:CGFloat?
@@ -40,6 +39,9 @@ class NBWeiboContextBasicViewController: UIViewController {
     var imageView4: UIImageView?
     var imageView5: UIImageView?
     var imageView6: UIImageView?
+    var backgroundView: UIView?
+    var showImageView: UIImageView?
+    var orignalFrame: CGRect?
     
     //StatusView - RepostView
     var repostView:UIView?
@@ -71,11 +73,9 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     //Repost & Comment & Like Bar
     var repostCommentLikeBar:UIView?
-    
     var repostButton:UIButton?
     var commentButton:UIButton?
     var likeButton:UIButton?
-    
     var likeFlag:Bool?
     
     
@@ -97,7 +97,6 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.navigationItem.title = "Weibo Context"
         self.navigationController?.navigationBar.tintColor = UIColor.grayColor()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: Selector("navigationAction"))
-        self.navigationBarHeight = self.navigationController?.navigationBar.frame.height
         self.viewHeight = self.view.bounds.height
         self.viewWidth  = self.view.bounds.width
         self.commentCache = NSCache.init()
@@ -302,6 +301,13 @@ class NBWeiboContextBasicViewController: UIViewController {
                 statusView.addSubview(imageViewArray[i]!)
             }
         }
+        
+        //Tap to Show Bigger Picture
+        for imageView in imageViewArray {
+            let tap = UITapGestureRecognizer(target: self, action: Selector("showBiggerPicture:"))
+            imageView?.addGestureRecognizer(tap)
+            imageView?.userInteractionEnabled = true
+        }
     }
     
     func setupRepostStatusView(bodyTextLabelHeight:CGFloat){
@@ -364,6 +370,12 @@ class NBWeiboContextBasicViewController: UIViewController {
             let imageView = UIImageView.init(frame: CGRect(x: 8 + (8 + imageViewWidth) * k, y: 16 + repostLabelHeight + (imageViewWidth + 8) * j, width: imageViewWidth, height: imageViewWidth))
             
             imageViewArray.append(imageView)
+        }
+        
+        for imageView in imageViewArray {
+            let tap = UITapGestureRecognizer(target: self, action: Selector("showBiggerPicture:"))
+            imageView.addGestureRecognizer(tap)
+            imageView.userInteractionEnabled = true
         }
         
         
@@ -552,6 +564,35 @@ class NBWeiboContextBasicViewController: UIViewController {
         
     }
     
+    //MARK: - ImageView
+    func showBiggerPicture(tap:UITapGestureRecognizer){
+        self.backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: viewHeight!))
+        self.backgroundView?.backgroundColor = UIColor.blackColor()
+        self.view.addSubview(self.backgroundView!)
+        
+        let imageViewTap = tap.view as? UIImageView
+        self.showImageView = UIImageView(image: imageViewTap?.image)
+        self.showImageView?.frame = (imageViewTap?.frame)!
+        self.orignalFrame = showImageView?.frame
+        let tap = UITapGestureRecognizer(target: self, action: Selector("hideImageView:"))
+        self.showImageView?.addGestureRecognizer(tap)
+        self.showImageView?.userInteractionEnabled = true
+        
+        UIView.animateWithDuration(0.3) { () -> Void in
+            self.showImageView?.frame = CGRect(x: 0, y: self.viewHeight!/5, width: self.viewWidth!, height: 3*(self.viewHeight!/5))
+            self.backgroundView?.addSubview(self.showImageView!)
+        }
+    }
+    
+    func hideImageView(tap:UITapGestureRecognizer){
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.showImageView?.frame = self.orignalFrame!
+            }) { (Bool) -> Void in
+                self.showImageView?.removeFromSuperview()
+                self.backgroundView?.removeFromSuperview()
+        }
+    }
+    
     //MARK: - TableView & UIButton for Repost & Comment & Like
     
     //Repost Comment Like Button Function
@@ -666,13 +707,13 @@ class NBWeiboContextBasicViewController: UIViewController {
     //MARK: - Repost & Comment & Like Bar
     func repostWeiboStatus(){
        
-        let repostViewController = NBWRespotViewController.init(weiboStatus: self.weiboStatus!, navigationBarHeight: self.navigationBarHeight!)
+        let repostViewController = NBWRespotViewController.init(weiboStatus: self.weiboStatus!, navigationBarHeight: navigationBarHeight!)
         self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
     }
     
     func commentWeiboStatus(){
         
-        let commentViewController = NBWCommentViewController.init(id: self.id,navigationBarHeight: self.navigationBarHeight!)
+        let commentViewController = NBWCommentViewController.init(id: self.id,navigationBarHeight: navigationBarHeight!)
         self.navigationController?.presentViewController(commentViewController, animated: true, completion: nil)
         
     }
