@@ -67,9 +67,9 @@ class NBWHomeViewController: UIViewController {
         let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
         self.refreshController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
         
-        self.refreshController!.addTarget(self, action: Selector(homeTimelineFetchDataFromWeibo()), forControlEvents: UIControlEvents.ValueChanged)
-
-        self.refreshController!.beginRefreshing()
+        self.refreshController!.addTarget(self, action: Selector("homeTimelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
+        
+        homeTimelineFetchDataFromWeibo(self)
         
         self.fetchDataFromCoreData()
     }
@@ -84,7 +84,9 @@ class NBWHomeViewController: UIViewController {
     
     
     //MARK: - Weibo.com
-    func homeTimelineFetchDataFromWeibo(){
+    func homeTimelineFetchDataFromWeibo(sender:AnyObject){
+        
+        self.refreshController!.beginRefreshing()
         
         Alamofire.request(.GET, homeTimelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
@@ -374,6 +376,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
                 
                 if cell == nil {
                     cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
+                    cell?.viewController = self
                     cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
                 }else{
                     cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
@@ -385,6 +388,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
             
             if cell == nil {
                 cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
+                cell?.viewController = self
                 cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
             }else{
                 cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
@@ -446,22 +450,40 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
     
     //The Background of selected Cell disappear
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         
         let weiboStatus = weiboStatusesArray[indexPath.row]
         
-        let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: weiboStatus.id!)
+        let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: weiboStatus.id!,tableViewBool: false)
         weiboContextBasicViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(weiboContextBasicViewController, animated: true)
     }
-    
-    func repostWeiboStatus(){
+
+    func repostWeiboStatus(sender:AnyObject){
         
-        let indexPath = self.tableView.indexPathForSelectedRow
+        let cell = sender.superview!!.superview!.superview as! UITableViewCell
+        
+        let indexPath = self.tableView.indexPathForCell(cell)
         
         self.selectedWeiboStatus = self.weiboStatusesArray[(indexPath?.row)!]
         
         let repostViewController = NBWRespotViewController.init(weiboStatus: self.selectedWeiboStatus!, navigationBarHeight: navigationBarHeight!)
         self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
+    }
+    
+    func commentWeiboStatus(sender:AnyObject){
+        
+        let cell = sender.superview!!.superview?.superview as! UITableViewCell
+        
+        let indexPath = self.tableView.indexPathForCell(cell)
+        
+        self.selectedWeiboStatus = self.weiboStatusesArray[indexPath!.row]
+        
+        let contextViewController = NBWeiboContextBasicViewController.init(id: self.selectedWeiboStatus!.id!, tableViewBool: true)
+        
+        contextViewController.hidesBottomBarWhenPushed = true
+        
+        self.navigationController?.pushViewController(contextViewController, animated: true)
     }
 }

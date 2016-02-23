@@ -16,6 +16,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     //Weibo Status Data
     var id:String = ""
+    var tableViewBool:Bool = false
     var weiboStatusArray:[WeiboStatus]?
     var weiboStatus:WeiboStatus?
     var viewWidth:CGFloat?
@@ -80,10 +81,11 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     
     //MARK: - ViewController LifeCycle
-    init(id:String){
+    init(id:String,tableViewBool:Bool){
         super.init(nibName: nil, bundle: nil)
         self.id = id
         self.switchBarCondition = .Comment
+        self.tableViewBool = tableViewBool
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -113,6 +115,10 @@ class NBWeiboContextBasicViewController: UIViewController {
         }
         
         setupWeiboStatus()
+        
+        if tableViewBool {
+           self.scrollView?.setContentOffset(CGPoint(x: 0, y: self.statusViewHeight! + 14), animated: true)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -731,7 +737,6 @@ class NBWeiboContextBasicViewController: UIViewController {
         }else {
             self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
         }
-        
     }
 
     //MARK: - Core Data

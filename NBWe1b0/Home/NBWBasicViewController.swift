@@ -219,6 +219,7 @@ class NBWBasicViewController: UIViewController {
     }
 }
 
+
 extension NBWBasicViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
@@ -231,3 +232,5 @@ extension NBWBasicViewController:SendScreenNameToTextViewDelegate {
         self.textView?.text.appendContentsOf("@\(screenName) ")
     }
 }
+
+

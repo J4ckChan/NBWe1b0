@@ -28,10 +28,18 @@ class NBWTableViewImageCell: UITableViewCell {
     
     //bottomView
     @IBOutlet weak var countForRepostCommentLikes: UILabel!
+    @IBOutlet weak var repostCommentLikeBarView: UIView!
+    var repostCommentLikeBar:UIView?
+    var repostButton:UIButton?
+    var commentButton:UIButton?
+    var likeButton:UIButton?
+    var likeFlag:Bool?
+    var viewController:NBWHomeViewController?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -91,6 +99,7 @@ class NBWTableViewImageCell: UITableViewCell {
         //Setup bottomView
         cell.countForRepostCommentLikes.text = "\((weiboStatus.reposts_count)!) Repost, \((weiboStatus.comments_count)!) Comment, \((weiboStatus.attitudes_count)!) Likes"
         
+        setupRespotCommentLikeBarView()
     }
     
     func configureMultiImageView(cell:NBWTableViewImageCell,weiboStatus:WeiboStatus){
@@ -135,6 +144,68 @@ class NBWTableViewImageCell: UITableViewCell {
                     break
                 }
             }
+        }
+    }
+    
+    //MARK: - Repost & Comment & Like Bar
+    func setupRespotCommentLikeBarView(){
+        
+        self.repostButton = UIButton.init(frame: CGRect(x: 0, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        self.repostButton?.setTitle("  Repost", forState: UIControlState.Normal)
+        self.repostButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.repostButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.repostButton?.setImage(UIImage(named: "repost32"), forState: .Normal)
+        self.repostButton?.addTarget(self.viewController, action: Selector("repostWeiboStatus:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.commentButton = UIButton.init(frame: CGRect(x: tableViewCellWidth!/3.0, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        self.commentButton?.setTitle("  Comment", forState: .Normal)
+        self.commentButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.commentButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.commentButton?.setImage(UIImage(named: "comment32"), forState: .Normal)
+        self.commentButton?.addTarget(self.viewController, action: Selector("commentWeiboStatus:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.likeButton = UIButton.init(frame: CGRect(x: (tableViewCellWidth!/3.0)*2, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        self.likeButton?.setTitle("  like", forState: .Normal)
+        self.likeButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        self.likeButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
+        self.likeButton?.addTarget(self, action: Selector("likeWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.likeFlag = false
+        
+        let separator1 = UIView(frame: CGRect(x: tableViewCellWidth!/3.0, y: 11, width: 1, height: 11))
+        separator1.backgroundColor = UIColor.lightGrayColor()
+        
+        let separator2 = UIView(frame: CGRect(x: 2.0*tableViewCellWidth!/3.0, y: 11, width: 1, height: 11))
+        separator2.backgroundColor = UIColor.lightGrayColor()
+        
+        let separator3 = UIView(frame: CGRect(x: 0, y: 32, width: tableViewCellWidth!, height: 10))
+        separator3.backgroundColor = UIColor(red: 242/250, green: 242/250, blue: 242/250, alpha: 1)
+        
+        let separator4 = UIView(frame: CGRect(x: 0, y: 0, width: tableViewCellWidth!, height: 0.5))
+        separator4.backgroundColor = UIColor.lightGrayColor()
+        
+        self.repostCommentLikeBarView.addSubview(self.repostButton!)
+        self.repostCommentLikeBarView.addSubview(self.commentButton!)
+        self.repostCommentLikeBarView.addSubview(self.likeButton!)
+        self.repostCommentLikeBarView.addSubview(separator1)
+        self.repostCommentLikeBarView.addSubview(separator2)
+        self.repostCommentLikeBarView.addSubview(separator3)
+        self.repostCommentLikeBarView.addSubview(separator4)
+    }
+    
+    func likeWeiboStatus(){
+        
+        if self.likeFlag == false {
+            self.likeFlag = true
+        }else{
+            self.likeFlag = false
+        }
+        
+        if likeFlag == true {
+            self.likeButton?.setImage(UIImage(named: "like32_selected"), forState: .Normal)
+        }else {
+            self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
         }
     }
 }
