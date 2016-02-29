@@ -26,7 +26,8 @@ class NBWHomeViewController: UIViewController {
     let multiImageReuseIdentifier = "ImageCell"
     let repostReuseIdentifier     = "RepostCell"
     
-    var refreshController:UIRefreshControl?
+    var refreshHeaderController:UIRefreshControl?
+//    var refreshFooterController:UIRefreshControl?
     var cellCache:NSCache?
     var numberOfImageRow:CGFloat?
     var numberOfRespostCellImageRow:CGFloat?
@@ -35,6 +36,11 @@ class NBWHomeViewController: UIViewController {
     var hasImage:Bool?
     var hasMultiImage:Bool?
     var hasRepost:Bool?
+    var nameButtonViewBool = false
+    var nameButtonView:UIView?
+    var nameButtonBackgroundImageView:UIImageView?
+    var nameButtonBackgroundArrowImageView:UIImageView?
+    var nameButtonTableViewController:NBWNameButtonTableViewController?
     
     var selectedWeiboStatus:WeiboStatus?
     
@@ -45,8 +51,6 @@ class NBWHomeViewController: UIViewController {
         // Do any additional setup after loading the view
         self.tableView.dataSource = self
         self.tableView.delegate   = self
-        
-        self.userNameButton.setTitle(userScreenName, forState: .Normal)
         tableViewCellWidth = self.view.frame.width
         navigationBarHeight = self.navigationController?.navigationBar.frame.height
         
@@ -56,24 +60,33 @@ class NBWHomeViewController: UIViewController {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         managerContext = appDelegate.managedObjectContext
         
+        setupUserNameButton()
+        
         setUpRefresh()
+    }
+    
+    func setupUserNameButton(){
+        self.userNameButton.setTitle(userScreenName, forState: .Normal)
+        self.userNameButton.addTarget(self, action: Selector("showNameButtonView:"), forControlEvents: .TouchUpInside)
     }
     
     func setUpRefresh(){
         
-        self.refreshController = UIRefreshControl.init()
-        self.tableView.addSubview(self.refreshController!)
-        self.refreshController?.tintColor = UIColor.orangeColor()
+        //HeaderRefresh
+        self.refreshHeaderController = UIRefreshControl.init()
+        self.tableView.addSubview(self.refreshHeaderController!)
+        self.refreshHeaderController?.tintColor = UIColor.orangeColor()
         let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
-        self.refreshController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
+        self.refreshHeaderController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
         
-        self.refreshController!.addTarget(self, action: Selector("homeTimelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
+        self.refreshHeaderController!.addTarget(self, action: Selector("homeTimelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
         
         homeTimelineFetchDataFromWeibo(self)
         
         self.fetchDataFromCoreData()
     }
     
+    //MARK: - Button
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
         let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
         request.redirectURI = redirectURL
@@ -82,11 +95,40 @@ class NBWHomeViewController: UIViewController {
         WeiboSDK.sendRequest(request)
     }
     
+    func showNameButtonView(sender:AnyObject){
+        
+        if nameButtonViewBool {
+            nameButtonViewBool = !nameButtonViewBool
+            
+            nameButtonView?.removeFromSuperview()
+            nameButtonBackgroundArrowImageView?.removeFromSuperview()
+            
+        }else{
+            nameButtonViewBool = !nameButtonViewBool
+            let center = userNameButton.center
+            
+            nameButtonView = UIView(frame: CGRect(origin: CGPoint(x: center.x - 100, y: navigationBarHeight! + 10), size: CGSize(width: 200, height: 300)))
+            nameButtonBackgroundImageView = UIImageView(image: UIImage(named: "nameButtonView"))
+            nameButtonBackgroundImageView?.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
+            nameButtonView?.addSubview(nameButtonBackgroundImageView!)
+            
+            nameButtonTableViewController = NBWNameButtonTableViewController.init(frame: CGRect(x: 0, y: 10, width: 200, height: 290))
+            nameButtonView?.addSubview((nameButtonTableViewController?.tableView)!)
+            
+            nameButtonBackgroundArrowImageView = UIImageView(image: UIImage(named: "nameButtonViewArrow"))
+            
+            nameButtonBackgroundArrowImageView?.frame = CGRect(x: center.x - 100, y: navigationBarHeight! - 10, width: 200, height: 10)
+            
+            navigationController?.navigationBar.addSubview(nameButtonBackgroundArrowImageView!)
+            view.addSubview(nameButtonView!)
+        }
+    }
+    
     
     //MARK: - Weibo.com
     func homeTimelineFetchDataFromWeibo(sender:AnyObject){
         
-        self.refreshController!.beginRefreshing()
+        self.refreshHeaderController!.beginRefreshing()
         
         Alamofire.request(.GET, homeTimelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
@@ -100,7 +142,7 @@ class NBWHomeViewController: UIViewController {
                 }catch let error as NSError{
                     print("Error:\(error.localizedDescription)")
                 }
-                self.refreshController?.endRefreshing()
+                self.refreshHeaderController?.endRefreshing()
             }
     }
     
