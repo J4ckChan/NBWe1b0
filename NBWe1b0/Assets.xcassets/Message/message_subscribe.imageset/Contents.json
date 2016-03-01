@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "message_subscribe.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Screen Shot 2016-01-16 at 17.34.44.png",
+      "filename" : "message_subscribe@2x.png",
       "scale" : "2x"
     },
     {

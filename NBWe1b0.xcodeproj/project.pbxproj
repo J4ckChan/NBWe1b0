@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
+		3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */; };
+		3D2C51041C85301500E19000 /* NBWOfficialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51031C85301500E19000 /* NBWOfficialTableViewCell.swift */; };
+		3D2C51071C85305C00E19000 /* NBWFollowerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51061C85305C00E19000 /* NBWFollowerTableViewCell.swift */; };
+		3D2C510A1C8578FA00E19000 /* NBWMentionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51091C8578FA00E19000 /* NBWMentionTableViewController.swift */; };
+		3D2C51111C858A9F00E19000 /* NBWCoreDataFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51101C858A9F00E19000 /* NBWCoreDataFunctions.swift */; };
 		3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */; };
 		3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */; };
 		3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */; };
@@ -60,6 +65,11 @@
 
 /* Begin PBXFileReference section */
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
+		3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWMessageTableViewController.swift; sourceTree = "<group>"; };
+		3D2C51031C85301500E19000 /* NBWOfficialTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWOfficialTableViewCell.swift; sourceTree = "<group>"; };
+		3D2C51061C85305C00E19000 /* NBWFollowerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWFollowerTableViewCell.swift; sourceTree = "<group>"; };
+		3D2C51091C8578FA00E19000 /* NBWMentionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWMentionTableViewController.swift; path = OfficialMessageVC/NBWMentionTableViewController.swift; sourceTree = "<group>"; };
+		3D2C51101C858A9F00E19000 /* NBWCoreDataFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCoreDataFunctions.swift; path = CoreDataFunction/NBWCoreDataFunctions.swift; sourceTree = "<group>"; };
 		3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWRepostTableViewCell.swift; path = Home/NBWRepostTableViewCell.swift; sourceTree = "<group>"; };
 		3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWRepostTableViewCell.xib; path = Home/NBWRepostTableViewCell.xib; sourceTree = "<group>"; };
 		3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWeiboContextBasicViewController.swift; path = Home/NBWeiboContextBasicViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +145,41 @@
 				7F4B1336DE0F1420E794259B /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		3D2C51001C852C6100E19000 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51081C8577E500E19000 /* OfficicalMessageVC */,
+				3D2C51051C85302100E19000 /* TableViewCell */,
+				3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		3D2C51051C85302100E19000 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51031C85301500E19000 /* NBWOfficialTableViewCell.swift */,
+				3D2C51061C85305C00E19000 /* NBWFollowerTableViewCell.swift */,
+			);
+			name = TableViewCell;
+			sourceTree = "<group>";
+		};
+		3D2C51081C8577E500E19000 /* OfficicalMessageVC */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51091C8578FA00E19000 /* NBWMentionTableViewController.swift */,
+			);
+			name = OfficicalMessageVC;
+			sourceTree = "<group>";
+		};
+		3D2C510F1C858A4B00E19000 /* CoreDataFunction */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51101C858A9F00E19000 /* NBWCoreDataFunctions.swift */,
+			);
+			name = CoreDataFunction;
 			sourceTree = "<group>";
 		};
 		3D467BF61C560045007A1797 /* WeiboDataModel */ = {
@@ -235,8 +280,10 @@
 		3DE1C5391C3D4CC8008E3A94 /* NBWe1b0 */ = {
 			isa = PBXGroup;
 			children = (
+				3D2C510F1C858A4B00E19000 /* CoreDataFunction */,
 				3DE1C53A1C3D4CC8008E3A94 /* AppDelegate.swift */,
 				3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */,
+				3D2C51001C852C6100E19000 /* Message */,
 				3DF22D971C4AA1A700DD53D2 /* Home */,
 				3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */,
 				3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */,
@@ -473,9 +520,12 @@
 				3D92C95D1C4E0B490007A12C /* WeiboUser+CoreDataProperties.swift in Sources */,
 				3DABDB001C507C9D001BC23E /* NBWTableViewImageCell.swift in Sources */,
 				3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */,
+				3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */,
 				3D9EA3221C630AF900A8383A /* NBWCommentTableViewCell.swift in Sources */,
 				3D5E86F01C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift in Sources */,
+				3D2C510A1C8578FA00E19000 /* NBWMentionTableViewController.swift in Sources */,
 				3D5D43371C4E777300DA8834 /* NBWPics.swift in Sources */,
+				3D2C51111C858A9F00E19000 /* NBWCoreDataFunctions.swift in Sources */,
 				3D7FEADF1C76BEBB00C2E847 /* NBWContactResultTableViewController.swift in Sources */,
 				3D5F620B1C741B1D00BDED94 /* NBWCommentViewController.swift in Sources */,
 				3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */,
@@ -486,8 +536,10 @@
 				3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */,
 				3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */,
 				3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */,
+				3D2C51071C85305C00E19000 /* NBWFollowerTableViewCell.swift in Sources */,
 				3D5F62091C7405E900BDED94 /* NBWBasicViewController.swift in Sources */,
 				3D92C9581C4E0B490007A12C /* NBWHomeViewController.swift in Sources */,
+				3D2C51041C85301500E19000 /* NBWOfficialTableViewCell.swift in Sources */,
 				3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */,
 				3D92C95B1C4E0B490007A12C /* WeiboStatus+CoreDataProperties.swift in Sources */,
 				3DE1C5431C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld in Sources */,

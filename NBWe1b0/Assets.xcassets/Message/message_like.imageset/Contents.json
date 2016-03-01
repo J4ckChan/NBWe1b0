@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "message_like.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "repostCommentLikeBar.jpg",
+      "filename" : "message_like@2x.png",
       "scale" : "2x"
     },
     {
