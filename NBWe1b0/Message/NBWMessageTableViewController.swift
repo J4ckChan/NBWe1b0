@@ -66,7 +66,12 @@ class NBWMessageTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                let mentionVC = NBWMentionTableViewController.init()
+                self.navigationController?.pushViewController(mentionVC, animated: true)
+            }
+        }
     }
 
 

@@ -177,42 +177,9 @@ class NBWBasicViewController: UIViewController {
         
         for userDict in friendsArray {
             
-            let userEntity = NSEntityDescription.entityForName("WeiboUser", inManagedObjectContext: managerContext!)
-            let weiboUser = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext!) as! WeiboUser
+            let weiboUser = weiboUserManagedObject()
             
-            weiboUser.id                 = userDict["id"] as? NSNumber
-            weiboUser.idstr              = userDict["idstr"] as? String
-            weiboUser.screen_name        = userDict["screen_name"] as? String
-            weiboUser.name               = userDict["name"] as? String
-            weiboUser.province           = userDict["province"] as? NSNumber
-            weiboUser.city               = userDict["city"] as? NSNumber
-            weiboUser.location           = userDict["location"] as? String
-            weiboUser.user_description   = userDict["description"] as? String
-            weiboUser.url                = userDict["url"] as? String
-            weiboUser.profile_image_url  = userDict["profile_image_url"] as? String
-            weiboUser.profile_url        = userDict["profile_url"] as? String
-            weiboUser.domain             = userDict["domain"] as? String
-            weiboUser.weihao             = userDict["weihao"] as? String
-            weiboUser.gender             = userDict["gender"] as? String
-            weiboUser.followers_count    = userDict["followers_count"] as? NSNumber
-            weiboUser.friends_count      = userDict["friends_count"] as? NSNumber
-            weiboUser.statuses_count     = userDict["statuses_count"] as? NSNumber
-            weiboUser.favourites_count   = userDict["favourites_count"] as? NSNumber
-            weiboUser.created_at         = userDict["created_at"] as? String
-            weiboUser.following          = userDict["following"] as? NSNumber
-            weiboUser.allow_all_act_msg  = userDict["allow_all_act_msg"] as? NSNumber
-            weiboUser.geo_enabled        = userDict["geo_enabled"] as? NSNumber
-            weiboUser.verified           = userDict["verified"] as? NSNumber
-            weiboUser.verified_type      = userDict["verified_type"] as? NSNumber
-            weiboUser.remark             = userDict["remark"] as? String
-            weiboUser.allow_all_comment  = userDict["allow_all_comment"] as? NSNumber
-            weiboUser.avatar_large       = userDict["avatar_large"] as? String
-            weiboUser.avatar_hd          = userDict["avatar_hd"] as? String
-            weiboUser.verified_reason    = userDict["verified_reason"] as? String
-            weiboUser.follow_me          = userDict["follow_me"] as? NSNumber
-            weiboUser.online_status      = userDict["online_status"] as? NSNumber
-            weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
-            weiboUser.lang               = userDict["lang"] as? String
+            importUserDataFromJSON(weiboUser, userDict: userDict as! NSDictionary)
             
             self.friendsYouFollowArray.append(weiboUser)
         }
