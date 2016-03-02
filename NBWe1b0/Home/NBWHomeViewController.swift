@@ -151,7 +151,7 @@ class NBWHomeViewController: UIViewController {
         // weibo status is stored in WeiboStatus from CoreData
         weiboStatusPesistentlyStoreInCoreData(statuesArray)
         
-        managerContextSava()
+        managerContextSave()
         
         fetchDataFromCoreData()
         

@@ -15,7 +15,7 @@ class NBWMentionTableViewController: UITableViewController {
     
     let mentionsURLString = "https://api.weibo.com/2/statuses/mentions.json"
     var mentionsWeiboStatuses = [WeiboStatus]()
-    var tableViewHeightArray = [CGFloat]()
+    var mentionFetched:WeiboStatus?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -69,27 +69,54 @@ class NBWMentionTableViewController: UITableViewController {
         mentionsWeiboStatuses = []
         
         for mention in mentionsArray {
-
-            let weiboStatus              = weiboStatusManagedObject()
-            importStatusDataFromJSON(weiboStatus, jsonDict: mention as! NSDictionary)
             
-            let weiboUser                = weiboUserManagedObject()
-            let userDict                 = mention["user"] as? NSDictionary
-            importUserDataFromJSON(weiboUser, userDict:userDict!)
-            weiboStatus.user             = weiboUser
-
-            let retweetedStatus          = weiboStatusManagedObject()
-            let retweeted_statusDict     = mention["retweeted_status"] as? NSDictionary
-            importStatusDataFromJSON(retweetedStatus, jsonDict: retweeted_statusDict!)
-            weiboStatus.retweeted_status = retweetedStatus
+            let id = mention["idstr"] as? String
+            let isExisted = fetchDataFromCoreData(id!)
             
-            let retweetedUser = weiboUserManagedObject()
-            let retweetedUserDict = retweeted_statusDict!["user"] as? NSDictionary
-            importUserDataFromJSON(retweetedUser, userDict: retweetedUserDict!)
-            weiboStatus.retweeted_status?.user = retweetedUser
-
-            mentionsWeiboStatuses.append(weiboStatus)
+            if !isExisted {
+                let weiboStatus              = weiboStatusManagedObject()
+                importStatusDataFromJSON(weiboStatus, jsonDict: mention as! NSDictionary)
+                
+                let weiboUser                = weiboUserManagedObject()
+                let userDict                 = mention["user"] as? NSDictionary
+                importUserDataFromJSON(weiboUser, userDict:userDict!)
+                weiboStatus.user             = weiboUser
+                
+                let retweetedStatus          = weiboStatusManagedObject()
+                let retweeted_statusDict     = mention["retweeted_status"] as? NSDictionary
+                importStatusDataFromJSON(retweetedStatus, jsonDict: retweeted_statusDict!)
+                weiboStatus.retweeted_status = retweetedStatus
+                
+                let retweetedUser = weiboUserManagedObject()
+                let retweetedUserDict = retweeted_statusDict!["user"] as? NSDictionary
+                importUserDataFromJSON(retweetedUser, userDict: retweetedUserDict!)
+                weiboStatus.retweeted_status?.user = retweetedUser
+                
+                mentionsWeiboStatuses.append(weiboStatus)
+            }
         }
+        
+        managerContextSave()
+    }
+    
+    func fetchDataFromCoreData(id:String)->Bool{
+        
+        let request = NSFetchRequest(entityName: "WeiboStatus")
+        request.predicate = NSPredicate(format: "id == \(id)")
+        
+        do {
+            let mentionsArray = try managerContext?.executeFetchRequest(request) as! [WeiboStatus]
+            if mentionsArray.count == 0 {
+                return false
+            }else{
+                mentionFetched = mentionsArray[0]
+                mentionsWeiboStatuses.append(mentionFetched!)
+            }
+        }catch let error as NSError{
+            print("Fetching Error:\(error.localizedDescription)")
+        }
+    
+        return true
     }
 
     // MARK: - Table view data source
@@ -116,14 +143,18 @@ class NBWMentionTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        tableViewHeightArray = []
-        
         let heightNoIncludingTextLabel:CGFloat = 194
         let mention                            = mentionsWeiboStatuses[indexPath.row]
         let textLabelHeight                    = calculateTextLabelHeight(mention.text!)
         let height                             = heightNoIncludingTextLabel + textLabelHeight
         
         return height
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let mention = mentionsWeiboStatuses[indexPath.row]
+        let contextVC = NBWeiboContextBasicViewController.init(id: mention.id!, tableViewBool: false)
+        navigationController?.pushViewController(contextVC, animated: true)
     }
     
     func configureMentionTabelViewCell(mention:WeiboStatus,_ cell:UITableViewCell){

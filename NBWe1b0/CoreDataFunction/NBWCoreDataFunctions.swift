@@ -103,7 +103,7 @@ func importUserDataFromJSON(weiboUser:WeiboUser,userDict:NSDictionary){
 }
 
 //MARK: - ManagerContextSave
-func managerContextSava(){
+func managerContextSave(){
     do{
         try managerContext!.save()
     }catch let error as NSError {
