@@ -96,31 +96,16 @@ class NBWHomeViewController: UIViewController {
     
     func showNameButtonView(sender:AnyObject){
         
-        if nameButtonViewBool {
-            nameButtonViewBool = !nameButtonViewBool
-            
-            nameButtonView?.removeFromSuperview()
-            nameButtonBackgroundArrowImageView?.removeFromSuperview()
-            
-        }else{
-            nameButtonViewBool = !nameButtonViewBool
-            let center = userNameButton.center
-            
-            nameButtonView = UIView(frame: CGRect(origin: CGPoint(x: center.x - 100, y: navigationBarHeight! + 10), size: CGSize(width: 200, height: 300)))
-            nameButtonBackgroundImageView = UIImageView(image: UIImage(named: "nameButtonView"))
-            nameButtonBackgroundImageView?.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
-            nameButtonView?.addSubview(nameButtonBackgroundImageView!)
-            
-            nameButtonTableViewController = NBWNameButtonTableViewController.init(frame: CGRect(x: 0, y: 10, width: 200, height: 290))
-            nameButtonView?.addSubview((nameButtonTableViewController?.tableView)!)
-            
-            nameButtonBackgroundArrowImageView = UIImageView(image: UIImage(named: "nameButtonViewArrow"))
-            
-            nameButtonBackgroundArrowImageView?.frame = CGRect(x: center.x - 100, y: navigationBarHeight! - 10, width: 200, height: 10)
-            
-            navigationController?.navigationBar.addSubview(nameButtonBackgroundArrowImageView!)
-            view.addSubview(nameButtonView!)
-        }
+        let nameButtonTableVC = NBWNameButtonTableViewController.init()
+        nameButtonTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        nameButtonTableVC.preferredContentSize = CGSize(width: 160, height: 200)
+        nameButtonTableVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        
+        let popover = nameButtonTableVC.popoverPresentationController
+        popover?.sourceView = nameButtonTableVC.view
+        popover?.sourceRect = CGRect(x: userNameButton.center.x, y: userNameButton.center.y + userNameButton.frame.height/2, width: 0, height: 0)
+        popover?.delegate = self
+        presentViewController(nameButtonTableVC, animated: true, completion: nil)
     }
     
     
@@ -414,5 +399,12 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         contextViewController.hidesBottomBarWhenPushed = true
         
         self.navigationController?.pushViewController(contextViewController, animated: true)
+    }
+}
+
+//MARK: - UIPopoverPresentationControllerDelegate
+extension NBWHomeViewController:UIPopoverPresentationControllerDelegate{
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
     }
 }

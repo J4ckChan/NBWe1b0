@@ -12,10 +12,8 @@ class NBWNameButtonTableViewController: UITableViewController {
     
     var nameButtonArray = ["Homepage","Friends Circle","Group Weibo","My Weibo"]
     
-    init(frame:CGRect){
+    init(){
         super.init(nibName: nil, bundle: nil)
-        view.frame = frame
-        tableView.frame = frame
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,13 +42,13 @@ class NBWNameButtonTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return nameButtonArray.count
     }
-
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
         cell.textLabel?.text = nameButtonArray[indexPath.row]
+        cell.textLabel?.textColor = UIColor.whiteColor()
         cell.backgroundColor = UIColor.clearColor()
 
         return cell

@@ -16,6 +16,7 @@ class NBWMentionTableViewController: UITableViewController {
     let mentionsURLString = "https://api.weibo.com/2/statuses/mentions.json"
     var mentionsWeiboStatuses = [WeiboStatus]()
     var mentionFetched:WeiboStatus?
+    var navigationBarHeight:CGFloat?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -36,6 +37,7 @@ class NBWMentionTableViewController: UITableViewController {
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "mentionCell")
         navigationItem.title = "Mention"
         navigationController?.navigationBar.tintColor = UIColor.lightGrayColor()
+        navigationBarHeight = navigationController?.navigationBar.frame.height
         
         fetchMentionsDataFromWeibo()
     }
@@ -159,84 +161,92 @@ class NBWMentionTableViewController: UITableViewController {
     
     func configureMentionTabelViewCell(mention:WeiboStatus,_ cell:UITableViewCell){
         
-        let avater = UIImageView(frame: CGRect(x: 8, y: 8, width: 40, height: 40))
+        let avater                      = UIImageView(frame: CGRect(x: 8, y: 8, width: 40, height: 40))
         avater.sd_setImageWithURL(NSURL(string: (mention.user?.avatar_large)!))
-        
-        let screenNameLabel = UILabel(frame: CGRect(x: 56, y: 8, width: view.frame.width - 64, height: 20))
-        screenNameLabel.text = mention.user?.screen_name
-        screenNameLabel.font = UIFont.systemFontOfSize(15)
-        
-        let createdAtLabel = UILabel(frame: CGRect(x: 56, y: 32, width: view.frame.width - 64, height: 16))
-        createdAtLabel.text = "\((mention.source)!)"
-        createdAtLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-        
-        let labelHeight = calculateTextLabelHeight(mention.text!)
-        let textLabel = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
-        textLabel.text = mention.text
-        textLabel.numberOfLines = 0
-        textLabel.font = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
-        
+
+        let screenNameLabel             = UILabel(frame: CGRect(x: 56, y: 8, width: 200, height: 20))
+        screenNameLabel.text            = mention.user?.screen_name
+        screenNameLabel.font            = UIFont.systemFontOfSize(15)
+
+        let createdAtLabel              = UILabel(frame: CGRect(x: 56, y: 32, width: view.frame.width - 64, height: 16))
+        createdAtLabel.text             = "\((mention.source)!)"
+        createdAtLabel.font             = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
+
+        let labelHeight                 = calculateTextLabelHeight(mention.text!)
+        let textLabel                   = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
+        textLabel.text                  = mention.text
+        textLabel.numberOfLines         = 0
+        textLabel.font                  = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
+
         cell.contentView.addSubview(avater)
         cell.contentView.addSubview(screenNameLabel)
         cell.contentView.addSubview(createdAtLabel)
         cell.contentView.addSubview(textLabel)
-        
-        let repostView = UIView(frame: CGRect(x: 8, y: 64 + labelHeight, width: view.frame.width - 16, height: 80))
-        repostView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
-        
+
+        let repostView                  = UIView(frame: CGRect(x: 8, y: 64 + labelHeight, width: view.frame.width - 16, height: 80))
+        repostView.backgroundColor      = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+
         cell.contentView.addSubview(repostView)
-        
-        let repostImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+
+        let repostImageView             = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         repostImageView.sd_setImageWithURL(NSURL(string: (mention.retweeted_status?.bmiddle_pic)!))
-        
-        let repostScreenNameLabel = UILabel(frame: CGRect(x: 88, y: 8, width: repostView.frame.width, height: 18))
-        repostScreenNameLabel.text = mention.retweeted_status?.user?.screen_name
-        repostScreenNameLabel.font = UIFont.systemFontOfSize(15)
-        
-        let repostTextLabel = UILabel(frame: CGRect(x: 88, y: 30, width: repostView.frame.width - 88, height: 46))
-        repostTextLabel.text = mention.retweeted_status?.text
-        repostTextLabel.numberOfLines = 0
-        repostTextLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-        
+
+        let repostScreenNameLabel       = UILabel(frame: CGRect(x: 88, y: 8, width: repostView.frame.width, height: 18))
+        repostScreenNameLabel.text      = mention.retweeted_status?.user?.screen_name
+        repostScreenNameLabel.font      = UIFont.systemFontOfSize(15)
+
+        let repostTextLabel             = UILabel(frame: CGRect(x: 88, y: 30, width: repostView.frame.width - 88, height: 46))
+        repostTextLabel.text            = mention.retweeted_status?.text
+        repostTextLabel.numberOfLines   = 0
+        repostTextLabel.font            = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
+
         repostView.addSubview(repostImageView)
         repostView.addSubview(repostScreenNameLabel)
         repostView.addSubview(repostTextLabel)
-        
-        let repostCommentLikeBarView = UIView(frame: CGRect(x: 0, y: 152 + labelHeight, width: view.frame.width, height: 42))
-        
+
+        let repostCommentLikeBarView    = UIView(frame: CGRect(x: 0, y: 152 + labelHeight, width: view.frame.width, height: 42))
+
         cell.contentView.addSubview(repostCommentLikeBarView)
-        
-        let separatorHeader = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0.5))
+
+        let separatorHeader             = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0.5))
         separatorHeader.backgroundColor = UIColor.grayColor()
-        
-        let separator = UIView(frame: CGRect(x: 0, y: 32, width: view.frame.width, height: 10))
-        separator.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
-        
+
+        let separator                   = UIView(frame: CGRect(x: 0, y: 32, width: view.frame.width, height: 10))
+        separator.backgroundColor       = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+
         repostCommentLikeBarView.addSubview(separator)
         repostCommentLikeBarView.addSubview(separatorHeader)
-        
-        
-        let repostButton = UIButton(frame: CGRect(x: 0, y: 1, width: view.frame.width/3, height: 31))
+
+
+        let repostButton                = UIButton(frame: CGRect(x: 0, y: 1, width: view.frame.width/3, height: 31))
         repostButton.setTitle(" Repost", forState: .Normal)
         repostButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        repostButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
+        repostButton.titleLabel?.font   = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         repostButton.setImage(UIImage(named: "repost32"), forState: .Normal)
-        
-        let commentButton = UIButton(frame: CGRect(x: view.frame.width/3, y: 1, width: view.frame.width/3, height: 31))
+        repostButton.addTarget(self, action: Selector("repostWeiboStatus:"), forControlEvents: .TouchUpInside)
+
+        let commentButton               = UIButton(frame: CGRect(x: view.frame.width/3, y: 1, width: view.frame.width/3, height: 31))
         commentButton.setTitle(" Comment", forState: .Normal)
         commentButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        commentButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
+        commentButton.titleLabel?.font  = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         commentButton.setImage(UIImage(named: "comment32"), forState: .Normal)
-        
-        let likeButton = UIButton(frame: CGRect(x: 2*(view.frame.width/3), y: 1, width: view.frame.width/3, height: 31))
+        commentButton.addTarget(self, action: Selector("commentWeiboStatus:"), forControlEvents: .TouchUpInside)
+
+        let likeButton                  = UIButton(frame: CGRect(x: 2*(view.frame.width/3), y: 1, width: view.frame.width/3, height: 31))
         likeButton.setTitle(" Like", forState: .Normal)
         likeButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
-        likeButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
+        likeButton.titleLabel?.font     = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         likeButton.setImage(UIImage(named: "like32"), forState: .Normal)
+        likeButton.addTarget(self, action: Selector("likeWeiboStatus:"), forControlEvents: .TouchUpInside)
         
+        let arrowButton = UIButton(frame: CGRect(x: view.frame.width - 50, y: 8, width: 50, height: 20))
+        arrowButton.setImage(UIImage(named: "arrow32"), forState: .Normal)
+        arrowButton.addTarget(self, action: Selector("arrowWeiboStatus:"), forControlEvents: .TouchUpInside)
+
         repostCommentLikeBarView.addSubview(repostButton)
         repostCommentLikeBarView.addSubview(commentButton)
         repostCommentLikeBarView.addSubview(likeButton)
+        cell.contentView.addSubview(arrowButton)
     }
     
     func calculateTextLabelHeight(text:String)->CGFloat{
@@ -250,5 +260,54 @@ class NBWMentionTableViewController: UITableViewController {
         let labelRect                          = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
         
         return labelRect.height
+    }
+    
+    //MARK: - UIButton
+    func repostWeiboStatus(sender:AnyObject){
+        
+        let cell = sender.superview!!.superview?.superview as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let mention = mentionsWeiboStatuses[(indexPath?.row)!]
+        let repostVC = NBWRespotViewController.init(weiboStatus: mention, navigationBarHeight: navigationBarHeight!)
+        self.presentViewController(repostVC, animated: true, completion: nil)
+    }
+    
+    func commentWeiboStatus(sender:AnyObject){
+        
+        let cell = sender.superview!!.superview?.superview as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let mention = mentionsWeiboStatuses[(indexPath?.row)!]
+        let weiboContextStatusVC = NBWeiboContextBasicViewController.init(id: mention.id!, tableViewBool: true)
+        navigationController?.pushViewController(weiboContextStatusVC, animated: true)
+    }
+    
+    func likeWeiboStatus(sender:AnyObject){
+        print("API NOT Found")
+    }
+    
+    func arrowWeiboStatus(sender:AnyObject){
+        
+//        let cell = sender.superview!!.superview as! UITableViewCell
+//        let indexPath = tableView.indexPathForCell(cell)
+//        let mention = mentionsWeiboStatuses[(indexPath?.row)!]
+        
+        let alertController = UIAlertController.init(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let shieldAction = UIAlertAction.init(title: "Shield", style: .Default) { (UIAlertAction) -> Void in
+            print("API Need High Authority")
+        }
+        let blockAction = UIAlertAction.init(title: "Block", style: .Default) { (UIAlertAction) -> Void in
+            print("API NOT Found")
+        }
+        let reportAction = UIAlertAction.init(title: "Report", style: .Default) { (UIAlertAction) -> Void in
+            print("API NOT Found")
+        }
+        let cancelAction = UIAlertAction.init(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alertController.addAction(shieldAction)
+        alertController.addAction(blockAction)
+        alertController.addAction(reportAction)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 }
