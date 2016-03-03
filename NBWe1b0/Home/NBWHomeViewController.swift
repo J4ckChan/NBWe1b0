@@ -20,7 +20,7 @@ class NBWHomeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var userNameButton: UIButton!
     
-    let homeTimelineURL           = "https://api.weibo.com/2/statuses/home_timeline.json"
+    var timelineURL               = "https://api.weibo.com/2/statuses/home_timeline.json"
     let basicReuseIdentifier      = "BasicCell"
     let multiImageReuseIdentifier = "ImageCell"
     let repostReuseIdentifier     = "RepostCell"
@@ -64,6 +64,11 @@ class NBWHomeViewController: UIViewController {
         setUpRefresh()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        managerContextSave()
+    }
+    
     func setupUserNameButton(){
         self.userNameButton.setTitle(userScreenName, forState: .Normal)
         self.userNameButton.addTarget(self, action: Selector("showNameButtonView:"), forControlEvents: .TouchUpInside)
@@ -78,11 +83,11 @@ class NBWHomeViewController: UIViewController {
         let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
         self.refreshHeaderController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
         
-        self.refreshHeaderController!.addTarget(self, action: Selector("homeTimelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
+        self.refreshHeaderController!.addTarget(self, action: Selector("timelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
         
-        homeTimelineFetchDataFromWeibo(self)
+        timelineFetchDataFromWeibo(self)
         
-        self.fetchDataFromCoreData()
+//        fetchDataFromCoreData()
     }
     
     //MARK: - Button
@@ -99,7 +104,8 @@ class NBWHomeViewController: UIViewController {
         let nameButtonTableVC = NBWNameButtonTableViewController.init()
         nameButtonTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
         nameButtonTableVC.preferredContentSize = CGSize(width: 160, height: 200)
-        nameButtonTableVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        nameButtonTableVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        nameButtonTableVC.sendTimelineURLStringDelegate = self
         
         let popover = nameButtonTableVC.popoverPresentationController
         popover?.sourceView = nameButtonTableVC.view
@@ -110,11 +116,11 @@ class NBWHomeViewController: UIViewController {
     
     
     //MARK: - Weibo.com
-    func homeTimelineFetchDataFromWeibo(sender:AnyObject){
+    func timelineFetchDataFromWeibo(sender:AnyObject){
         
         self.refreshHeaderController!.beginRefreshing()
         
-        Alamofire.request(.GET, homeTimelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, timelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -136,29 +142,15 @@ class NBWHomeViewController: UIViewController {
         // weibo status is stored in WeiboStatus from CoreData
         weiboStatusPesistentlyStoreInCoreData(statuesArray)
         
-        managerContextSave()
-        
-        fetchDataFromCoreData()
-        
         self.tableView.reloadData()
     }
     
     func weiboStatusPesistentlyStoreInCoreData(statuesArray:NSArray){
         
+        weiboStatusesArray = []
+        
         for jsonDict in statuesArray {
             
-            //compare idstr
-            fetchDataFromCoreData()
-            
-            var flag = true
-            for status in weiboStatusesArray {
-                let id = jsonDict["idstr"] as? String
-                if id == status.id {
-                    flag = false
-                }
-            }
-            
-            if flag == true {
                 //create NSManagedObject
                 let weiboUser            = weiboUserManagedObject()
 
@@ -192,8 +184,9 @@ class NBWHomeViewController: UIViewController {
                 importUserDataFromJSON(weiboUser, userDict: userDict)
                 
                 weiboUser.status = weiboUser.status?.setByAddingObject(weiboStatus)
+                
+                weiboStatusesArray.append(weiboStatus)
             }
-        }
     }
     
     func fetchDataFromCoreData(){
@@ -241,8 +234,6 @@ class NBWHomeViewController: UIViewController {
                 self.numberOfRespostCellImageRow = 1
             }
         }
-      
-//        print("hasImage:\(hasImage!) hasMultiImage:\(hasMultiImage!) pics number:\((weiboStatus.pics?.count)!) hasRepost:\(hasRepost!) pic number in repost:\(self.numberOfRespostCellImageRow!)")
     }
 }
 
@@ -406,5 +397,17 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
 extension NBWHomeViewController:UIPopoverPresentationControllerDelegate{
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
+    }
+}
+
+//MARK: - Send TimelineURL 
+extension NBWHomeViewController:SendTimelineURLStringDelegate {
+    func sendHomeTimeline() {
+        timelineURL = "https://api.weibo.com/2/statuses/home_timeline.json"
+        timelineFetchDataFromWeibo(self)
+    }
+    func sendFrindsTimeline() {
+        timelineURL = "https://api.weibo.com/2/statuses/bilateral_timeline.json"
+        timelineFetchDataFromWeibo(self)
     }
 }
