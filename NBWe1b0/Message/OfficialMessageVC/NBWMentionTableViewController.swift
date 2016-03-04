@@ -147,7 +147,7 @@ class NBWMentionTableViewController: UITableViewController {
         
         let heightNoIncludingTextLabel:CGFloat = 194
         let mention                            = mentionsWeiboStatuses[indexPath.row]
-        let textLabelHeight                    = calculateTextLabelHeight(mention.text!)
+        let textLabelHeight                    = calculateTextLabelHeight(mention.text!, fontSize: 17, viewWidth: tableView.frame.width)
         let height                             = heightNoIncludingTextLabel + textLabelHeight
         
         return height
@@ -172,7 +172,7 @@ class NBWMentionTableViewController: UITableViewController {
         createdAtLabel.text             = "\((mention.source)!)"
         createdAtLabel.font             = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
 
-        let labelHeight                 = calculateTextLabelHeight(mention.text!)
+        let labelHeight                 = calculateTextLabelHeight(mention.text!, fontSize: 17, viewWidth: tableView.frame.width)
         let textLabel                   = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
         textLabel.text                  = mention.text
         textLabel.numberOfLines         = 0
@@ -249,19 +249,6 @@ class NBWMentionTableViewController: UITableViewController {
         cell.contentView.addSubview(arrowButton)
     }
     
-    func calculateTextLabelHeight(text:String)->CGFloat{
-        
-        let labelText                          = text
-        let labelTextNSString                  = NSString(CString:labelText, encoding: NSUTF8StringEncoding)
-        let labelFont                          = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
-        let attributesDictionary               = [NSFontAttributeName:labelFont]
-        let labelSize                          = CGSize(width: tableView.frame.width-16, height:CGFloat.max)
-        let options:NSStringDrawingOptions     = [.UsesLineFragmentOrigin,.UsesFontLeading]
-        let labelRect                          = labelTextNSString!.boundingRectWithSize(labelSize, options: options, attributes: attributesDictionary,context: nil)
-        
-        return labelRect.height
-    }
-    
     //MARK: - UIButton
     func repostWeiboStatus(sender:AnyObject){
         
@@ -308,6 +295,6 @@ class NBWMentionTableViewController: UITableViewController {
         alertController.addAction(reportAction)
         alertController.addAction(cancelAction)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }

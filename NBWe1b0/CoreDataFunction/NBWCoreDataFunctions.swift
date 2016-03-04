@@ -13,6 +13,43 @@ import MJExtension
 
 //MARK: Fetch data frome core data
 
+func weiboStatusAlreadyExisted(id:String)->Bool {
+    
+    let request = NSFetchRequest(entityName: "WeiboStatus")
+    request.predicate = NSPredicate(format: "id == \(id)")
+    
+    do{
+        let array =  try managerContext?.executeFetchRequest(request) as! [WeiboStatus]
+        if array.count == 0 {
+            return false
+        }else{
+            return true
+        }
+    }catch let error as NSError {
+        print("Fetch Error: \(error.localizedDescription)")
+    }
+    
+    return false
+}
+
+func commentAlreadyExisted(id:String)->Bool{
+    
+    let request = NSFetchRequest(entityName: "Comment")
+    request.predicate = NSPredicate(format: "idstr == \(id)")
+    
+    do{
+        let array = try managerContext?.executeFetchRequest(request) as! [Comment]
+        if array.count == 0 {
+            return false
+        }else{
+            return true
+        }
+    }catch let error as NSError {
+        print("Fetch comment error:\(error.localizedDescription)")
+    }
+    return false
+}
+
 //MARK: - Pesistently Store in CoreData
 
 //MARK: NSManagedObject
@@ -29,6 +66,13 @@ func weiboUserManagedObject()->WeiboUser{
     let weiboUser         = NSManagedObject(entity: userEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboUser
     
     return weiboUser
+}
+
+func weiboCommentManagedObject()->Comment{
+    let commentEntity = NSEntityDescription.entityForName("Comment", inManagedObjectContext: managerContext!)
+    let comment = NSManagedObject(entity: commentEntity!, insertIntoManagedObjectContext: managerContext!) as! Comment
+    
+    return comment
 }
 
 
@@ -100,6 +144,16 @@ func importUserDataFromJSON(weiboUser:WeiboUser,userDict:NSDictionary){
     weiboUser.online_status      = userDict["online_status"] as? NSNumber
     weiboUser.bi_followers_count = userDict["bi_followers_count"] as? NSNumber
     weiboUser.lang               = userDict["lang"] as? String
+}
+
+func importCommentDataFromJSON(comment:Comment,commentDict:NSDictionary){
+    
+    comment.created_at = createdAtDateStringToNSDate(commentDict["created_at"] as? String)
+    comment.id         = commentDict["id"] as? NSNumber
+    comment.text       = commentDict["text"] as? String
+    comment.source     = sourceStringModifiedWithString((commentDict["source"] as? String)!)
+    comment.mid        = commentDict["mid"] as? String
+    comment.idstr      = commentDict["idstr"] as? String
 }
 
 //MARK: - ManagerContextSave

@@ -69,7 +69,10 @@ class NBWMessageTableViewController: UITableViewController {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let mentionVC = NBWMentionTableViewController.init()
-                self.navigationController?.pushViewController(mentionVC, animated: true)
+                navigationController?.pushViewController(mentionVC, animated: true)
+            }else if indexPath.row == 1{
+                let commentVC = NBWCommentTableViewController.init()
+                navigationController?.pushViewController(commentVC, animated: true)
             }
         }
     }

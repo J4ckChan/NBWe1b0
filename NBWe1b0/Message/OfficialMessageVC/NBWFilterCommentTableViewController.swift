@@ -1,20 +1,16 @@
 //
-//  NBWNameButtonTableViewController.swift
+//  NBWFilterCommentTableViewController.swift
 //  NBWe1b0
 //
-//  Created by ChanLiang on 2/29/16.
+//  Created by ChanLiang on 3/4/16.
 //  Copyright © 2016 JackChan. All rights reserved.
 //
 
 import UIKit
 
-protocol SendIndexDelegate{
-    func sendIndex(index:Int)
-}
-
-class NBWNameButtonTableViewController: UITableViewController {
+class NBWFilterCommentTableViewController: UITableViewController {
     
-    var nameButtonArray = ["Homepage","Friends Circle","Group Weibo"]
+    let filterCommentArray = ["All Comments","Following","Mine"]
     var indexDelegate:SendIndexDelegate?
     
     init(){
@@ -24,11 +20,11 @@ class NBWNameButtonTableViewController: UITableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
-        view.backgroundColor = UIColor.clearColor()
+        
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "filterCommentsCell")
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
     }
 
@@ -41,58 +37,39 @@ class NBWNameButtonTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0 {
-           return nameButtonArray.count
-        }else{
-            return 0
-        }
+        return filterCommentArray.count
     }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-           return 0
-        }else{
-            return 20
-        }
-    }
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1{
-            let myGroupImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 160, height: 10))
-            myGroupImageView.image = UIImage(named: "myGroup")
-            return myGroupImageView
-        }else{
-            return nil
-        }
-    }
-    
+
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("filterCommentsCell", forIndexPath: indexPath)
 
         // Configure the cell...
-        cell.textLabel?.text = nameButtonArray[indexPath.row]
+        cell.textLabel?.text = filterCommentArray[indexPath.row]
+        cell.textLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
         cell.textLabel?.textColor = UIColor.whiteColor()
         cell.backgroundColor = UIColor.clearColor()
 
         return cell
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 40
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         cell?.textLabel?.textColor = UIColor.orangeColor()
         
-        if indexPath.section == 0 {
-            if indexPath.row == 0 && indexPath.row == 1 {
-                indexDelegate?.sendIndex(indexPath.row)
-            }else{}
-        }else{}
+        if indexPath.row == 0 && indexPath.row == 1 && indexPath.row == 2{
+            indexDelegate?.sendIndex(indexPath.row)
+        }
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
 }
