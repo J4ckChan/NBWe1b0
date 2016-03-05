@@ -21,3 +21,12 @@ func calculateTextLabelHeight(text:String,fontSize:CGFloat,viewWidth:CGFloat)->C
     
     return labelRect.height
 }
+
+func createdAtLabelText(date:NSDate,source:String) -> String{
+    
+    let dateFormatter = NSDateFormatter.init()
+    dateFormatter.dateFormat = "MM-dd HH:mm"
+    let dateString    = dateFormatter.stringFromDate(date)
+
+    return "\(dateString) From \(source)"
+}

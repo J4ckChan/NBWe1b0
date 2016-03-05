@@ -35,7 +35,6 @@ class NBWCommentTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "commentIdentifier")
-        navigationItem.rightBarButtonItem = self.editButtonItem()
 
         navigationController?.navigationBar.tintColor = UIColor.lightGrayColor()
         
@@ -115,19 +114,39 @@ class NBWCommentTableViewController: UITableViewController {
             let idstr = commentDict["idstr"] as? String
             if !commentAlreadyExisted(idstr!) {
 
-                let comment           = weiboCommentManagedObject()
+                let comment             = weiboCommentManagedObject()
                 importCommentDataFromJSON(comment, commentDict: commentDict as! NSDictionary)
 
-                let weiboStatus       = weiboStatusManagedObject()
-                let weiboStatusDict   = commentDict["status"] as! NSDictionary
-                importStatusDataFromJSON(weiboStatus, jsonDict: weiboStatusDict)
-                comment.status        = weiboStatus
-
-                let weiboUser         = weiboUserManagedObject()
-                let weiboUserDict     = commentDict["user"] as! NSDictionary
+                let weiboUser           = weiboUserManagedObject()
+                let weiboUserDict       = commentDict["user"] as! NSDictionary
                 importUserDataFromJSON(weiboUser, userDict: weiboUserDict)
-                comment.user          = weiboUser
+                comment.user            = weiboUser
 
+                let weiboStatus         = weiboStatusManagedObject()
+                let weiboStatusDict     = commentDict["status"] as! NSDictionary
+                importStatusDataFromJSON(weiboStatus, jsonDict: weiboStatusDict)
+                comment.status          = weiboStatus
+
+                let weiboStatusUser     = weiboUserManagedObject()
+                let weiboStatusUserDict = weiboStatusDict["user"] as! NSDictionary
+                importUserDataFromJSON(weiboStatusUser, userDict: weiboStatusUserDict)
+                comment.status?.user    = weiboStatusUser
+
+                let retweetedStatusDict = weiboStatusDict["retweeted_status"] as? NSDictionary
+                
+                if retweetedStatusDict == nil {
+                    comment.status?.retweeted_status = nil
+                }else{
+                    let retweetedStatus = weiboStatusManagedObject()
+                    importStatusDataFromJSON(retweetedStatus, jsonDict: retweetedStatusDict!)
+                    comment.status?.retweeted_status = retweetedStatus
+                    
+                    let retweetedUser = weiboUserManagedObject()
+                    let retweetedUserDict = retweetedStatusDict!["user"] as! NSDictionary
+                    importUserDataFromJSON(retweetedUser, userDict: retweetedUserDict)
+                    comment.status?.retweeted_status?.user = retweetedUser
+                }
+                
                 let reply_commentDict = commentDict["reply_comment"] as? NSDictionary
 
                 if reply_commentDict == nil {
@@ -169,7 +188,16 @@ class NBWCommentTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 200
+        let comment = commentArray[indexPath.row]
+        let textLabelHeight = calculateTextLabelHeight(comment.text!, fontSize: 15, viewWidth: view.frame.width - 16)
+        if comment.reply_comment == nil {
+            return 152 + textLabelHeight
+        }else{
+            let name = comment.reply_comment?.user?.screen_name
+            let text = "@\(name!): \((comment.reply_comment?.text)!)"
+            let replyCommentLableHeight = calculateTextLabelHeight(text, fontSize: 15, viewWidth: view.frame.width - 16)
+            return 160 + textLabelHeight + replyCommentLableHeight
+        }
     }
     
     func configureCommentTableViewCell(comment:Comment,_ cell:UITableViewCell){
@@ -182,19 +210,104 @@ class NBWCommentTableViewController: UITableViewController {
         screenNameLabel.font            = UIFont.systemFontOfSize(15)
         
         let createdAtLabel              = UILabel(frame: CGRect(x: 56, y: 32, width: view.frame.width - 64, height: 16))
-        createdAtLabel.text             = "\((comment.source)!)"
+        createdAtLabel.text             = createdAtLabelText(comment.created_at!, source: comment.source!)
         createdAtLabel.font             = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
         
-        let labelHeight                 = calculateTextLabelHeight(comment.text!,fontSize: 17,viewWidth: view.frame.width)
+        let labelHeight                 = calculateTextLabelHeight(comment.text!,fontSize: 15,viewWidth: view.frame.width)
         let textLabel                   = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
         textLabel.text                  = comment.text
         textLabel.numberOfLines         = 0
-        textLabel.font                  = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
+        textLabel.font                  = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         
         cell.contentView.addSubview(avater)
         cell.contentView.addSubview(screenNameLabel)
         cell.contentView.addSubview(createdAtLabel)
         cell.contentView.addSubview(textLabel)
+        
+        if comment.reply_comment == nil {
+            let statusView = UIView(frame: CGRect(x: 8, y: 64 + labelHeight, width: view.frame.width - 16, height: 80))
+            statusView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+            cell.contentView.addSubview(statusView)
+            
+            let statusImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+            if comment.status?.bmiddle_pic != nil {
+                statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.bmiddle_pic)!))
+            }else{
+                if comment.status?.retweeted_status != nil {
+                    if comment.status?.retweeted_status?.bmiddle_pic != nil {
+                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.retweeted_status?.bmiddle_pic)!))
+                    }else{
+                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.user?.avatar_large)!))
+                    }
+                }else{
+                    statusImageView.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+                }
+            }
+            statusView.addSubview(statusImageView)
+            
+            let statusUserLabel = UILabel(frame: CGRect(x: 88, y: 8, width: 100, height: 18))
+            statusUserLabel.text = "@\((comment.status?.user?.screen_name)!)"
+            statusUserLabel.font = UIFont.systemFontOfSize(15)
+            statusView.addSubview(statusUserLabel)
+            
+            let statusTextLable = UILabel(frame: CGRect(x: 88, y: 30, width: statusView.frame.width - 88, height: 48))
+            statusTextLable.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
+            statusTextLable.numberOfLines = 0
+            if comment.status?.retweeted_status != nil {
+                let name = comment.status?.retweeted_status?.user?.screen_name
+                let text = comment.status?.retweeted_status?.text
+                statusTextLable.text = "\((comment.status?.text)!)//@\(name!):\(text!)"
+            }else{
+                statusTextLable.text = comment.status?.text
+            }
+            statusView.addSubview(statusTextLable)
+        }else{
+            let name = comment.reply_comment?.user?.screen_name
+            let text = "@\(name!): \((comment.reply_comment?.text)!)"
+            let replyCommentLabelHeight = calculateTextLabelHeight(text, fontSize: 15, viewWidth: view.frame.width - 16)
+            
+            let replyCommentView = UIView(frame: CGRect(x: 0, y: 64 + labelHeight, width: view.frame.width, height: 96 + replyCommentLabelHeight))
+            replyCommentView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+            cell.contentView.addSubview(replyCommentView)
+            
+            let replyCommentLabel = UILabel(frame: CGRect(x: 8, y: 0, width: view.frame.width - 16, height: replyCommentLabelHeight))
+            replyCommentLabel.text = text
+            replyCommentLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
+            replyCommentLabel.numberOfLines = 0
+            replyCommentView.addSubview(replyCommentLabel)
+            
+            let statusView = UIView(frame: CGRect(x: 8, y: replyCommentLabelHeight + 8, width: view.frame.width - 16, height: 80))
+            statusView.backgroundColor = UIColor.whiteColor()
+            replyCommentView.addSubview(statusView)
+            
+            let statusImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+            statusView.addSubview(statusImageView)
+            
+            if comment.status?.bmiddle_pic != nil {
+                statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.bmiddle_pic)!))
+            }else{
+                if comment.status?.retweeted_status != nil {
+                    if comment.status?.retweeted_status?.bmiddle_pic != nil {
+                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.retweeted_status?.bmiddle_pic)!))
+                    }else{
+                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.user?.avatar_large)!))
+                    }
+                }else{
+                    statusImageView.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+                }
+            }
+            
+            let nameLabel = UILabel(frame: CGRect(x: 88, y: 8, width: 100, height: 18))
+            nameLabel.font = UIFont.systemFontOfSize(15)
+            nameLabel.text = "@\((comment.status?.user?.screen_name)!)"
+            statusView.addSubview(nameLabel)
+            
+            let replyCommentTextLabel = UILabel(frame: CGRect(x: 88, y: 30, width: statusView.frame.width - 96, height: 42))
+            replyCommentTextLabel.numberOfLines = 0
+            replyCommentTextLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
+            replyCommentTextLabel.text = comment.status?.text
+            statusView.addSubview(replyCommentTextLabel)
+        }
     }
 }
 
