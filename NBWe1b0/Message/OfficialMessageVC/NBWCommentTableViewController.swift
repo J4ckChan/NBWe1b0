@@ -202,65 +202,44 @@ class NBWCommentTableViewController: UITableViewController {
     
     func configureCommentTableViewCell(comment:Comment,_ cell:UITableViewCell){
         
-        let avater                      = UIImageView(frame: CGRect(x: 8, y: 8, width: 40, height: 40))
-        avater.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+        let avaterString = comment.user?.avatar_large
         
-        let screenNameLabel             = UILabel(frame: CGRect(x: 56, y: 8, width: 200, height: 20))
-        screenNameLabel.text            = comment.user?.screen_name
-        screenNameLabel.font            = UIFont.systemFontOfSize(15)
+        let labelHeight  = calculateTextLabelHeight(comment.text!,fontSize: 15,viewWidth: view.frame.width)
         
-        let createdAtLabel              = UILabel(frame: CGRect(x: 56, y: 32, width: view.frame.width - 64, height: 16))
-        createdAtLabel.text             = createdAtLabelText(comment.created_at!, source: comment.source!)
-        createdAtLabel.font             = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-        
-        let labelHeight                 = calculateTextLabelHeight(comment.text!,fontSize: 15,viewWidth: view.frame.width)
-        let textLabel                   = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
-        textLabel.text                  = comment.text
-        textLabel.numberOfLines         = 0
-        textLabel.font                  = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
-        
-        cell.contentView.addSubview(avater)
-        cell.contentView.addSubview(screenNameLabel)
-        cell.contentView.addSubview(createdAtLabel)
-        cell.contentView.addSubview(textLabel)
+        setupHeaderOfStatusView(cell.contentView, avaterString!, (comment.user?.screen_name)!, comment.created_at!, comment.source!, comment.text!, view.frame.width)
         
         if comment.reply_comment == nil {
+            
             let statusView = UIView(frame: CGRect(x: 8, y: 64 + labelHeight, width: view.frame.width - 16, height: 80))
             statusView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
             cell.contentView.addSubview(statusView)
             
-            let statusImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+            var imageURLString:String?
             if comment.status?.bmiddle_pic != nil {
-                statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.bmiddle_pic)!))
+                imageURLString = comment.status?.bmiddle_pic
             }else{
                 if comment.status?.retweeted_status != nil {
                     if comment.status?.retweeted_status?.bmiddle_pic != nil {
-                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.retweeted_status?.bmiddle_pic)!))
+                        imageURLString = comment.status?.retweeted_status?.bmiddle_pic
                     }else{
-                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.user?.avatar_large)!))
+                        imageURLString = comment.status?.user?.avatar_large
                     }
                 }else{
-                    statusImageView.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+                    imageURLString = comment.status?.user?.avatar_large
                 }
             }
-            statusView.addSubview(statusImageView)
             
-            let statusUserLabel = UILabel(frame: CGRect(x: 88, y: 8, width: 100, height: 18))
-            statusUserLabel.text = "@\((comment.status?.user?.screen_name)!)"
-            statusUserLabel.font = UIFont.systemFontOfSize(15)
-            statusView.addSubview(statusUserLabel)
-            
-            let statusTextLable = UILabel(frame: CGRect(x: 88, y: 30, width: statusView.frame.width - 88, height: 48))
-            statusTextLable.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-            statusTextLable.numberOfLines = 0
+            var context:String?
             if comment.status?.retweeted_status != nil {
                 let name = comment.status?.retweeted_status?.user?.screen_name
                 let text = comment.status?.retweeted_status?.text
-                statusTextLable.text = "\((comment.status?.text)!)//@\(name!):\(text!)"
+                context = "\((comment.status?.text)!)//@\(name!):\(text!)"
             }else{
-                statusTextLable.text = comment.status?.text
+                context = comment.status?.text
             }
-            statusView.addSubview(statusTextLable)
+            
+            statusViewInBrief(statusView, imageURLString: imageURLString!, name: (comment.status?.user?.screen_name)!, context: context!)
+
         }else{
             let name = comment.reply_comment?.user?.screen_name
             let text = "@\(name!): \((comment.reply_comment?.text)!)"
@@ -280,33 +259,23 @@ class NBWCommentTableViewController: UITableViewController {
             statusView.backgroundColor = UIColor.whiteColor()
             replyCommentView.addSubview(statusView)
             
-            let statusImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
-            statusView.addSubview(statusImageView)
+            var imageURLString:String?
             
             if comment.status?.bmiddle_pic != nil {
-                statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.bmiddle_pic)!))
+                imageURLString = comment.status?.bmiddle_pic
             }else{
                 if comment.status?.retweeted_status != nil {
                     if comment.status?.retweeted_status?.bmiddle_pic != nil {
-                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.retweeted_status?.bmiddle_pic)!))
+                        imageURLString = comment.status?.retweeted_status?.bmiddle_pic
                     }else{
-                        statusImageView.sd_setImageWithURL(NSURL(string: (comment.status?.user?.avatar_large)!))
+                        imageURLString = comment.status?.user?.avatar_large
                     }
                 }else{
-                    statusImageView.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+                    imageURLString = comment.user?.avatar_large
                 }
             }
             
-            let nameLabel = UILabel(frame: CGRect(x: 88, y: 8, width: 100, height: 18))
-            nameLabel.font = UIFont.systemFontOfSize(15)
-            nameLabel.text = "@\((comment.status?.user?.screen_name)!)"
-            statusView.addSubview(nameLabel)
-            
-            let replyCommentTextLabel = UILabel(frame: CGRect(x: 88, y: 30, width: statusView.frame.width - 96, height: 42))
-            replyCommentTextLabel.numberOfLines = 0
-            replyCommentTextLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-            replyCommentTextLabel.text = comment.status?.text
-            statusView.addSubview(replyCommentTextLabel)
+            statusViewInBrief(statusView, imageURLString: imageURLString!, name: (comment.status?.user?.screen_name)!, context: (comment.status?.text)!)
         }
     }
 }

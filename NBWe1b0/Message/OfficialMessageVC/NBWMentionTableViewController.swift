@@ -161,48 +161,22 @@ class NBWMentionTableViewController: UITableViewController {
     
     func configureMentionTabelViewCell(mention:WeiboStatus,_ cell:UITableViewCell){
         
-        let avater                      = UIImageView(frame: CGRect(x: 8, y: 8, width: 40, height: 40))
-        avater.sd_setImageWithURL(NSURL(string: (mention.user?.avatar_large)!))
-
-        let screenNameLabel             = UILabel(frame: CGRect(x: 56, y: 8, width: 200, height: 20))
-        screenNameLabel.text            = mention.user?.screen_name
-        screenNameLabel.font            = UIFont.systemFontOfSize(15)
-
-        let createdAtLabel              = UILabel(frame: CGRect(x: 56, y: 32, width: view.frame.width - 64, height: 16))
-        createdAtLabel.text             = "\((mention.source)!)"
-        createdAtLabel.font             = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-
+        let avaterString = mention.user?.avatar_large
+      
         let labelHeight                 = calculateTextLabelHeight(mention.text!, fontSize: 17, viewWidth: tableView.frame.width)
-        let textLabel                   = UILabel(frame: CGRect(x: 8, y: 56, width: view.frame.width - 16, height: labelHeight))
-        textLabel.text                  = mention.text
-        textLabel.numberOfLines         = 0
-        textLabel.font                  = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
-
-        cell.contentView.addSubview(avater)
-        cell.contentView.addSubview(screenNameLabel)
-        cell.contentView.addSubview(createdAtLabel)
-        cell.contentView.addSubview(textLabel)
+      
+        setupHeaderOfStatusView(cell.contentView, avaterString!, (mention.user?.screen_name)!, mention.created_at!, mention.source!, mention.text!, view.frame.width)
 
         let repostView                  = UIView(frame: CGRect(x: 8, y: 64 + labelHeight, width: view.frame.width - 16, height: 80))
         repostView.backgroundColor      = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
 
         cell.contentView.addSubview(repostView)
-
-        let repostImageView             = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
-        repostImageView.sd_setImageWithURL(NSURL(string: (mention.retweeted_status?.bmiddle_pic)!))
-
-        let repostScreenNameLabel       = UILabel(frame: CGRect(x: 88, y: 8, width: repostView.frame.width, height: 18))
-        repostScreenNameLabel.text      = mention.retweeted_status?.user?.screen_name
-        repostScreenNameLabel.font      = UIFont.systemFontOfSize(15)
-
-        let repostTextLabel             = UILabel(frame: CGRect(x: 88, y: 30, width: repostView.frame.width - 88, height: 46))
-        repostTextLabel.text            = mention.retweeted_status?.text
-        repostTextLabel.numberOfLines   = 0
-        repostTextLabel.font            = UIFont.systemFontOfSize(13, weight: UIFontWeightThin)
-
-        repostView.addSubview(repostImageView)
-        repostView.addSubview(repostScreenNameLabel)
-        repostView.addSubview(repostTextLabel)
+        
+        let imageURLString = mention.retweeted_status?.bmiddle_pic
+        let name = mention.retweeted_status?.user?.screen_name
+        let context = mention.retweeted_status?.text
+        
+        statusViewInBrief(repostView, imageURLString: imageURLString!, name: name!, context: context!)
 
         let repostCommentLikeBarView    = UIView(frame: CGRect(x: 0, y: 152 + labelHeight, width: view.frame.width, height: 42))
 
