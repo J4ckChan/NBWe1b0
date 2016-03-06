@@ -87,7 +87,7 @@ class NBWNameButtonTableViewController: UITableViewController {
         cell?.textLabel?.textColor = UIColor.orangeColor()
         
         if indexPath.section == 0 {
-            if indexPath.row == 0 && indexPath.row == 1 {
+            if indexPath.row == 0 || indexPath.row == 1 {
                 indexDelegate?.sendIndex(indexPath.row)
             }else{}
         }else{}

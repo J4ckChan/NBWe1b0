@@ -18,6 +18,7 @@ class NBWCommentTableViewController: UITableViewController {
     var filterByAuthor = 0
     var midButton:UIButton?
     var midButtonTitle:String = "All Comments"
+    var comment:Comment?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -112,26 +113,28 @@ class NBWCommentTableViewController: UITableViewController {
         for commentDict in array {
             
             let idstr = commentDict["idstr"] as? String
-            if !commentAlreadyExisted(idstr!) {
-
+            
+            if commentAlreadyExisted(idstr!) {
+                commentArray.append(comment!)
+            }else{
                 let comment             = weiboCommentManagedObject()
                 importCommentDataFromJSON(comment, commentDict: commentDict as! NSDictionary)
-
+                
                 let weiboUser           = weiboUserManagedObject()
                 let weiboUserDict       = commentDict["user"] as! NSDictionary
                 importUserDataFromJSON(weiboUser, userDict: weiboUserDict)
                 comment.user            = weiboUser
-
+                
                 let weiboStatus         = weiboStatusManagedObject()
                 let weiboStatusDict     = commentDict["status"] as! NSDictionary
                 importStatusDataFromJSON(weiboStatus, jsonDict: weiboStatusDict)
                 comment.status          = weiboStatus
-
+                
                 let weiboStatusUser     = weiboUserManagedObject()
                 let weiboStatusUserDict = weiboStatusDict["user"] as! NSDictionary
                 importUserDataFromJSON(weiboStatusUser, userDict: weiboStatusUserDict)
                 comment.status?.user    = weiboStatusUser
-
+                
                 let retweetedStatusDict = weiboStatusDict["retweeted_status"] as? NSDictionary
                 
                 if retweetedStatusDict == nil {
@@ -148,14 +151,14 @@ class NBWCommentTableViewController: UITableViewController {
                 }
                 
                 let reply_commentDict = commentDict["reply_comment"] as? NSDictionary
-
+                
                 if reply_commentDict == nil {
                     comment.reply_comment = nil
                 }else{
                     let replyComment            = weiboCommentManagedObject()
                     importCommentDataFromJSON(replyComment, commentDict: reply_commentDict!)
                     comment.reply_comment       = replyComment
-
+                    
                     let replyCommentUser        = weiboUserManagedObject()
                     let replyCommentUserDict    = reply_commentDict!["user"] as! NSDictionary
                     importUserDataFromJSON(replyCommentUser, userDict: replyCommentUserDict)
@@ -167,6 +170,24 @@ class NBWCommentTableViewController: UITableViewController {
         
         tableView.reloadData()
     }
+    
+    func commentAlreadyExisted(id:String)->Bool{
+        
+        let request = NSFetchRequest(entityName: "Comment")
+        request.predicate = NSPredicate(format: "idstr == \(id)")
+        
+        do{
+            let array = try managerContext?.executeFetchRequest(request) as! [Comment]
+            if array.count != 0 {
+                comment = array[0]
+                return true
+            }
+        }catch let error as NSError {
+            print("Fetch comment error:\(error.localizedDescription)")
+        }
+        return false
+    }
+
     
     
 

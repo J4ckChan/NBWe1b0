@@ -43,6 +43,7 @@ class NBWHomeViewController: UIViewController {
     var nameButtonTableViewController:NBWNameButtonTableViewController?
     
     var selectedWeiboStatus:WeiboStatus?
+    var weiboStatus:WeiboStatus?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -154,7 +155,13 @@ class NBWHomeViewController: UIViewController {
             
             let id = jsonDict["idstr"] as? String
             
-            if !weiboStatusAlreadyExisted(id!){
+            if weiboStatusAlreadyExisted(id!) {
+                
+                fetchOneWeiboStatusFromCoreDate(id!)
+                
+                weiboStatusesArray.append(weiboStatus!)
+                
+            }else{
                 //create NSManagedObject
                 let weiboUser            = weiboUserManagedObject()
                 
@@ -202,6 +209,24 @@ class NBWHomeViewController: UIViewController {
         }catch let error as NSError {
             print("Fetching error: \(error.localizedDescription)")
         }
+    }
+    
+    func fetchOneWeiboStatusFromCoreDate(id:String)->Bool {
+        
+        let request = NSFetchRequest(entityName: "WeiboStatus")
+        request.predicate = NSPredicate(format: "id == \(id)")
+        
+        do{
+            let array =  try managerContext?.executeFetchRequest(request) as! [WeiboStatus]
+            if array.count != 0 {
+                weiboStatus = array[0]
+                return true
+            }
+        }catch let error as NSError {
+            print("Fetch Error: \(error.localizedDescription)")
+        }
+        
+        return false
     }
     
     //MARK: - AssitedFunction

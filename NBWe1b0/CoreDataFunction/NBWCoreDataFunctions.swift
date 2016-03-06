@@ -20,9 +20,7 @@ func weiboStatusAlreadyExisted(id:String)->Bool {
     
     do{
         let array =  try managerContext?.executeFetchRequest(request) as! [WeiboStatus]
-        if array.count == 0 {
-            return false
-        }else{
+        if array.count != 0 {
             return true
         }
     }catch let error as NSError {
@@ -32,23 +30,6 @@ func weiboStatusAlreadyExisted(id:String)->Bool {
     return false
 }
 
-func commentAlreadyExisted(id:String)->Bool{
-    
-    let request = NSFetchRequest(entityName: "Comment")
-    request.predicate = NSPredicate(format: "idstr == \(id)")
-    
-    do{
-        let array = try managerContext?.executeFetchRequest(request) as! [Comment]
-        if array.count == 0 {
-            return false
-        }else{
-            return true
-        }
-    }catch let error as NSError {
-        print("Fetch comment error:\(error.localizedDescription)")
-    }
-    return false
-}
 
 //MARK: - Pesistently Store in CoreData
 
