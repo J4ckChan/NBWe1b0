@@ -74,7 +74,7 @@
     </entity>
     <elements>
         <element name="Comment" positionX="610" positionY="351" width="128" height="180"/>
-        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="313"/>
+        <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="315"/>
         <element name="WeiboStatusPics" positionX="637" positionY="116" width="128" height="73"/>
         <element name="WeiboUser" positionX="225" positionY="-63" width="128" height="568"/>
     </elements>

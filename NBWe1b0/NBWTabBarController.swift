@@ -18,19 +18,24 @@ class NBWTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.orangeColor()
         
         // TabBarItem --- Compose
-        let addBackgroundImage = UIImage(named: "tabbar_compose_bg")
         let imageViewOriginX = 2.0*(self.tabBar.frame.size.width/5.0)
+        let itemFrame = CGRectMake(imageViewOriginX, 0, tabBar.frame.size.width/5.0, tabBar.frame.size.height)
         
-        let addImageView = UIImageView.init(frame: CGRectMake(imageViewOriginX, 0, tabBar.frame.size.width/5.0, tabBar.frame.size.height))
-        addImageView.image = addBackgroundImage
-        addImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        
-        tabBar.insertSubview(addImageView, atIndex: 1)
+        let composeButton = UIButton(frame: itemFrame)
+        composeButton.setImage(UIImage(named: "tabbar_compose_bg"), forState: .Normal)
+        composeButton.addTarget(self, action: Selector("presentComposeVC:"), forControlEvents: .TouchUpInside)
+        tabBar.addSubview(composeButton)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func presentComposeVC(sender:AnyObject){
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let composeVC = mainStoryboard.instantiateViewControllerWithIdentifier("ComposeViewController")
+        self.presentViewController(composeVC, animated: true, completion: nil)
     }
     
 
@@ -50,12 +55,11 @@ class NBWTabBarController: UITabBarController {
 
 extension NBWTabBarController:UITabBarControllerDelegate{
     
-    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController){
-        
+    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
         if viewController.isEqual(tabBarController.viewControllers![2]){
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let composeVC = mainStoryboard.instantiateViewControllerWithIdentifier("ComposeViewController")
-            self.presentViewController(composeVC, animated: true, completion: nil)
+            return false
+        }else{
+            return true
         }
     }
 }
