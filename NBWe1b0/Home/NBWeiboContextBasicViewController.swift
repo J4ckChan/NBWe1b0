@@ -719,7 +719,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     func commentWeiboStatus(){
         
-        let commentViewController = NBWCommentViewController.init(id: self.id,navigationBarHeight: navigationBarHeight!)
+        let commentViewController = NBWCommentViewController.init(id: self.id,navigationBarHeight: navigationBarHeight!,replyOrNot:false,commentID:0)
         self.navigationController?.presentViewController(commentViewController, animated: true, completion: nil)
         
     }

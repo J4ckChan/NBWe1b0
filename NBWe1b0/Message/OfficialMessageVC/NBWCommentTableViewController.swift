@@ -84,6 +84,15 @@ class NBWCommentTableViewController: UITableViewController {
         presentViewController(filterCommentVC, animated: true, completion: nil)
     }
     
+    func replyComment(sender:AnyObject){
+        let cell = sender.superview!!.superview as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let id = commentArray[(indexPath?.row)!].status!.id
+        let commentID = commentArray[(indexPath?.row)!].idstr
+        let commentVC = NBWCommentViewController.init(id: id!, navigationBarHeight:( navigationController?.navigationBar.frame.height)!,replyOrNot:true,commentID:Int(commentID!)!)
+        presentViewController(commentVC, animated: true, completion: nil)
+    }
+    
     //MARK: - Weibo.com
     
     func fetchCommentDataFromWeibo(){
@@ -228,6 +237,12 @@ class NBWCommentTableViewController: UITableViewController {
         let labelHeight  = calculateTextLabelHeight(comment.text!,fontSize: 15,viewWidth: view.frame.width)
         
         setupHeaderOfStatusView(cell.contentView, avaterString!, (comment.user?.screen_name)!, comment.created_at!, comment.source!, comment.text!, view.frame.width)
+        
+        let replyButton = UIButton(frame: CGRect(x: view.frame.width - 70, y: 8, width: 45, height: 30))
+        replyButton.setTitle("Reply", forState: .Normal)
+        replyButton.setImage(UIImage(named: "Reply"), forState: .Normal)
+        replyButton.addTarget(self, action: Selector("replyComment:"), forControlEvents: .TouchUpInside)
+        cell.contentView.addSubview(replyButton)
         
         if comment.reply_comment == nil {
             

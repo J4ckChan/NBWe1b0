@@ -12,14 +12,19 @@ import Alamofire
 class NBWCommentViewController: NBWBasicViewController {
     
     let commentCreateURL = "https://api.weibo.com/2/comments/create.json"
+    let replyCommentURL  = "https://api.weibo.com/2/comments/reply.json"
     var idInt:Int?
     var commentOri:Int = 0
     var keyboardSize:CGSize?
     var alsoRepostButton:UIButton?
     var alseRepostBool = false
+    var replyBool:Bool = false
+    var commentID:Int?
     
-    override init(id: String, navigationBarHeight: CGFloat) {
+    init(id: String, navigationBarHeight: CGFloat,replyOrNot:Bool,commentID:Int) {
         super.init(id: id, navigationBarHeight: navigationBarHeight)
+        replyBool = replyOrNot
+        self.commentID = commentID
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,6 +36,10 @@ class NBWCommentViewController: NBWBasicViewController {
 
         // Do any additional setup after loading the view.
         self.idInt = Int(self.id!)
+        
+        if replyBool == true {
+            self.navigationBasicItem?.title = "Reply"
+        }
         
         registerForKeyboardNotifications()
         
@@ -85,9 +94,13 @@ class NBWCommentViewController: NBWBasicViewController {
     override func sendTextViewContext() {
         super.sendTextViewContext()
         
-        Alamofire.request(.POST, commentCreateURL, parameters: ["access_token":accessToken,"comment":(self.textView?.text)!,"id":self.idInt!,"comment_ori":self.commentOri], encoding: ParameterEncoding.URL, headers: nil)
+        if replyBool {
+            Alamofire.request(.POST, replyCommentURL, parameters: ["access_token":accessToken,"cid":commentID!,"id":idInt!,"comment":(self.textView?.text)!], encoding: ParameterEncoding.URL, headers: nil)
+        }else{
+            Alamofire.request(.POST, commentCreateURL, parameters: ["access_token":accessToken,"comment":(self.textView?.text)!,"id":self.idInt!,"comment_ori":self.commentOri], encoding: ParameterEncoding.URL, headers: nil)
+        }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func alsoRepostOrNot(){
