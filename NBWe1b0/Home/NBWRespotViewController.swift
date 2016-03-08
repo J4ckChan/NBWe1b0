@@ -24,8 +24,8 @@ class NBWRespotViewController: NBWBasicViewController {
     var alsoCommentButton:UIButton?
     var alsoCommentBool = false
     
-    init(weiboStatus:WeiboStatus, navigationBarHeight: CGFloat) {
-        super.init(id:weiboStatus.id!, navigationBarHeight: navigationBarHeight)
+    init(weiboStatus:WeiboStatus) {
+        super.init(id:weiboStatus.id!)
         self.weiboStatus = weiboStatus
     }
 

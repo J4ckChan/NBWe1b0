@@ -16,17 +16,15 @@ class NBWBasicViewController: UIViewController {
     var friendsYouFollowArray = [WeiboUser]()
     
     var id:String?
-    var navigationBarHeight:CGFloat?
     var navigationBasicItem:UINavigationItem?
     var textView:UITextView?
     var toolBar:UIToolbar?
     
     
     //MARK: - Init
-    init(id:String,navigationBarHeight:CGFloat){
+    init(id:String){
         super.init(nibName: nil, bundle: nil)
         self.id = id
-        self.navigationBarHeight = navigationBarHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +55,7 @@ class NBWBasicViewController: UIViewController {
     
     func setupNavigationBar(){
 
-        let navigationBar                            = UINavigationBar.init(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navigationBarHeight!+20))
+        let navigationBar                            = UINavigationBar.init(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: navigationBarHeight!+20))
 
         self.navigationBasicItem                     = UINavigationItem.init(title: "Comment")
 
@@ -75,7 +73,7 @@ class NBWBasicViewController: UIViewController {
     
     func setupTextViewAndToolBar(){
         
-        self.textView = UITextView.init(frame: CGRect(x: 8, y: self.navigationBarHeight!+20, width: self.view.frame.width - 16, height: self.view.frame.height - 100))
+        self.textView = UITextView.init(frame: CGRect(x: 8, y: navigationBarHeight!+20, width: self.view.frame.width - 16, height: self.view.frame.height - 100))
         
         self.textView?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
 

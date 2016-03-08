@@ -403,7 +403,7 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         self.selectedWeiboStatus = self.weiboStatusesArray[(indexPath?.row)!]
         
-        let repostViewController = NBWRespotViewController.init(weiboStatus: self.selectedWeiboStatus!, navigationBarHeight: navigationBarHeight!)
+        let repostViewController = NBWRespotViewController.init(weiboStatus: self.selectedWeiboStatus!)
         self.navigationController?.presentViewController(repostViewController, animated: true, completion: nil)
     }
     

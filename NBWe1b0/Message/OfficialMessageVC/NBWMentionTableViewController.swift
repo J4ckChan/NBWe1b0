@@ -16,7 +16,6 @@ class NBWMentionTableViewController: UITableViewController {
     let mentionsURLString = "https://api.weibo.com/2/statuses/mentions.json"
     var mentionsWeiboStatuses = [WeiboStatus]()
     var mentionFetched:WeiboStatus?
-    var navigationBarHeight:CGFloat?
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -37,7 +36,6 @@ class NBWMentionTableViewController: UITableViewController {
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "mentionCell")
         navigationItem.title = "Mention"
         navigationController?.navigationBar.tintColor = UIColor.lightGrayColor()
-        navigationBarHeight = navigationController?.navigationBar.frame.height
         
         fetchMentionsDataFromWeibo()
     }
@@ -229,7 +227,7 @@ class NBWMentionTableViewController: UITableViewController {
         let cell = sender.superview!!.superview?.superview as! UITableViewCell
         let indexPath = tableView.indexPathForCell(cell)
         let mention = mentionsWeiboStatuses[(indexPath?.row)!]
-        let repostVC = NBWRespotViewController.init(weiboStatus: mention, navigationBarHeight: navigationBarHeight!)
+        let repostVC = NBWRespotViewController.init(weiboStatus: mention)
         self.presentViewController(repostVC, animated: true, completion: nil)
     }
     

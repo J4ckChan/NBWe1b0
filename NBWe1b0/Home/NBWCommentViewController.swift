@@ -21,8 +21,8 @@ class NBWCommentViewController: NBWBasicViewController {
     var replyBool:Bool = false
     var commentID:Int?
     
-    init(id: String, navigationBarHeight: CGFloat,replyOrNot:Bool,commentID:Int) {
-        super.init(id: id, navigationBarHeight: navigationBarHeight)
+    init(id: String,replyOrNot:Bool,commentID:Int) {
+        super.init(id: id)
         replyBool = replyOrNot
         self.commentID = commentID
     }
