@@ -9,13 +9,21 @@
 import UIKit
 import Alamofire
 
+protocol DismissSuperVCDelegate{
+    func dissmissSuperVC()
+}
+
 class NBWUpdateStatusVC: UIViewController {
     
     let statusUpdateURL = "https://api.weibo.com/2/statuses/update.json"
     var visibleNumber = 0
+    var shareWithImagesArray = ["public","onlyMe","friendsCircle"]
+    let shareButtonWidthArray:[CGFloat] = [68,86,116]
     
     var navigationBasicItem:UINavigationItem?
     var textView:UITextView?
+    var delegete:DismissSuperVCDelegate?
+    var superVC:NBWComposeViewController?
     
     //AccessoryView
     var accessoryView:UIView?
@@ -26,8 +34,9 @@ class NBWUpdateStatusVC: UIViewController {
     var textInitialLabel:UILabel?
     var rightButton:UIButton?
     
-    init(){
+    init(compseVC:NBWComposeViewController){
         super.init(nibName: nil, bundle: nil)
+        superVC = compseVC
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,6 +72,7 @@ class NBWUpdateStatusVC: UIViewController {
         let rightBarButtonContextView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 20))
         rightButton = UIButton(frame: rightBarButtonContextView.frame)
         rightButton!.setImage(UIImage(named: "noSend"), forState: .Normal)
+        rightButton?.addTarget(self, action: Selector("updateWeibo:"), forControlEvents: .TouchUpInside)
         rightBarButtonContextView.addSubview(rightButton!)
 
         navigationBasicItem?.rightBarButtonItem = UIBarButtonItem.init(customView: rightBarButtonContextView)
@@ -94,15 +104,16 @@ class NBWUpdateStatusVC: UIViewController {
         
         accessoryView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 72))
         
-        shareWithButton = UIButton(frame: CGRect(x: view.frame.width - 68, y: 0, width: 60, height: 20))
-        shareWithButton!.setImage(UIImage(named: "shareWith"), forState: .Normal)
+        shareWithButton = UIButton(frame: CGRect(x: view.frame.width - shareButtonWidthArray[0] - 8, y: 0, width: shareButtonWidthArray[0], height: 20))
+        shareWithButton!.setImage(UIImage(named: "public"), forState: .Normal)
+        shareWithButton?.addTarget(self, action: Selector("shareWith:"), forControlEvents: .TouchUpInside)
         accessoryView?.addSubview(shareWithButton!)
         
-        numberOfWordsLabel = UILabel(frame: CGRect(x: view.frame.width - 86, y: 0, width: 10, height: 20))
+        numberOfWordsLabel = UILabel(frame: CGRect(x: view.frame.width - (shareWithButton?.frame.width)! - 26, y: 0, width: 10, height: 20))
         numberOfWordsLabel!.text = "4"
         accessoryView?.addSubview(numberOfWordsLabel!)
         
-        locationButton = UIButton(frame: CGRect(x: 8, y: 0, width: view.frame.width - (shareWithButton?.frame.origin.x)!, height: 20))
+        locationButton = UIButton(frame: CGRect(x: 8, y: 0, width: 200, height: 20))
         locationButton?.setImage(UIImage(named: "addLocation"), forState: .Normal)
         accessoryView?.addSubview(locationButton!)
         
@@ -129,13 +140,33 @@ class NBWUpdateStatusVC: UIViewController {
         textView?.inputAccessoryView = accessoryView
     }
     
+    //MARK: - UIButton
+    
+    func shareWith(sender:AnyObject){
+        let shareWithTVC = NBWShareWithTableVC.init()
+        shareWithTVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        shareWithTVC.preferredContentSize = CGSize(width: 120, height: 90)
+        shareWithTVC.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        shareWithTVC.delegate = self
+        
+        let popover = shareWithTVC.popoverPresentationController
+        popover?.barButtonItem = sender as? UIBarButtonItem
+        popover?.sourceView = shareWithTVC.view
+        popover?.sourceRect = CGRect(x: (shareWithButton?.center.x)! , y: view.frame.height - 288, width: 0, height: 0)
+        popover?.delegate = self
+        presentViewController(shareWithTVC, animated: true, completion: nil)
+    }
+    
     func dismissVC(sender:AnyObject){
         textView?.resignFirstResponder()
-        dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true) { () -> Void in
+            self.superVC?.dismissViewControllerAnimated(false, completion: nil)
+        }
     }
     
     func updateWeibo(sender:AnyObject){
         Alamofire.request(.POST, statusUpdateURL, parameters: ["access_token":accessToken,"status":(textView?.text)!,"visible":visibleNumber], encoding: ParameterEncoding.URL, headers: nil)
+        dismissVC(self)
     }
 }
 
@@ -153,4 +184,22 @@ extension NBWUpdateStatusVC:UITextViewDelegate{
         }
     }
     
+}
+
+extension NBWUpdateStatusVC:UIPopoverPresentationControllerDelegate{
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+}
+
+extension NBWUpdateStatusVC:SendIndexDelegate{
+    func sendIndex(index: Int) {
+        visibleNumber = index
+        
+        UIView.animateWithDuration(0.5) { () -> Void in
+            self.shareWithButton?.setImage(UIImage(named: self.shareWithImagesArray[index]), forState: .Normal)
+            self.shareWithButton?.frame = CGRect(x: self.view.frame.width - self.shareButtonWidthArray[index] - 8, y: 0, width: self.shareButtonWidthArray[index], height: 20)
+            self.numberOfWordsLabel?.frame = CGRect(x: self.view.frame.width - self.shareButtonWidthArray[index] - 26, y: 0, width: 10, height: 20)
+        }
+    }
 }

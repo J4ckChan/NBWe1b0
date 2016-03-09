@@ -30,7 +30,7 @@ class NBWComposeViewController: UIViewController {
     
     @IBAction func writeText(sender: AnyObject) {
         
-        let updateStatusVC = NBWUpdateStatusVC.init()
+        let updateStatusVC = NBWUpdateStatusVC.init(compseVC: self)
         presentViewController(updateStatusVC, animated: true, completion: nil)
     }
     
