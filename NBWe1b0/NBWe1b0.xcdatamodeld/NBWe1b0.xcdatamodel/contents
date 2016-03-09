@@ -11,6 +11,17 @@
         <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboStatus" inverseName="comment" inverseEntity="WeiboStatus" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeiboUser" inverseName="comment" inverseEntity="WeiboUser" syncable="YES"/>
     </entity>
+    <entity name="Geo" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="city_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="more" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pinyin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="province" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="province_name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="WeiboStatus" representedClassName=".WeiboStatus" syncable="YES">
         <attribute name="attitudes_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bmiddle_pic" optional="YES" attributeType="String" syncable="YES"/>
@@ -77,5 +88,6 @@
         <element name="WeiboStatus" positionX="423" positionY="-63" width="128" height="315"/>
         <element name="WeiboStatusPics" positionX="637" positionY="116" width="128" height="73"/>
         <element name="WeiboUser" positionX="225" positionY="-63" width="128" height="568"/>
+        <element name="Geo" positionX="450" positionY="108" width="128" height="180"/>
     </elements>
 </model>

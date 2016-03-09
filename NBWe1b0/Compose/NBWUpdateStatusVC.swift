@@ -109,11 +109,12 @@ class NBWUpdateStatusVC: UIViewController {
         shareWithButton?.addTarget(self, action: Selector("shareWith:"), forControlEvents: .TouchUpInside)
         accessoryView?.addSubview(shareWithButton!)
         
-        numberOfWordsLabel = UILabel(frame: CGRect(x: view.frame.width - (shareWithButton?.frame.width)! - 26, y: 0, width: 10, height: 20))
-        numberOfWordsLabel!.text = "4"
+        numberOfWordsLabel = UILabel(frame: CGRect(x: view.frame.width - (shareWithButton?.frame.width)! - 116, y: 0, width: 100, height: 20))
+        numberOfWordsLabel!.text = "4 Words"
+        numberOfWordsLabel?.textAlignment = NSTextAlignment.Right
         accessoryView?.addSubview(numberOfWordsLabel!)
         
-        locationButton = UIButton(frame: CGRect(x: 8, y: 0, width: 200, height: 20))
+        locationButton = UIButton(frame: CGRect(x: 8, y: 0, width: 100, height: 20))
         locationButton?.setImage(UIImage(named: "addLocation"), forState: .Normal)
         accessoryView?.addSubview(locationButton!)
         
@@ -182,6 +183,8 @@ extension NBWUpdateStatusVC:UITextViewDelegate{
             navigationBasicItem?.rightBarButtonItem?.enabled = false
             rightButton?.setImage(UIImage(named: "noSend"), forState: .Normal)
         }
+        let array = textView.text.componentsSeparatedByString(" ")
+        numberOfWordsLabel?.text = "\(array.count) Words"
     }
     
 }
@@ -199,7 +202,7 @@ extension NBWUpdateStatusVC:SendIndexDelegate{
         UIView.animateWithDuration(0.5) { () -> Void in
             self.shareWithButton?.setImage(UIImage(named: self.shareWithImagesArray[index]), forState: .Normal)
             self.shareWithButton?.frame = CGRect(x: self.view.frame.width - self.shareButtonWidthArray[index] - 8, y: 0, width: self.shareButtonWidthArray[index], height: 20)
-            self.numberOfWordsLabel?.frame = CGRect(x: self.view.frame.width - self.shareButtonWidthArray[index] - 26, y: 0, width: 10, height: 20)
+            self.numberOfWordsLabel?.frame = CGRect(x: self.view.frame.width - self.shareButtonWidthArray[index] - 116, y: 0, width: 100, height: 20)
         }
     }
 }
