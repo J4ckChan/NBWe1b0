@@ -52,7 +52,6 @@ class NBWShareWithTableVC: UITableViewController {
         cell.textLabel?.font = UIFont.systemFontOfSize(13)
         cell.backgroundColor = UIColor.clearColor()
         
-
         return cell
     }
     
