@@ -8,7 +8,18 @@
 
 import UIKit
 
+protocol CloseSelfOpenNewViewControllerDelegate{
+    func closeSelfOpenNewVC(option:composeOptions)
+}
+
+enum composeOptions {
+    case updateStatusVC,uploadImageVC,CheckInVC
+}
+
 class NBWComposeViewController: UIViewController {
+    
+    var delegate:CloseSelfOpenNewViewControllerDelegate?
+    var sendOption:composeOptions = .updateStatusVC
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,15 +40,18 @@ class NBWComposeViewController: UIViewController {
     }
     
     @IBAction func writeText(sender: AnyObject) {
-        
-        let updateStatusVC = NBWUpdateStatusVC.init(compseVC: self)
-        presentViewController(updateStatusVC, animated: true, completion: nil)
+        sendOption = .updateStatusVC
+        delegate?.closeSelfOpenNewVC(sendOption)
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
+        sendOption = .uploadImageVC
+        delegate?.closeSelfOpenNewVC(sendOption)
     }
     
     @IBAction func checkIn(sender: AnyObject) {
+        sendOption = .CheckInVC
+        delegate?.closeSelfOpenNewVC(sendOption)
     }
     
     @IBAction func closeCompose(sender: UIButton) {

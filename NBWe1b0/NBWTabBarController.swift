@@ -9,6 +9,8 @@
 import UIKit
 
 class NBWTabBarController: UITabBarController {
+    
+    var composeVC:NBWComposeViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +36,8 @@ class NBWTabBarController: UITabBarController {
     
     func presentComposeVC(sender:AnyObject){
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let composeVC = mainStoryboard.instantiateViewControllerWithIdentifier("ComposeViewController")
+        let composeVC = mainStoryboard.instantiateViewControllerWithIdentifier("ComposeViewController") as! NBWComposeViewController
+        composeVC.delegate = self
         self.presentViewController(composeVC, animated: true, completion: nil)
     }
     
@@ -60,6 +63,22 @@ extension NBWTabBarController:UITabBarControllerDelegate{
             return false
         }else{
             return true
+        }
+    }
+}
+
+extension NBWTabBarController:CloseSelfOpenNewViewControllerDelegate{
+    func closeSelfOpenNewVC(option: composeOptions) {
+        dismissViewControllerAnimated(false) { () -> Void in
+            switch option{
+            case .updateStatusVC:
+                let updateStatusVC = NBWUpdateStatusVC.init()
+                self.presentViewController(updateStatusVC, animated: true, completion: nil)
+            case .uploadImageVC:
+                print("UploadImageVC")
+            case .CheckInVC:
+                print("CheckINvc")
+            }
         }
     }
 }

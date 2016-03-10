@@ -9,10 +9,6 @@
 import UIKit
 import Alamofire
 
-protocol DismissSuperVCDelegate{
-    func dissmissSuperVC()
-}
-
 class NBWUpdateStatusVC: UIViewController {
     
     let statusUpdateURL = "https://api.weibo.com/2/statuses/update.json"
@@ -36,9 +32,6 @@ class NBWUpdateStatusVC: UIViewController {
     var imageView6:UIImageView?
     var imageViewHeight:CGFloat?
     
-    var delegete:DismissSuperVCDelegate?
-    var superVC:NBWComposeViewController?
-    
     //AccessoryView
     var accessoryView:UIView?
     var locationButton:UIButton?
@@ -48,9 +41,8 @@ class NBWUpdateStatusVC: UIViewController {
     var textInitialLabel:UILabel?
     var rightButton:UIButton?
     
-    init(compseVC:NBWComposeViewController){
+    init(){
         super.init(nibName: nil, bundle: nil)
-        superVC = compseVC
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -187,9 +179,7 @@ class NBWUpdateStatusVC: UIViewController {
     
     func dismissVC(sender:AnyObject){
         textView?.resignFirstResponder()
-        dismissViewControllerAnimated(true) { () -> Void in
-            self.superVC?.dismissViewControllerAnimated(false, completion: nil)
-        }
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func updateWeibo(sender:AnyObject){
