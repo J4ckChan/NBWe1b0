@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 
+
 class NBWUpdateStatusVC: UIViewController {
     
     let statusUpdateURL = "https://api.weibo.com/2/statuses/update.json"
@@ -189,18 +190,7 @@ class NBWUpdateStatusVC: UIViewController {
     
     //MAKR: - UITabBarButton
     func fetchPhoto(){
-        
-        let imagePicker = UIImagePickerController.init()
-        
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
-            imagePicker.sourceType = .Camera
-        }else{
-            imagePicker.sourceType = .PhotoLibrary
-        }
-        
-        imagePicker.delegate = self
-        
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+    
     }
     
     func atFriends(){
@@ -322,9 +312,4 @@ extension NBWUpdateStatusVC:SendScreenNameToTextViewDelegate {
     func sendScreenName(screenName: String) {
         self.textView?.text.appendContentsOf("@\(screenName) ")
     }
-}
-
-extension NBWUpdateStatusVC:UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    
 }
