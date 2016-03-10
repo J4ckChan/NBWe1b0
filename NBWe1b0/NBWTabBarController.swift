@@ -76,7 +76,8 @@ extension NBWTabBarController:CloseSelfOpenNewViewControllerDelegate{
                 self.presentViewController(updateStatusVC, animated: true, completion: nil)
             case .uploadImageVC:
                 let uploadImageVC = NBWUploadImageCollectionViewController.init()
-                self.presentViewController(uploadImageVC, animated: true, completion: nil)
+                let navigationVC = UINavigationController.init(rootViewController: uploadImageVC)
+                self.presentViewController(navigationVC, animated: true, completion: nil)
             case .CheckInVC:
                 print("CheckINvc")
             }

@@ -14,6 +14,8 @@
 		3D1ED7B01C89211C00009CB3 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1ED7AE1C89211C00009CB3 /* Comment.swift */; };
 		3D1ED7B21C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1ED7B11C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift */; };
 		3D2B91C71C91195E002A9927 /* NBWUploadImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2B91C61C91195E002A9927 /* NBWUploadImageCollectionViewController.swift */; };
+		3D2B91CB1C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2B91C91C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift */; };
+		3D2B91CC1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2B91CA1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib */; };
 		3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */; };
 		3D2C51041C85301500E19000 /* NBWOfficialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51031C85301500E19000 /* NBWOfficialTableViewCell.swift */; };
 		3D2C51071C85305C00E19000 /* NBWFollowerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51061C85305C00E19000 /* NBWFollowerTableViewCell.swift */; };
@@ -80,6 +82,8 @@
 		3D1ED7AE1C89211C00009CB3 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = CoreDataFunction/Comment.swift; sourceTree = "<group>"; };
 		3D1ED7B11C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWFilterCommentTableViewController.swift; path = OfficialMessageVC/NBWFilterCommentTableViewController.swift; sourceTree = "<group>"; };
 		3D2B91C61C91195E002A9927 /* NBWUploadImageCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWUploadImageCollectionViewController.swift; path = Compose/NBWUploadImageCollectionViewController.swift; sourceTree = "<group>"; };
+		3D2B91C91C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWUploadImageCollectionViewCell.swift; path = Compose/NBWUploadImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		3D2B91CA1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWUploadImageCollectionViewCell.xib; path = Compose/NBWUploadImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWMessageTableViewController.swift; sourceTree = "<group>"; };
 		3D2C51031C85301500E19000 /* NBWOfficialTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWOfficialTableViewCell.swift; sourceTree = "<group>"; };
 		3D2C51061C85305C00E19000 /* NBWFollowerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWFollowerTableViewCell.swift; sourceTree = "<group>"; };
@@ -181,6 +185,16 @@
 				3D1ED7B11C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift */,
 			);
 			name = Comment;
+			sourceTree = "<group>";
+		};
+		3D2B91C81C91A004002A9927 /* UploadImage */ = {
+			isa = PBXGroup;
+			children = (
+				3D2B91C61C91195E002A9927 /* NBWUploadImageCollectionViewController.swift */,
+				3D2B91C91C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift */,
+				3D2B91CA1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib */,
+			);
+			name = UploadImage;
 			sourceTree = "<group>";
 		};
 		3D2C51001C852C6100E19000 /* Message */ = {
@@ -287,7 +301,7 @@
 				3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */,
 				3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */,
 				3D11468E1C8FF274008479D2 /* UpdateStatusVC */,
-				3D2B91C61C91195E002A9927 /* NBWUploadImageCollectionViewController.swift */,
+				3D2B91C81C91A004002A9927 /* UploadImage */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -495,6 +509,7 @@
 				3DE1C5401C3D4CC8008E3A94 /* Main.storyboard in Resources */,
 				3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */,
 				3D5F62071C7305A200BDED94 /* Assets.xcassets in Resources */,
+				3D2B91CC1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib in Resources */,
 				3D9EA3231C630AF900A8383A /* NBWCommentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -583,6 +598,7 @@
 				3D7FEADF1C76BEBB00C2E847 /* NBWContactResultTableViewController.swift in Sources */,
 				3D5F620B1C741B1D00BDED94 /* NBWCommentViewController.swift in Sources */,
 				3D499CC01C897CDB00224F71 /* NBWBasicTableViewCellFunctions.swift in Sources */,
+				3D2B91CB1C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift in Sources */,
 				3DE1C53B1C3D4CC8008E3A94 /* AppDelegate.swift in Sources */,
 				3D7FEADD1C76B1EE00C2E847 /* NBWContactTableViewController.swift in Sources */,
 				3D5F620E1C7459A600BDED94 /* NBWRespotViewController.swift in Sources */,

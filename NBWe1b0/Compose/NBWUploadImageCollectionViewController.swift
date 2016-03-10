@@ -16,8 +16,13 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     let collectionLayout = UICollectionViewFlowLayout()
     var assets = [PHAsset]()
     var itemSideLength:CGFloat?
+    var rightButton:UIButton?
     
-    var imageArray = [UIImage]()
+    struct imageWithTage {
+        var image:UIImage?
+        var tag = false
+    }
+    var imageArray = [imageWithTage]()
     
     init(){
         super.init(collectionViewLayout: collectionLayout)
@@ -34,9 +39,11 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
+        self.collectionView?.registerNib(UINib(nibName: "NBWUploadImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         // Do any additional setup after loading the view.
+        collectionView?.backgroundColor = UIColor.whiteColor()
+        setupNavigationBar()
+        
         configureCollectionViewLayout()
         
         fetchPhoto()
@@ -45,6 +52,23 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setupNavigationBar(){
+        navigationItem.title = "Photos"
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("dismissSelf:"))
+        
+        let rightBarButtonContextView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 20))
+        rightButton = UIButton(frame: rightBarButtonContextView.frame)
+        rightButton!.setImage(UIImage(named: "grayNext"), forState: .Normal)
+        rightButton!.addTarget(self, action: Selector("updateWeibo:"), forControlEvents: .TouchUpInside)
+        rightBarButtonContextView.addSubview(rightButton!)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBarButtonContextView)
+        navigationItem.rightBarButtonItem?.enabled = false
+        
+        navigationController?.navigationBar.tintColor = UIColor.lightGrayColor()
     }
     
     func configureCollectionViewLayout(){
@@ -61,7 +85,6 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
             let collection = smartAlbums[i]
             if collection.isKindOfClass(PHAssetCollection.classForCoder()){
                 let fetchResult = PHAsset.fetchAssetsInAssetCollection(collection as! PHAssetCollection, options: nil)
-                print(fetchResult.count)
                 for var j = 0; j < fetchResult.count; j++ {
                     let asset = fetchResult[j]
                     if asset.isKindOfClass(PHAsset.classForCoder()) {
@@ -73,29 +96,18 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
                 assert(false, "Fetch collection not PHCollection: \(collection)")
             }
         }
-        
-        print(assets.count)
-        
+
         let manager = PHImageManager()
         for asset in assets {
              manager.requestImageForAsset(asset, targetSize: CGSize(width: itemSideLength!, height: itemSideLength!), contentMode: PHImageContentMode.AspectFit, options: nil, resultHandler: { (image, dict) -> Void in
-                self.imageArray.append(image!)
+                let imageStruct = imageWithTage(image: image, tag: false)
+                self.imageArray.append(imageStruct)
                 self.collectionView?.reloadData()
              })
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -105,49 +117,83 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return imageArray.count
+        return imageArray.count + 1
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
-    
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NBWUploadImageCollectionViewCell
+        
+        
         // Configure the cell
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: itemSideLength!, height: itemSideLength!))
-        imageView.image = imageArray[indexPath.row]
-        cell.contentView.addSubview(imageView)
-    
+        if indexPath.row == 0 {
+            cell.circleTag.hidden = true
+        }else{
+            cell.imageView.image = imageArray[indexPath.row - 1].image
+            cell.circleTag.image = UIImage(named: "circle")
+        }
+
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
     
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if indexPath.row == 0 {
+           
+            
+        }else{
+            if imageArray[indexPath.row - 1].tag {
+                let cell = collectionView.cellForItemAtIndexPath(indexPath) as!NBWUploadImageCollectionViewCell
+                cell.circleTag.image = UIImage(named: "circle")
+                cell.selectedBool = !cell.selectedBool
+                imageArray[indexPath.row - 1].tag = !imageArray[indexPath.row - 1].tag
+            }else{
+                //check the number of images  < 6
+                var flagCount = true
+                var count = 0
+                for imageStruct in imageArray {
+                    if imageStruct.tag == true {
+                        count++
+                    }
+                    if count >= 6 {
+                        flagCount = false
+                    }
+                }
+                
+                //If the number of images < 6
+                if flagCount {
+                    let cell = collectionView.cellForItemAtIndexPath(indexPath) as!NBWUploadImageCollectionViewCell
+                    if cell.selectedBool == false {
+                        cell.circleTag.image = UIImage(named: "orangeCircle")
+                    }else{
+                        cell.circleTag.image = UIImage(named: "circle")
+                    }
+                    
+                    cell.selectedBool = !cell.selectedBool
+                    imageArray[indexPath.row - 1].tag = !imageArray[indexPath.row - 1].tag
+                }
+            }
+            
+            //Check Next Button State
+            var flag = false
+            for imageStruct in imageArray {
+                if imageStruct.tag {
+                    flag = true
+                }
+            }
+            
+            if flag {
+                rightButton?.setImage(UIImage(named: "orangeNext"), forState: .Normal)
+                navigationItem.rightBarButtonItem?.enabled = true
+            }else{
+                rightButton?.setImage(UIImage(named: "grayNext"), forState: .Normal)
+                navigationItem.rightBarButtonItem?.enabled = false
+            }
+        }
     }
-    */
-
+    
+    //MARK: - UIbutton & UIBarButton
+    
+    func dismissSelf(sender:AnyObject){
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 }
