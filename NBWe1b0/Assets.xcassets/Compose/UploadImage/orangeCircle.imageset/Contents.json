@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "iconfont-circle-2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "iconfont-xiaogougou-2.png",
       "scale" : "2x"
     },
     {

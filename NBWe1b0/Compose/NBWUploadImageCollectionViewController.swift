@@ -11,18 +11,25 @@ import Photos
 
 private let reuseIdentifier = "ImageCollectionCell"
 
+struct ImageWithTage {
+    var image:UIImage?
+    var tag = false
+}
+
+protocol SendImageToStatusVCDelegate{
+    func sendImageToStatusVC(imageArray:[UIImage])
+}
+
 class NBWUploadImageCollectionViewController: UICollectionViewController {
     
     let collectionLayout = UICollectionViewFlowLayout()
     var assets = [PHAsset]()
     var itemSideLength:CGFloat?
     var rightButton:UIButton?
-    
-    struct imageWithTage {
-        var image:UIImage?
-        var tag = false
-    }
-    var imageArray = [imageWithTage]()
+    var delegate:CloseSelfOpenNewViewControllerDelegate?
+    var imageDelegate:SendImageToStatusVCDelegate?
+
+    var imageArray = [ImageWithTage]()
     
     init(){
         super.init(collectionViewLayout: collectionLayout)
@@ -62,7 +69,7 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         let rightBarButtonContextView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 20))
         rightButton = UIButton(frame: rightBarButtonContextView.frame)
         rightButton!.setImage(UIImage(named: "grayNext"), forState: .Normal)
-        rightButton!.addTarget(self, action: Selector("updateWeibo:"), forControlEvents: .TouchUpInside)
+        rightButton!.addTarget(self, action: Selector("nextToUploadImage:"), forControlEvents: .TouchUpInside)
         rightBarButtonContextView.addSubview(rightButton!)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBarButtonContextView)
@@ -72,7 +79,7 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     }
     
     func configureCollectionViewLayout(){
-        itemSideLength = (view.frame.width - 16)/3
+        itemSideLength = ((collectionView?.frame.width)! - 16)/3
         collectionLayout.itemSize = CGSize(width: itemSideLength!, height: itemSideLength!)
         collectionLayout.minimumInteritemSpacing = 8
         collectionLayout.minimumLineSpacing = 8
@@ -97,10 +104,12 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
             }
         }
 
+        imageArray = []
+        
         let manager = PHImageManager()
         for asset in assets {
              manager.requestImageForAsset(asset, targetSize: CGSize(width: itemSideLength!, height: itemSideLength!), contentMode: PHImageContentMode.AspectFit, options: nil, resultHandler: { (image, dict) -> Void in
-                let imageStruct = imageWithTage(image: image, tag: false)
+                let imageStruct = ImageWithTage(image: image, tag: false)
                 self.imageArray.append(imageStruct)
                 self.collectionView?.reloadData()
              })
@@ -126,6 +135,7 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         
         // Configure the cell
         if indexPath.row == 0 {
+            cell.imageView.image = UIImage(named: "photoToUpload")
             cell.circleTag.hidden = true
         }else{
             cell.imageView.image = imageArray[indexPath.row - 1].image
@@ -138,8 +148,17 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.row == 0 {
-           
+            let imagePicker = UIImagePickerController.init()
             
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+                imagePicker.sourceType = .Camera
+            }else{
+                imagePicker.sourceType = .PhotoLibrary
+            }
+            
+            imagePicker.delegate = self
+            
+            self.presentViewController(imagePicker, animated: true, completion: nil)
         }else{
             if imageArray[indexPath.row - 1].tag {
                 let cell = collectionView.cellForItemAtIndexPath(indexPath) as!NBWUploadImageCollectionViewCell
@@ -195,5 +214,34 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     
     func dismissSelf(sender:AnyObject){
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func nextToUploadImage(sender:AnyObject){
+        
+        var array = [UIImage]()
+        
+        for imageStruct in imageArray {
+            if imageStruct.tag {
+                array.append(imageStruct.image!)
+            }
+        }
+        
+        delegate?.closeSelfOpenNewVC(composeOptions.updateStatusVC, array)
+        imageDelegate?.sendImageToStatusVC(array)
+    }
+}
+
+//MARK: - Delegate
+
+extension NBWUploadImageCollectionViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let tempImageStruct = ImageWithTage.init(image: image, tag: false)
+        imageArray.append(tempImageStruct)
+    
+        dismissViewControllerAnimated(true) { () -> Void in
+            self.collectionView?.reloadData()
+        }
     }
 }

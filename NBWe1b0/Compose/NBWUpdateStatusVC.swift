@@ -13,6 +13,7 @@ import Alamofire
 class NBWUpdateStatusVC: UIViewController {
     
     let statusUpdateURL = "https://api.weibo.com/2/statuses/update.json"
+    let imageUploadURL = "https://upload.api.weibo.com/2/statuses/upload.json"
     let friendsURL = "https://api.weibo.com/2/friendships/friends.json"
     var friendsYouFollowArray = [WeiboUser]()
     
@@ -24,6 +25,7 @@ class NBWUpdateStatusVC: UIViewController {
     var textView:UITextView?
     
     //ImageView
+    var imageArray = [UIImage]()
     var imagePlaceHolderView:UIView?
     var imageView1:UIImageView?
     var imageView2:UIImageView?
@@ -42,8 +44,9 @@ class NBWUpdateStatusVC: UIViewController {
     var textInitialLabel:UILabel?
     var rightButton:UIButton?
     
-    init(){
+    init(imageArray:[UIImage]){
         super.init(nibName: nil, bundle: nil)
+        self.imageArray = imageArray
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,6 +62,8 @@ class NBWUpdateStatusVC: UIViewController {
         setupNavigationBar()
         
         setupTextView()
+        
+        setupImagePlaceHolderView()
         
         setupImageView()
         
@@ -104,18 +109,36 @@ class NBWUpdateStatusVC: UIViewController {
         textView = UITextView(frame: CGRect(x: 8, y: navigationBarHeight! + 28, width: view.frame.width - 16, height: 101))
         textView?.font = UIFont.systemFontOfSize(14)
         textView?.scrollEnabled = false
-        textView?.backgroundColor = UIColor.brownColor()
         textView?.becomeFirstResponder()
         textView?.delegate = self
         view.addSubview(textView!)
     }
     
-    func setupImageView(){
+    func setupImagePlaceHolderView(){
         
         imageViewHeight = (view.frame.width - 32)/3
-        imagePlaceHolderView = UIView(frame: CGRect(x: 8, y: (textView?.frame.origin.y)! + (textView?.frame.size.height)! + 8, width: view.frame.width - 16, height: imageViewHeight!))
-        imagePlaceHolderView?.backgroundColor = UIColor.lightGrayColor()
+        imagePlaceHolderView = UIView(frame: CGRect(x: 8, y: (textView?.frame.origin.y)! + (textView?.frame.size.height)! + 8, width: view.frame.width - 16, height: imageViewHeight! * 2 + 8))
         view.addSubview(imagePlaceHolderView!)
+    }
+    
+    func setupImageView(){
+        let count = CGFloat(imageArray.count)
+        var imageViewArray = [imageView1,imageView2,imageView3,imageView4,imageView5,imageView6]
+        
+        var k:CGFloat = 0
+        for var i = 0; i < Int(count); i++ {
+            var j:CGFloat = 0
+            if i > 2 {
+                j = 1
+            }
+            if j == 1 {
+                k = CGFloat(i) - 3
+            }
+            imageViewArray[i] = UIImageView.init(frame: CGRect(x: k*(imageViewHeight! + 8), y: j*(imageViewHeight! + 8), width: imageViewHeight!, height: imageViewHeight!))
+            imageViewArray[i]?.image = imageArray[i]
+            imagePlaceHolderView?.addSubview(imageViewArray[i]!)
+            k++
+        }
     }
     
     func setupAccessoryBar(){
@@ -184,13 +207,22 @@ class NBWUpdateStatusVC: UIViewController {
     }
     
     func updateWeibo(sender:AnyObject){
-        Alamofire.request(.POST, statusUpdateURL, parameters: ["access_token":accessToken,"status":(textView?.text)!,"visible":visibleNumber], encoding: ParameterEncoding.URL, headers: nil)
+        
+        if imageArray.count > 0 {
+            let imageData = UIImageJPEGRepresentation(imageArray[0], 1)
+            Alamofire.request(.POST, imageUploadURL, parameters: ["access_token":accessToken,"status":(textView?.text)!,"visible":visibleNumber,"pic":imageData!], encoding: ParameterEncoding.URL, headers: nil)
+        }else{
+            Alamofire.request(.POST, statusUpdateURL, parameters: ["access_token":accessToken,"status":(textView?.text)!,"visible":visibleNumber], encoding: ParameterEncoding.URL, headers: nil)
+        }
         dismissVC(self)
     }
     
     //MAKR: - UITabBarButton
     func fetchPhoto(){
-    
+        let uploadImageVC = NBWUploadImageCollectionViewController.init()
+        uploadImageVC.imageDelegate = self
+        let navigationVC = UINavigationController.init(rootViewController: uploadImageVC)
+        presentViewController(navigationVC, animated: true, completion: nil)
     }
     
     func atFriends(){
@@ -311,5 +343,16 @@ extension NBWUpdateStatusVC:SendIndexDelegate{
 extension NBWUpdateStatusVC:SendScreenNameToTextViewDelegate {
     func sendScreenName(screenName: String) {
         self.textView?.text.appendContentsOf("@\(screenName) ")
+    }
+}
+
+extension NBWUpdateStatusVC:SendImageToStatusVCDelegate {
+    func sendImageToStatusVC(imageArray: [UIImage]) {
+        dismissViewControllerAnimated(true, completion: nil)
+        for image in imageArray {
+            self.imageArray.append(image)
+        }
+        textView?.becomeFirstResponder()
+        setupImageView()
     }
 }

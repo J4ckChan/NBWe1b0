@@ -68,14 +68,15 @@ extension NBWTabBarController:UITabBarControllerDelegate{
 }
 
 extension NBWTabBarController:CloseSelfOpenNewViewControllerDelegate{
-    func closeSelfOpenNewVC(option: composeOptions) {
+    func closeSelfOpenNewVC(option: composeOptions,_ imageArray:[UIImage]) {
         dismissViewControllerAnimated(false) { () -> Void in
             switch option{
             case .updateStatusVC:
-                let updateStatusVC = NBWUpdateStatusVC.init()
+                let updateStatusVC = NBWUpdateStatusVC.init(imageArray: imageArray)
                 self.presentViewController(updateStatusVC, animated: true, completion: nil)
             case .uploadImageVC:
                 let uploadImageVC = NBWUploadImageCollectionViewController.init()
+                uploadImageVC.delegate = self
                 let navigationVC = UINavigationController.init(rootViewController: uploadImageVC)
                 self.presentViewController(navigationVC, animated: true, completion: nil)
             case .CheckInVC:

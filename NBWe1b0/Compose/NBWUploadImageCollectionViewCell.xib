@@ -13,7 +13,7 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="142" height="138"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="photoToUpload" translatesAutoresizingMaskIntoConstraints="NO" id="hWK-bO-J28">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photoToUpload" translatesAutoresizingMaskIntoConstraints="NO" id="hWK-bO-J28">
                         <rect key="frame" x="0.0" y="0.0" width="142" height="138"/>
                         <gestureRecognizers/>
                     </imageView>
@@ -29,6 +29,10 @@
             </view>
             <constraints>
                 <constraint firstItem="Yuf-Yr-YwJ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="3JL-6g-7xO"/>
+                <constraint firstAttribute="trailing" secondItem="hWK-bO-J28" secondAttribute="trailing" id="ctc-eh-bF9"/>
+                <constraint firstItem="hWK-bO-J28" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="jFt-6v-7na"/>
+                <constraint firstItem="hWK-bO-J28" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="kJP-Td-6X0"/>
+                <constraint firstAttribute="bottom" secondItem="hWK-bO-J28" secondAttribute="bottom" id="kcw-sw-q0X"/>
                 <constraint firstAttribute="trailing" secondItem="Yuf-Yr-YwJ" secondAttribute="trailing" constant="8" id="zda-YJ-Eap"/>
             </constraints>
             <size key="customSize" width="142" height="138"/>
@@ -36,7 +40,7 @@
                 <outlet property="circleTag" destination="Yuf-Yr-YwJ" id="1Ga-E0-sEb"/>
                 <outlet property="imageView" destination="hWK-bO-J28" id="Vjo-hB-GU5"/>
             </connections>
-            <point key="canvasLocation" x="-185" y="292"/>
+            <point key="canvasLocation" x="-295" y="292"/>
         </collectionViewCell>
     </objects>
     <resources>

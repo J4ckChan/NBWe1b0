@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CloseSelfOpenNewViewControllerDelegate{
-    func closeSelfOpenNewVC(option:composeOptions)
+    func closeSelfOpenNewVC(option:composeOptions,_ imageArray:[UIImage])
 }
 
 enum composeOptions {
@@ -20,6 +20,7 @@ class NBWComposeViewController: UIViewController {
     
     var delegate:CloseSelfOpenNewViewControllerDelegate?
     var sendOption:composeOptions = .updateStatusVC
+    var imageArray = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,17 +42,17 @@ class NBWComposeViewController: UIViewController {
     
     @IBAction func writeText(sender: AnyObject) {
         sendOption = .updateStatusVC
-        delegate?.closeSelfOpenNewVC(sendOption)
+        delegate?.closeSelfOpenNewVC(sendOption,imageArray)
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
         sendOption = .uploadImageVC
-        delegate?.closeSelfOpenNewVC(sendOption)
+        delegate?.closeSelfOpenNewVC(sendOption,imageArray)
     }
     
     @IBAction func checkIn(sender: AnyObject) {
         sendOption = .CheckInVC
-        delegate?.closeSelfOpenNewVC(sendOption)
+        delegate?.closeSelfOpenNewVC(sendOption,imageArray)
     }
     
     @IBAction func closeCompose(sender: UIButton) {
