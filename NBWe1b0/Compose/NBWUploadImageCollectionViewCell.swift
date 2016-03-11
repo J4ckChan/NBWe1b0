@@ -10,8 +10,9 @@ import UIKit
 
 class NBWUploadImageCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var circleTag: UIImageView!
+    
     @IBOutlet weak var imageView: UIImageView!
+    var circleTag: UIImageView?
     var selectedBool = false
     
     override func awakeFromNib() {

@@ -107,8 +107,11 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         imageArray = []
         
         let manager = PHImageManager()
+        let imageRequestOptions = PHImageRequestOptions.init()
+        imageRequestOptions.resizeMode = PHImageRequestOptionsResizeMode.Exact
+        
         for asset in assets {
-             manager.requestImageForAsset(asset, targetSize: CGSize(width: itemSideLength!, height: itemSideLength!), contentMode: PHImageContentMode.AspectFit, options: nil, resultHandler: { (image, dict) -> Void in
+             manager.requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: PHImageContentMode.Default, options: imageRequestOptions, resultHandler: { (image, dict) -> Void in
                 let imageStruct = ImageWithTage(image: image, tag: false)
                 self.imageArray.append(imageStruct)
                 self.collectionView?.reloadData()
@@ -136,10 +139,11 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         // Configure the cell
         if indexPath.row == 0 {
             cell.imageView.image = UIImage(named: "photoToUpload")
-            cell.circleTag.hidden = true
         }else{
             cell.imageView.image = imageArray[indexPath.row - 1].image
-            cell.circleTag.image = UIImage(named: "circle")
+            cell.circleTag = UIImageView(frame: CGRect(x: cell.frame.width - 28, y: 8, width: 20, height: 20))
+            cell.circleTag!.image = UIImage(named: "circle")
+            cell.imageView.addSubview(cell.circleTag!)
         }
 
         return cell
@@ -162,7 +166,7 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         }else{
             if imageArray[indexPath.row - 1].tag {
                 let cell = collectionView.cellForItemAtIndexPath(indexPath) as!NBWUploadImageCollectionViewCell
-                cell.circleTag.image = UIImage(named: "circle")
+                cell.circleTag!.image = UIImage(named: "circle")
                 cell.selectedBool = !cell.selectedBool
                 imageArray[indexPath.row - 1].tag = !imageArray[indexPath.row - 1].tag
             }else{
@@ -182,9 +186,9 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
                 if flagCount {
                     let cell = collectionView.cellForItemAtIndexPath(indexPath) as!NBWUploadImageCollectionViewCell
                     if cell.selectedBool == false {
-                        cell.circleTag.image = UIImage(named: "orangeCircle")
+                        cell.circleTag!.image = UIImage(named: "orangeCircle")
                     }else{
-                        cell.circleTag.image = UIImage(named: "circle")
+                        cell.circleTag!.image = UIImage(named: "circle")
                     }
                     
                     cell.selectedBool = !cell.selectedBool
