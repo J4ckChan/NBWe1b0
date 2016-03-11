@@ -109,6 +109,8 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
         let manager = PHImageManager()
         let imageRequestOptions = PHImageRequestOptions.init()
         imageRequestOptions.resizeMode = PHImageRequestOptionsResizeMode.Exact
+        imageRequestOptions.networkAccessAllowed = true
+        imageRequestOptions.synchronous = true
         
         for asset in assets {
              manager.requestImageForAsset(asset, targetSize: PHImageManagerMaximumSize, contentMode: PHImageContentMode.Default, options: imageRequestOptions, resultHandler: { (image, dict) -> Void in

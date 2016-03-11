@@ -27,13 +27,8 @@ class NBWUpdateStatusVC: UIViewController {
     //ImageView
     var imageArray = [UIImage]()
     var imagePlaceHolderView:UIView?
-    var imageView1:UIImageView?
-    var imageView2:UIImageView?
-    var imageView3:UIImageView?
-    var imageView4:UIImageView?
-    var imageView5:UIImageView?
-    var imageView6:UIImageView?
     var imageViewHeight:CGFloat?
+    var imageViewArray = Array.init(count: 6, repeatedValue: UIImageView())
     
     //AccessoryView
     var accessoryView:UIView?
@@ -123,7 +118,6 @@ class NBWUpdateStatusVC: UIViewController {
     
     func setupImageView(){
         let count = CGFloat(imageArray.count)
-        var imageViewArray = [imageView1,imageView2,imageView3,imageView4,imageView5,imageView6]
         
         var k:CGFloat = 0
         for var i = 0; i < Int(count); i++ {
@@ -135,8 +129,17 @@ class NBWUpdateStatusVC: UIViewController {
                 k = CGFloat(i) - 3
             }
             imageViewArray[i] = UIImageView.init(frame: CGRect(x: k*(imageViewHeight! + 8), y: j*(imageViewHeight! + 8), width: imageViewHeight!, height: imageViewHeight!))
-            imageViewArray[i]?.image = imageArray[i]
-            imagePlaceHolderView?.addSubview(imageViewArray[i]!)
+            imageViewArray[i].image = imageArray[i]
+            let xImageView = UIImageView(frame: CGRect(x: imageViewHeight! - 20, y: 0, width: 20, height: 20))
+            xImageView.image = UIImage(named: "x")
+            imageViewArray[i].addSubview(xImageView)
+            let tap = UITapGestureRecognizer.init(target: self, action: Selector("deleteThisPhoto:"))
+            xImageView.addGestureRecognizer(tap)
+            xImageView.userInteractionEnabled = true
+            xImageView.tag = i
+            imageViewArray[i].userInteractionEnabled = true
+            imageViewArray[i].tag = i
+            imagePlaceHolderView?.addSubview(imageViewArray[i])
             k++
         }
     }
@@ -217,7 +220,34 @@ class NBWUpdateStatusVC: UIViewController {
         dismissVC(self)
     }
     
+    func deleteThisPhoto(tap:UITapGestureRecognizer){
+        let xImageView = tap.view as! UIImageView
+        let imageView = xImageView.superview as! UIImageView
+        let index = imageView.tag
+        var originalFrame = imageView.frame
+        var newFrame:CGRect?
+        
+        let count = imageArray.count
+
+        imageArray[index] = UIImage.init()
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            imageView.removeFromSuperview()
+            }) { (Bool) -> Void in
+                if index != (count - 1) {
+                    for var i = index, j = index + 1; j < count; i++, j++ {
+                        UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        newFrame = self.imageViewArray[j].frame
+                        self.imageViewArray[j].frame = originalFrame
+                        originalFrame = newFrame!
+                        }, completion: nil)
+                    }
+                }
+        }
+    }
+
+    
     //MAKR: - UITabBarButton
+
     func fetchPhoto(){
         let uploadImageVC = NBWUploadImageCollectionViewController.init()
         uploadImageVC.imageDelegate = self
@@ -349,6 +379,7 @@ extension NBWUpdateStatusVC:SendScreenNameToTextViewDelegate {
 extension NBWUpdateStatusVC:SendImageToStatusVCDelegate {
     func sendImageToStatusVC(imageArray: [UIImage]) {
         dismissViewControllerAnimated(true, completion: nil)
+        self.imageArray.removeAll()
         for image in imageArray {
             self.imageArray.append(image)
         }
