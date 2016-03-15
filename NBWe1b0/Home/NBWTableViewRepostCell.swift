@@ -49,36 +49,6 @@ class NBWTableViewRepostCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func calculateRepostCellHeight(cell:NBWTableViewRepostCell,numberOfImageRow:CGFloat) -> CGFloat{
-        
-        let headerHeight:CGFloat = 40
-        
-        let bodyLabelHeight:CGFloat = cell.bodyTextLabel.frame.height
-        
-        let spacingHeight:CGFloat = 8
-        
-        let repostTextLabelHeight:CGFloat = cell.repostTextLabel.frame.height
-        
-        var imageHeight:CGFloat?
-        if numberOfImageRow == 1 {
-            imageHeight = (cell.imageViewOne.frame.height + 8) * numberOfImageRow
-        }else if numberOfImageRow == 2{
-           imageHeight = (cell.imageViewOne.frame.height  + 8) * numberOfImageRow
-        }else{
-            imageHeight = 0
-        }
-        
-        let repostHeight:CGFloat = repostTextLabelHeight + 8 + imageHeight!
-        
-        let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
-        
-        let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 5 + bottomHeight
-        
-//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight) repostLabelHeight:\(repostTextLabelHeight)\n )")
-        
-        return cellHeight
-    }
-    
     func configureRespostCell(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus,tableView:UITableView,numberOfImageRow:CGFloat){
         
         //Setup Header

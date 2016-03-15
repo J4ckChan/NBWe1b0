@@ -314,6 +314,10 @@ class NBWCommentTableViewController: UITableViewController {
             statusViewInBrief(statusView, imageURLString: imageURLString!, name: (comment.status?.user?.screen_name)!, context: (comment.status?.text)!)
         }
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
 }
 
 //MARK: - UIPopoverPresentationControllerDelegate

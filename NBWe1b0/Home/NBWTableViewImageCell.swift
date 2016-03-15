@@ -48,24 +48,7 @@ class NBWTableViewImageCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func calculateImageCell(cell:NBWTableViewImageCell,numberOfImageRow:CGFloat) -> CGFloat{
-        
-        let headerHeight:CGFloat = 40
-        
-        let bodyLabelHeight:CGFloat = cell.bodyTextLabel.frame.height
-        
-        let spacingHeight:CGFloat = 8
-        
-        let imageHeight:CGFloat = cell.imageViewOne.frame.height
-        
-        let bottomHeight:CGFloat = 32 + 10 + 25
-        
-        let cellHeight = headerHeight + bodyLabelHeight + imageHeight * numberOfImageRow + spacingHeight * 3 + bottomHeight + 12
-            
-//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight * numberOfImageRow)")
-        
-        return cellHeight
-    }
+    
     
     func configureMultiImageCell(cell:NBWTableViewImageCell,weiboStatus:WeiboStatus,tableView:UITableView){
         

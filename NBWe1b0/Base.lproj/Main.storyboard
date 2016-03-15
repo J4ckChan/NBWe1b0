@@ -797,9 +797,6 @@
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JJH-8C-HTK">
-                                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                                        </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ORL-Lf-gE2">
                                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                         </imageView>
@@ -867,6 +864,9 @@
                                                                 </mask>
                                                             </variation>
                                                         </imageView>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JJH-8C-HTK">
+                                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                        </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
@@ -900,12 +900,12 @@
                                                     <variation key="default">
                                                         <mask key="subviews">
                                                             <exclude reference="6dM-wJ-zI0"/>
-                                                            <exclude reference="JJH-8C-HTK"/>
                                                             <exclude reference="ORL-Lf-gE2"/>
                                                             <exclude reference="zRw-li-9yF"/>
                                                             <exclude reference="2X2-aQ-qxU"/>
                                                             <exclude reference="v2q-CX-9qC"/>
                                                             <exclude reference="7Un-Oa-5aE"/>
+                                                            <exclude reference="JJH-8C-HTK"/>
                                                         </mask>
                                                         <mask key="constraints">
                                                             <exclude reference="346-qv-HN2"/>
@@ -939,12 +939,12 @@
                                                     <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="subviews">
                                                             <include reference="6dM-wJ-zI0"/>
-                                                            <include reference="JJH-8C-HTK"/>
                                                             <include reference="ORL-Lf-gE2"/>
                                                             <include reference="zRw-li-9yF"/>
                                                             <include reference="2X2-aQ-qxU"/>
                                                             <include reference="v2q-CX-9qC"/>
                                                             <include reference="7Un-Oa-5aE"/>
+                                                            <include reference="JJH-8C-HTK"/>
                                                         </mask>
                                                         <mask key="constraints">
                                                             <include reference="346-qv-HN2"/>

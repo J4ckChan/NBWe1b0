@@ -74,3 +74,75 @@ func statusViewInBrief(statusView:UIView,imageURLString:String,name:String,conte
     replyCommentTextLabel.numberOfLines = 0
     statusView.addSubview(replyCommentTextLabel)
 }
+
+
+//MARK: - HomeTableViewCellHeight
+func calculateBasicCell(weiboStatus:WeiboStatus,hasImage:Bool) -> CGFloat{
+    
+    let headerHeight:CGFloat = 40
+    
+    let bodyLabelHeight:CGFloat = calculateTextLabelHeight(weiboStatus.text!, fontSize: 17, viewWidth: tableViewCellWidth!)
+    
+    let spacingHeight:CGFloat = 8
+    
+    let imageHeight:CGFloat = 105
+    
+    let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
+    
+    var cellHeight:CGFloat?
+    
+    if hasImage == true  {
+        cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 4 + bottomHeight
+    }else{
+        cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight
+    }
+    
+    return cellHeight!
+}
+
+func calculateImageCell(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat) -> CGFloat{
+    
+    let headerHeight:CGFloat = 40
+    
+    let bodyLabelHeight:CGFloat = calculateTextLabelHeight(weiboStatus.text!, fontSize: 17, viewWidth: tableViewCellWidth!)
+    
+    let spacingHeight:CGFloat = 8
+    
+    let imageHeight:CGFloat = (tableViewCellWidth! - 32)/3
+    
+    let bottomHeight:CGFloat = 32 + 10 + 25
+    
+    let cellHeight = headerHeight + bodyLabelHeight + imageHeight * numberOfImageRow + spacingHeight * 3 + bottomHeight + 12
+    
+    return cellHeight
+}
+
+func calculateRepostCellHeight(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat) -> CGFloat{
+    
+    let headerHeight:CGFloat = 40
+    
+    let bodyLabelHeight:CGFloat = calculateTextLabelHeight(weiboStatus.text!, fontSize: 17, viewWidth: tableViewCellWidth!)
+    
+    let spacingHeight:CGFloat = 8
+    
+    let repostTextLabelHeight:CGFloat = calculateTextLabelHeight((weiboStatus.retweeted_status?.text)!, fontSize: 15, viewWidth: tableViewCellWidth!)
+    
+    let singleImageHeight:CGFloat = (tableViewCellWidth! - 32)/3
+    
+    var imageHeight:CGFloat?
+    if numberOfImageRow == 1 {
+        imageHeight = (singleImageHeight) + 8
+    }else if numberOfImageRow == 2{
+        imageHeight = (singleImageHeight) * 2 + 16
+    }else{
+        imageHeight = 0
+    }
+    
+    let repostHeight:CGFloat = repostTextLabelHeight + 8 + imageHeight!
+    
+    let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
+    
+    let cellHeight = headerHeight + bodyLabelHeight + repostHeight + spacingHeight * 5 + bottomHeight
+
+    return cellHeight
+}

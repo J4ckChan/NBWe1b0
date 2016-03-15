@@ -43,31 +43,8 @@ class NBWTableViewBasicCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func calculateBasicCell(cell:NBWTableViewBasicCell,hasImage:Bool) -> CGFloat{
         
-        let headerHeight:CGFloat = 40
-        
-        let bodyLabelHeight:CGFloat = cell.bodyTextLabel.frame.height
-        
-        let spacingHeight:CGFloat = 8
-        
-        let imageHeight:CGFloat = cell.imageViewOne.frame.height
-        
-        let bottomHeight:CGFloat = 67 // 17 + 8 + 32 + 10
-        
-        var cellHeight:CGFloat?
-        if hasImage == true  {
-            cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 4 + bottomHeight
-        }else{
-            cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight
-        }
-        
-//        print("The Height of Cell is: \(cellHeight)\n bodyLabelHeigt:\(bodyLabelHeight)\n imageHeight:\(imageHeight)")
-        
-        return cellHeight!
-    }
-    
-    func configureHomeTableViewBasicCell(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus,tableView:UITableView,hasImage:Bool){
+     func configureHomeTableViewBasicCell(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus,tableView:UITableView,hasImage:Bool){
         
         //Setup Header
         cell.thumbnailHeadImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))

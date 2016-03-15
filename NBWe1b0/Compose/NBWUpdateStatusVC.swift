@@ -233,7 +233,6 @@ class NBWUpdateStatusVC: UIViewController {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             imageView.removeFromSuperview()
             }) { (Bool) -> Void in
-                if index != (count - 1) {
                     for var i = index, j = index + 1; j < count; i++, j++ {
                         UIView.animateWithDuration(0.5, animations: { () -> Void in
                         newFrame = self.imageViewArray[j].frame
@@ -241,8 +240,7 @@ class NBWUpdateStatusVC: UIViewController {
                         originalFrame = newFrame!
                         }, completion: nil)
                     }
-                }
-        }
+            }
     }
 
     

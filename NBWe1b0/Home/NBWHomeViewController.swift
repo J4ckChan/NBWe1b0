@@ -55,8 +55,6 @@ class NBWHomeViewController: UIViewController {
         tableViewCellWidth = self.view.frame.width
         navigationBarHeight = self.navigationController?.navigationBar.frame.height
         
-        cellCache = NSCache.init()
-        
         //CoreData
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         managerContext = appDelegate.managedObjectContext
@@ -122,7 +120,7 @@ class NBWHomeViewController: UIViewController {
         
         self.refreshHeaderController!.beginRefreshing()
         
-        Alamofire.request(.GET, timelineURL, parameters: ["access_token":accessToken,"count":5], encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.GET, timelineURL, parameters: ["access_token":accessToken,"count":20], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (response) -> Void in
                 
                 do {
@@ -285,57 +283,8 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         return weiboStatusesArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let key:String = "\(indexPath.section)-\(indexPath.row)"
-        
-        let weiboStatus = weiboStatusesArray[indexPath.row]
-        
-        hasImageOrMutilImageAndRepostOrNot(weiboStatus)
-        
-        if hasRepost == false {
-            if hasMultiImage == false{
-                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewBasicCell
-                
-                if cell == nil {
-                    cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
-                    cell?.viewController = self
-                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
-                }else {
-                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
-                }
-                
-                return cell!
-            }else{
-                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
-                
-                if cell == nil {
-                    cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
-                    cell?.viewController = self
-                    cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
-                }else{
-                    cell?.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
-                }
-                return cell!
-            }
-        }else{
-            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewRepostCell
-            
-            if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
-                cell?.viewController = self
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
-            }else{
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
-            }
-            return cell!
-        }
-    }
-    
     //HeightForRow
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        let key:String = "\(indexPath.section)-\(indexPath.row)"
         
         let weiboStatus = self.weiboStatusesArray[indexPath.row]
         
@@ -345,42 +294,42 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         if hasRepost == false {
             if hasMultiImage == false {
-                var cell = self.cellCache?.objectForKey(key) as?NBWTableViewBasicCell
-                
-                if cell == nil {
-                    cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
-                    cell?.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus,tableView: tableView, hasImage: self.hasImage!)
-                    self.cellCache?.setObject(cell!, forKey: key)
-                    cellHeight = cell?.calculateBasicCell(cell!, hasImage: hasImage!)
-                }else{
-                    cellHeight = cell?.calculateBasicCell(cell!, hasImage: self.hasImage!)
-                }
+                cellHeight = calculateBasicCell(weiboStatus, hasImage: hasImage!)
             }else{
-                var cell = self.cellCache?.objectForKey(key) as? NBWTableViewImageCell
-                
-                if cell == nil {
-                    cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
-                    cell?.configureMultiImageCell(cell!, weiboStatus: weiboStatus, tableView: tableView)
-                    self.cellCache?.setObject(cell!, forKey: key)
-                    cellHeight = cell?.calculateImageCell(cell!,numberOfImageRow: self.numberOfImageRow!)
-                }else{
-                    cellHeight = cell?.calculateImageCell(cell!, numberOfImageRow: self.numberOfImageRow!)
-                }
+                cellHeight = calculateImageCell(weiboStatus, numberOfImageRow: numberOfImageRow!)
             }
         }else{
-            var cell = self.cellCache?.objectForKey(key) as? NBWTableViewRepostCell
-            
-            if cell == nil {
-                cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
-                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
-                self.cellCache?.setObject(cell!, forKey: key)
-                cellHeight = cell?.calculateRepostCellHeight(cell!, numberOfImageRow: self.numberOfRespostCellImageRow!)
-            }else{
-                cellHeight = cell?.calculateRepostCellHeight(cell!, numberOfImageRow: self.numberOfRespostCellImageRow!)
-            }
+            cellHeight = calculateRepostCellHeight(weiboStatus, numberOfImageRow: numberOfRespostCellImageRow!)
         }
         
         return cellHeight!
+    }
+
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
+        let weiboStatus = weiboStatusesArray[indexPath.row]
+        
+        hasImageOrMutilImageAndRepostOrNot(weiboStatus)
+        
+        if hasRepost == false {
+            if hasMultiImage == false{
+                let cell = tableView.dequeueReusableCellWithIdentifier(basicReuseIdentifier) as? NBWTableViewBasicCell
+                cell?.viewController = self
+                cell!.configureHomeTableViewBasicCell(cell!, weiboStatus:weiboStatus, tableView: tableView, hasImage: self.hasImage!)
+                return cell!
+            }else{
+                let cell = tableView.dequeueReusableCellWithIdentifier(multiImageReuseIdentifier) as? NBWTableViewImageCell
+                cell?.viewController = self
+                cell!.configureMultiImageCell(cell!, weiboStatus:weiboStatus, tableView: tableView)
+                return cell!
+            }
+        }else{
+                let cell = tableView.dequeueReusableCellWithIdentifier(repostReuseIdentifier) as? NBWTableViewRepostCell
+                cell?.viewController = self
+                cell?.configureRespostCell(cell!, weiboStatus: weiboStatus, tableView: tableView,numberOfImageRow: self.numberOfRespostCellImageRow!)
+        return cell!
+        }
     }
     
     //The Background of selected Cell disappear
