@@ -10,10 +10,15 @@ import UIKit
 import Alamofire
 import CoreData
 
+protocol FetchDataFromStoreDelegate{
+    func fetchCommentFromWeb(commentArray:[Comment])
+}
+
 class NBWCommentStore: NSObject {
     
     var commentArray = [Comment]()
     var comment:Comment?
+    var delegate:FetchDataFromStoreDelegate?
     
     init(urlString:String,filterByAuthor:Int){
         super.init()
@@ -101,6 +106,8 @@ class NBWCommentStore: NSObject {
                 commentArray.append(comment)
             }
         }
+        
+        delegate?.fetchCommentFromWeb(commentArray)
     }
     
     func commentAlreadyExisted(id:String)->Bool{
