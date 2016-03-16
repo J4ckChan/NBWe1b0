@@ -337,6 +337,8 @@ extension NBWHomeViewController: UITableViewDataSource,  UITableViewDelegate, UI
         
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         
+        managerContextSave()
+        
         let weiboStatus = weiboStatusesArray[indexPath.row]
         
         let weiboContextBasicViewController = NBWeiboContextBasicViewController.init(id: weiboStatus.id!,tableViewBool: false)
