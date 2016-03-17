@@ -19,7 +19,6 @@ class NBWCommentArrayDelegateAndDataSource: NSObject {
         super.init()
         commentArray = comments
     }
-    
 }
 
 extension NBWCommentArrayDelegateAndDataSource:UITableViewDataSource {

@@ -42,6 +42,8 @@ class NBWCommentTableViewController: UITableViewController {
         
         store.delegate = self
         
+        commentArray = store.fetchDataFromCoreData()
+        
         setupTableView()
     }
     

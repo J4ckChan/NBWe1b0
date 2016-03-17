@@ -126,4 +126,18 @@ class NBWCommentStore: NSObject {
         }
         return false
     }
+    
+    func fetchDataFromCoreData()->[Comment]{
+        
+        let request = NSFetchRequest(entityName: "Comment")
+        var array:[Comment]?
+        
+        do{
+            array = try managerContext?.executeFetchRequest(request) as? [Comment]
+        }catch let error as NSError{
+            print("Fetch comment error:\(error.localizedDescription)")
+        }
+        
+        return array!
+    }
 }
