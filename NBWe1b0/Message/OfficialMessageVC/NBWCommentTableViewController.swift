@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import SDWebImage
 
 class NBWCommentTableViewController: UITableViewController {
     
@@ -45,6 +44,8 @@ class NBWCommentTableViewController: UITableViewController {
         commentArray = store.fetchDataFromCoreData()
         
         setupTableView()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("replyComment:"), name: "ReplyComment", object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -54,7 +55,7 @@ class NBWCommentTableViewController: UITableViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        managerContextSave()
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "ReplyComment", object: nil)
     }
     
     func setupTableView(){
@@ -96,8 +97,8 @@ class NBWCommentTableViewController: UITableViewController {
         presentViewController(filterCommentVC, animated: true, completion: nil)
     }
     
-    func replyComment(sender:AnyObject){
-        let cell = sender.superview!!.superview as! UITableViewCell
+    func replyComment(info:NSNotification){
+        let cell = info.object as! UITableViewCell
         let indexPath = tableView.indexPathForCell(cell)
         let id = commentArray[(indexPath?.row)!].status!.id
         let commentID = commentArray[(indexPath?.row)!].idstr
@@ -121,9 +122,9 @@ extension NBWCommentTableViewController:SendIndexDelegate{
     }
 }
 
-extension NBWCommentTableViewController:FetchDataFromStoreDelegate{
-    func fetchCommentFromWeb(commentArray: [Comment]) {
-        self.commentArray = commentArray
+extension NBWCommentTableViewController:FetchDataFromStoreDelegate{    
+    func fetchDataFromWeb(array: [AnyObject]) {
+        self.commentArray = array as! [Comment]
         setupTableView()
     }
 }

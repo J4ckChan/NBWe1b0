@@ -77,7 +77,7 @@ func statusViewInBrief(statusView:UIView,imageURLString:String,name:String,conte
 
 
 //MARK: - HomeTableViewCellHeight
-func calculateBasicCell(weiboStatus:WeiboStatus,hasImage:Bool) -> CGFloat{
+func calculateBasicCell(weiboStatus:WeiboStatus) -> CGFloat{
     
     let headerHeight:CGFloat = 40
     
@@ -91,7 +91,7 @@ func calculateBasicCell(weiboStatus:WeiboStatus,hasImage:Bool) -> CGFloat{
     
     var cellHeight:CGFloat?
     
-    if hasImage == true  {
+    if weiboStatus.bmiddle_pic != nil  {
         cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 4 + bottomHeight
     }else{
         cellHeight = headerHeight + bodyLabelHeight  + spacingHeight * 3 + bottomHeight
@@ -100,7 +100,7 @@ func calculateBasicCell(weiboStatus:WeiboStatus,hasImage:Bool) -> CGFloat{
     return cellHeight!
 }
 
-func calculateImageCell(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat) -> CGFloat{
+func calculateImageCell(weiboStatus:WeiboStatus) -> CGFloat{
     
     let headerHeight:CGFloat = 40
     
@@ -112,12 +112,16 @@ func calculateImageCell(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat) -> CGF
     
     let bottomHeight:CGFloat = 32 + 10 + 25
     
-    let cellHeight = headerHeight + bodyLabelHeight + imageHeight * numberOfImageRow + spacingHeight * 3 + bottomHeight + 12
+    var cellHeight = headerHeight + bodyLabelHeight + imageHeight + spacingHeight * 3 + bottomHeight + 12
+    
+    if weiboStatus.pics?.count > 3 {
+        cellHeight += imageHeight
+    }
     
     return cellHeight
 }
 
-func calculateRepostCellHeight(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat) -> CGFloat{
+func calculateRepostCellHeight(weiboStatus:WeiboStatus) -> CGFloat{
     
     let headerHeight:CGFloat = 40
     
@@ -130,12 +134,12 @@ func calculateRepostCellHeight(weiboStatus:WeiboStatus,numberOfImageRow:CGFloat)
     let singleImageHeight:CGFloat = (tableViewCellWidth! - 32)/3
     
     var imageHeight:CGFloat?
-    if numberOfImageRow == 1 {
-        imageHeight = (singleImageHeight) + 8
-    }else if numberOfImageRow == 2{
+    if weiboStatus.retweeted_status?.pics?.count > 3 {
         imageHeight = (singleImageHeight) * 2 + 16
-    }else{
+    }else if weiboStatus.retweeted_status?.bmiddle_pic == nil {
         imageHeight = 0
+    }else{
+        imageHeight = (singleImageHeight) + 8
     }
     
     let repostHeight:CGFloat = repostTextLabelHeight + 8 + imageHeight!

@@ -15,12 +15,14 @@ class NBWCommentArrayDelegateAndDataSource: NSObject {
     var cellHeightArray = [CGFloat]()
     var comment:Comment?
     
+    //MARK: - Init
     init(comments:[Comment]) {
         super.init()
         commentArray = comments
     }
 }
 
+//MARK: - DataSource
 extension NBWCommentArrayDelegateAndDataSource:UITableViewDataSource {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -46,6 +48,8 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDataSource {
     }
 }
 
+
+//MARK: - Delgate
 extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

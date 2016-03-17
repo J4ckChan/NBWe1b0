@@ -11,7 +11,7 @@ import Alamofire
 import CoreData
 
 protocol FetchDataFromStoreDelegate{
-    func fetchCommentFromWeb(commentArray:[Comment])
+    func fetchDataFromWeb(array:[AnyObject])
 }
 
 class NBWCommentStore: NSObject {
@@ -25,7 +25,7 @@ class NBWCommentStore: NSObject {
         fetchCommentDataFromWeibo(urlString, filterByAuthor)
     }
     
-    //MARK: - FetchDataFromWeibo
+    //MARK: - FetchData
     
     func fetchCommentDataFromWeibo(urlString:String,_ filterByAuthor:Int){
         
@@ -44,7 +44,30 @@ class NBWCommentStore: NSObject {
         }
     }
     
-    //MARK: - CoreData -- StoreData
+    func fetchDataFromCoreData()->[Comment]{
+        
+        let request = NSFetchRequest(entityName: "Comment")
+        var array:[Comment]?
+        
+        do{
+            array = try managerContext?.executeFetchRequest(request) as? [Comment]
+        }catch let error as NSError{
+            print("Fetch comment error:\(error.localizedDescription)")
+        }
+        
+        array?.sortInPlace({ (comment1, comment2) -> Bool in
+            if comment1.created_at?.compare(comment2.created_at!) == NSComparisonResult.OrderedDescending {
+                return true
+            }else{
+                return false
+            }
+        })
+        
+        return array!
+    }
+
+    
+    //MARK: - StoreData
     func commentIntoCoreData(array:NSArray){
         
         commentArray = []
@@ -107,9 +130,13 @@ class NBWCommentStore: NSObject {
             }
         }
         
-        delegate?.fetchCommentFromWeb(commentArray)
+        delegate?.fetchDataFromWeb(commentArray)
+        
+        managerContextSave()
     }
     
+    
+    //MARK: - Check Data
     func commentAlreadyExisted(id:String)->Bool{
         
         let request = NSFetchRequest(entityName: "Comment")
@@ -127,17 +154,4 @@ class NBWCommentStore: NSObject {
         return false
     }
     
-    func fetchDataFromCoreData()->[Comment]{
-        
-        let request = NSFetchRequest(entityName: "Comment")
-        var array:[Comment]?
-        
-        do{
-            array = try managerContext?.executeFetchRequest(request) as? [Comment]
-        }catch let error as NSError{
-            print("Fetch comment error:\(error.localizedDescription)")
-        }
-        
-        return array!
-    }
 }

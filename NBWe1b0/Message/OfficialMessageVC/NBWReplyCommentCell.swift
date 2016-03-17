@@ -33,4 +33,9 @@ class NBWReplyCommentCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @IBAction func replyCommentInReplyCommentCell(sender: UIButton) {
+        let cell = sender.superview?.superview as! UITableViewCell
+        NSNotificationCenter.defaultCenter().postNotificationName("ReplyComment", object: cell)
+    }
+    
 }

@@ -95,6 +95,9 @@
                             <constraint firstAttribute="height" constant="22" id="OBN-Gr-K9F"/>
                         </constraints>
                         <state key="normal" image="Reply"/>
+                        <connections>
+                            <action selector="replyCommentInCommentCell:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4Ur-C6-7Ze"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

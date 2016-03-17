@@ -112,6 +112,9 @@
                             <constraint firstAttribute="width" constant="48" id="Mn6-2u-0NZ"/>
                         </constraints>
                         <state key="normal" image="Reply"/>
+                        <connections>
+                            <action selector="replyCommentInReplyCommentCell:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="nnD-oA-84k"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

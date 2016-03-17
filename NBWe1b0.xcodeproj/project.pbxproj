@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
 		3D1146901C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */; };
+		3D12344D1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */; };
 		3D14DCCA1C98FBE400D3FE90 /* NBWCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DCC81C98FBE400D3FE90 /* NBWCommentCell.swift */; };
 		3D14DCCB1C98FBE400D3FE90 /* NBWCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D14DCC91C98FBE400D3FE90 /* NBWCommentCell.xib */; };
 		3D14DCCE1C98FC0400D3FE90 /* NBWReplyCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DCCC1C98FC0400D3FE90 /* NBWReplyCommentCell.swift */; };
 		3D14DCCF1C98FC0400D3FE90 /* NBWReplyCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D14DCCD1C98FC0400D3FE90 /* NBWReplyCommentCell.xib */; };
 		3D14DCD61C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DCD51C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift */; };
 		3D14DCD81C993FAE00D3FE90 /* NBWCommentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DCD71C993FAE00D3FE90 /* NBWCommentStore.swift */; };
+		3D14DD1A1C9A515E00D3FE90 /* NBWHomeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DD191C9A515E00D3FE90 /* NBWHomeStore.swift */; };
 		3D1ED7AC1C88929F00009CB3 /* NBWCommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1ED7AB1C88929F00009CB3 /* NBWCommentTableViewController.swift */; };
 		3D1ED7AF1C89211C00009CB3 /* Comment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1ED7AD1C89211C00009CB3 /* Comment+CoreDataProperties.swift */; };
 		3D1ED7B01C89211C00009CB3 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1ED7AE1C89211C00009CB3 /* Comment.swift */; };
@@ -83,12 +85,14 @@
 /* Begin PBXFileReference section */
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
 		3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCompseBasicFuntion.swift; path = Compose/NBWCompseBasicFuntion.swift; sourceTree = "<group>"; };
+		3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWHomeDelegateAndDataSource.swift; path = Home/NBWHomeDelegateAndDataSource.swift; sourceTree = "<group>"; };
 		3D14DCC81C98FBE400D3FE90 /* NBWCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentCell.swift; path = OfficialMessageVC/NBWCommentCell.swift; sourceTree = "<group>"; };
 		3D14DCC91C98FBE400D3FE90 /* NBWCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWCommentCell.xib; path = OfficialMessageVC/NBWCommentCell.xib; sourceTree = "<group>"; };
 		3D14DCCC1C98FC0400D3FE90 /* NBWReplyCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWReplyCommentCell.swift; path = OfficialMessageVC/NBWReplyCommentCell.swift; sourceTree = "<group>"; };
 		3D14DCCD1C98FC0400D3FE90 /* NBWReplyCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWReplyCommentCell.xib; path = OfficialMessageVC/NBWReplyCommentCell.xib; sourceTree = "<group>"; };
 		3D14DCD51C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentArrayDelegateAndDataSource.swift; path = OfficialMessageVC/NBWCommentArrayDelegateAndDataSource.swift; sourceTree = "<group>"; };
 		3D14DCD71C993FAE00D3FE90 /* NBWCommentStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentStore.swift; path = OfficialMessageVC/NBWCommentStore.swift; sourceTree = "<group>"; };
+		3D14DD191C9A515E00D3FE90 /* NBWHomeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWHomeStore.swift; path = Home/NBWHomeStore.swift; sourceTree = "<group>"; };
 		3D1ED7AB1C88929F00009CB3 /* NBWCommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentTableViewController.swift; path = OfficialMessageVC/NBWCommentTableViewController.swift; sourceTree = "<group>"; };
 		3D1ED7AD1C89211C00009CB3 /* Comment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Comment+CoreDataProperties.swift"; path = "CoreDataFunction/Comment+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3D1ED7AE1C89211C00009CB3 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = CoreDataFunction/Comment.swift; sourceTree = "<group>"; };
@@ -190,6 +194,14 @@
 			name = UpdateStatusVC;
 			sourceTree = "<group>";
 		};
+		3D12344B1C9A7B2F00C74470 /* Delegate&DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */,
+			);
+			name = "Delegate&DataSource";
+			sourceTree = "<group>";
+		};
 		3D14DCC01C98FAEF00D3FE90 /* CommentCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -209,13 +221,29 @@
 			name = CommentStore;
 			sourceTree = "<group>";
 		};
+		3D14DCD91C9A3BD900D3FE90 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				3D14DCD51C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift */,
+			);
+			name = Delegates;
+			sourceTree = "<group>";
+		};
+		3D14DD181C9A513900D3FE90 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				3D14DD191C9A515E00D3FE90 /* NBWHomeStore.swift */,
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
 		3D1ED7AA1C88920600009CB3 /* Comment */ = {
 			isa = PBXGroup;
 			children = (
+				3D14DCD91C9A3BD900D3FE90 /* Delegates */,
 				3D14DCD01C98FC1000D3FE90 /* CommentStore */,
 				3D14DCC01C98FAEF00D3FE90 /* CommentCell */,
 				3D1ED7AB1C88929F00009CB3 /* NBWCommentTableViewController.swift */,
-				3D14DCD51C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift */,
 				3D1ED7B11C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift */,
 			);
 			name = Comment;
@@ -416,6 +444,8 @@
 		3DF22D971C4AA1A700DD53D2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3D12344B1C9A7B2F00C74470 /* Delegate&DataSource */,
+				3D14DD181C9A513900D3FE90 /* Store */,
 				3D5F620C1C74597C00BDED94 /* Repost&Comment */,
 				3DABDB011C507E70001BC23E /* TableViewCell */,
 				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
@@ -623,6 +653,7 @@
 				3D2B91C71C91195E002A9927 /* NBWUploadImageCollectionViewController.swift in Sources */,
 				3DD1D3901C8D6F7E006730FC /* NBWUpdateStatusVC.swift in Sources */,
 				3DABDB001C507C9D001BC23E /* NBWTableViewImageCell.swift in Sources */,
+				3D12344D1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift in Sources */,
 				3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */,
 				3D1ED7B21C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift in Sources */,
 				3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */,
@@ -657,6 +688,7 @@
 				3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */,
 				3D92C95B1C4E0B490007A12C /* WeiboStatus+CoreDataProperties.swift in Sources */,
 				3DE1C5431C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld in Sources */,
+				3D14DD1A1C9A515E00D3FE90 /* NBWHomeStore.swift in Sources */,
 				3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */,
 				3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */,
 				3DDA2F2D1C62E66E0094D0B9 /* NBWComment.swift in Sources */,
