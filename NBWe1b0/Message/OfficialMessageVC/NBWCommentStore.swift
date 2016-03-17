@@ -131,8 +131,6 @@ class NBWCommentStore: NSObject {
         }
         
         delegate?.fetchDataFromWeb(commentArray)
-        
-        managerContextSave()
     }
     
     
