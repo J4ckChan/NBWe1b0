@@ -32,6 +32,7 @@ class NBWHomeViewController: UIViewController {
     var nameButtonBackgroundArrowImageView:UIImageView?
     var nameButtonTableViewController:NBWNameButtonTableViewController?
     var homeDelegateAndDataSource:NBWHomeDelegateAndDataSource?
+    var store:NBWHomeStore?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -59,14 +60,15 @@ class NBWHomeViewController: UIViewController {
         let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
         self.refreshHeaderController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
         
-        self.refreshHeaderController!.addTarget(self, action: Selector("timelineFetchDataFromWeibo:"), forControlEvents: .ValueChanged)
+        self.refreshHeaderController!.addTarget(self.store, action: Selector("setupStore"), forControlEvents: .ValueChanged)
+        self.refreshHeaderController?.beginRefreshing()
     }
     
     func setupStore(){
-        let store = NBWHomeStore.init(urlString: timelineURL)
-        store.delegate = self
+        store = NBWHomeStore.init(urlString: timelineURL)
+        store!.delegate = self
         
-        weiboStatusesArray = store.fetchDataFromCoreData()
+        weiboStatusesArray = store!.fetchDataFromCoreData()
     }
     
     func setupTableViewDelegateAndDataSource(){
@@ -74,6 +76,7 @@ class NBWHomeViewController: UIViewController {
         self.tableView.dataSource = homeDelegateAndDataSource
         self.tableView.delegate   = homeDelegateAndDataSource
         homeDelegateAndDataSource?.delegate = self
+        tableView.reloadData()
     }
     
     func setupUserNameButton(){
@@ -124,7 +127,8 @@ extension NBWHomeViewController:SendIndexDelegate {
 extension NBWHomeViewController:FetchDataFromStoreDelegate{
     func fetchDataFromWeb(array: [AnyObject]) {
         self.weiboStatusesArray = array as! [WeiboStatus]
-        tableView.reloadData()
+        setupTableViewDelegateAndDataSource()
+        self.refreshHeaderController?.endRefreshing()
     }
 }
 

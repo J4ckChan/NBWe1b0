@@ -66,7 +66,6 @@ extension NBWHomeDelegateAndDataSource:UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         weiboStatus = weiboStatusesArray[indexPath.row]
-        
         cellType = homeCellType(weiboStatus!)
         
         if cellType == HomeTableViewCellType.BasicCell {
@@ -98,6 +97,8 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var cellHeight:CGFloat?
+        weiboStatus = weiboStatusesArray[indexPath.row]
+        cellType = homeCellType(weiboStatus!)
         if heightArray.count == weiboStatusesArray.count {
             return heightArray[indexPath.row]
         }else{
@@ -286,7 +287,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         likeButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         likeButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         likeButton.setImage(UIImage(named: "like32"), forState: .Normal)
-        likeButton.addTarget(self, action: Selector("likeWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        likeButton.addTarget(self, action: Selector("likeWeiboStatus:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         let separator1 = UIView(frame: CGRect(x: tableViewCellWidth!/3.0, y: 11, width: 1, height: 11))
         separator1.backgroundColor = UIColor.lightGrayColor()
