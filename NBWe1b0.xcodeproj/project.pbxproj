@@ -30,6 +30,7 @@
 		3D2C51111C858A9F00E19000 /* NBWCoreDataFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2C51101C858A9F00E19000 /* NBWCoreDataFunctions.swift */; };
 		3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */; };
 		3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */; };
+		3D37C5D71CA0433F00C6AF36 /* NBWMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37C5D61CA0433F00C6AF36 /* NBWMeViewController.swift */; };
 		3D467BF81C571B47007A1797 /* NBWeiboContextBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */; };
 		3D499CC01C897CDB00224F71 /* NBWBasicTableViewCellFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D499CBF1C897CDB00224F71 /* NBWBasicTableViewCellFunctions.swift */; };
 		3D5D43371C4E777300DA8834 /* NBWPics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43361C4E777300DA8834 /* NBWPics.swift */; };
@@ -105,6 +106,7 @@
 		3D2C51101C858A9F00E19000 /* NBWCoreDataFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCoreDataFunctions.swift; path = CoreDataFunction/NBWCoreDataFunctions.swift; sourceTree = "<group>"; };
 		3D2D053B1C643F2C001F1320 /* NBWRepostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWRepostTableViewCell.swift; path = Home/NBWRepostTableViewCell.swift; sourceTree = "<group>"; };
 		3D2D053C1C643F2C001F1320 /* NBWRepostTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWRepostTableViewCell.xib; path = Home/NBWRepostTableViewCell.xib; sourceTree = "<group>"; };
+		3D37C5D61CA0433F00C6AF36 /* NBWMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWMeViewController.swift; path = Me/NBWMeViewController.swift; sourceTree = "<group>"; };
 		3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWeiboContextBasicViewController.swift; path = Home/NBWeiboContextBasicViewController.swift; sourceTree = "<group>"; };
 		3D499CBF1C897CDB00224F71 /* NBWBasicTableViewCellFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWBasicTableViewCellFunctions.swift; path = OfficialMessageVC/NBWBasicTableViewCellFunctions.swift; sourceTree = "<group>"; };
 		3D5D43361C4E777300DA8834 /* NBWPics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWPics.swift; path = Home/NBWPics.swift; sourceTree = "<group>"; };
@@ -300,6 +302,14 @@
 				3D2C51091C8578FA00E19000 /* NBWMentionTableViewController.swift */,
 			);
 			name = Mention;
+			sourceTree = "<group>";
+		};
+		3D37C5D51CA042FF00C6AF36 /* Me */ = {
+			isa = PBXGroup;
+			children = (
+				3D37C5D61CA0433F00C6AF36 /* NBWMeViewController.swift */,
+			);
+			name = Me;
 			sourceTree = "<group>";
 		};
 		3D467BF61C560045007A1797 /* WeiboDataModel */ = {
@@ -505,6 +515,7 @@
 				3DF22D971C4AA1A700DD53D2 /* Home */,
 				3D2C51001C852C6100E19000 /* Message */,
 				3DD1D38C1C8D6EF7006730FC /* Compose */,
+				3D37C5D51CA042FF00C6AF36 /* Me */,
 				3D9ECA9B1CA0172B009DE497 /* Public */,
 				3D9ECAA01CA0180C009DE497 /* Resource */,
 				3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */,
@@ -742,6 +753,7 @@
 				3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */,
 				3D1ED7B21C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift in Sources */,
 				3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */,
+				3D37C5D71CA0433F00C6AF36 /* NBWMeViewController.swift in Sources */,
 				3D9EA3221C630AF900A8383A /* NBWCommentTableViewCell.swift in Sources */,
 				3D5E86F01C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift in Sources */,
 				3D2C510A1C8578FA00E19000 /* NBWMentionTableViewController.swift in Sources */,

@@ -90,6 +90,8 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
     func configureCommentCell(cell:NBWCommentCell,comment:Comment){
         
         cell.avater.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+        cell.avater.clipsToBounds = true
+        cell.avater.layer.cornerRadius = 20
         cell.screenNameLabel.text = comment.user?.screen_name
         cell.createdAtLabel.text = createdAtLabelText(comment.created_at!, source: comment.source!)
         cell.commentTextLabel.text = comment.text
@@ -114,6 +116,8 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
     
     func configureReplyCommentCell(cell:NBWReplyCommentCell,comment:Comment){
         cell.avater.sd_setImageWithURL(NSURL(string: (comment.user?.avatar_large)!))
+        cell.avater.clipsToBounds = true
+        cell.avater.layer.cornerRadius = 20
         cell.screenNameLabel.text = comment.user?.screen_name
         cell.createdAtLabel.text = createdAtLabelText(comment.created_at!, source: comment.source!)
         cell.commentTextLabel.text = comment.text

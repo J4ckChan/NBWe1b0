@@ -129,6 +129,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         
         //Setup Header
         cell.thumbnailHeadImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
+        trimImageViewToRound(cell.thumbnailHeadImageView)
         cell.screenNameLable.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -153,6 +154,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         
         //Setup Header
         cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
+        trimImageViewToRound(cell.headerImageView)
         cell.screenNameLabel.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -172,6 +174,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         
         //Setup Header
         cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
+        trimImageViewToRound(cell.headerImageView)
         cell.screenNameLabel.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -264,6 +267,11 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
                 }
             }
         }
+    }
+    
+    func trimImageViewToRound(imageView:UIImageView){
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
     }
     
     func setupRespotCommentLikeBarView(repostCommentLikeBarView:UIView){
