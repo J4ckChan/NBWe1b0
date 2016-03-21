@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
-		3D1146901C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */; };
 		3D12344D1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */; };
 		3D14DCCA1C98FBE400D3FE90 /* NBWCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14DCC81C98FBE400D3FE90 /* NBWCommentCell.swift */; };
 		3D14DCCB1C98FBE400D3FE90 /* NBWCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D14DCC91C98FBE400D3FE90 /* NBWCommentCell.xib */; };
@@ -84,7 +83,6 @@
 
 /* Begin PBXFileReference section */
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
-		3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCompseBasicFuntion.swift; path = Compose/NBWCompseBasicFuntion.swift; sourceTree = "<group>"; };
 		3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWHomeDelegateAndDataSource.swift; path = Home/NBWHomeDelegateAndDataSource.swift; sourceTree = "<group>"; };
 		3D14DCC81C98FBE400D3FE90 /* NBWCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentCell.swift; path = OfficialMessageVC/NBWCommentCell.swift; sourceTree = "<group>"; };
 		3D14DCC91C98FBE400D3FE90 /* NBWCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWCommentCell.xib; path = OfficialMessageVC/NBWCommentCell.xib; sourceTree = "<group>"; };
@@ -253,8 +251,6 @@
 			isa = PBXGroup;
 			children = (
 				3D2B91C61C91195E002A9927 /* NBWUploadImageCollectionViewController.swift */,
-				3D2B91C91C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift */,
-				3D2B91CA1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib */,
 			);
 			name = UploadImage;
 			sourceTree = "<group>";
@@ -262,9 +258,9 @@
 		3D2C51001C852C6100E19000 /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				3D2C51081C8577E500E19000 /* OfficicalMessageVC */,
-				3D2C51051C85302100E19000 /* TableViewCell */,
-				3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */,
+				3D9ECA971CA01628009DE497 /* Model */,
+				3D9ECA9C1CA01762009DE497 /* View */,
+				3D9ECA981CA0162F009DE497 /* Controller */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -348,6 +344,103 @@
 			name = WeiboContextCell;
 			sourceTree = "<group>";
 		};
+		3D9ECA951CA01448009DE497 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D5F620C1C74597C00BDED94 /* Repost&Comment */,
+				3D12344B1C9A7B2F00C74470 /* Delegate&DataSource */,
+				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
+				3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */,
+				3D5E86EF1C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		3D9ECA961CA01475009DE497 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3D14DD181C9A513900D3FE90 /* Store */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		3D9ECA971CA01628009DE497 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		3D9ECA981CA0162F009DE497 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51011C852CB500E19000 /* NBWMessageTableViewController.swift */,
+				3D2C51081C8577E500E19000 /* OfficicalMessageVC */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		3D9ECA991CA016DE009DE497 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		3D9ECA9A1CA016EB009DE497 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */,
+				3D11468E1C8FF274008479D2 /* UpdateStatusVC */,
+				3D2B91C81C91A004002A9927 /* UploadImage */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		3D9ECA9B1CA0172B009DE497 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */,
+				3DE1C5411C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld */,
+				3D2C510F1C858A4B00E19000 /* CoreDataFunction */,
+			);
+			name = Public;
+			sourceTree = "<group>";
+		};
+		3D9ECA9C1CA01762009DE497 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3D2C51051C85302100E19000 /* TableViewCell */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		3D9ECA9D1CA0178C009DE497 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3DABDB011C507E70001BC23E /* TableViewCell */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		3D9ECA9F1CA017DB009DE497 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3D2B91C91C91A037002A9927 /* NBWUploadImageCollectionViewCell.swift */,
+				3D2B91CA1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		3D9ECAA01CA0180C009DE497 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				3D5F62061C7305A200BDED94 /* Assets.xcassets */,
+				3DE1C5491C3D4CC8008E3A94 /* Info.plist */,
+			);
+			name = Resource;
+			sourceTree = "<group>";
+		};
 		3DABDB011C507E70001BC23E /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,10 +453,9 @@
 		3DD1D38C1C8D6EF7006730FC /* Compose */ = {
 			isa = PBXGroup;
 			children = (
-				3D11468F1C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift */,
-				3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */,
-				3D11468E1C8FF274008479D2 /* UpdateStatusVC */,
-				3D2B91C81C91A004002A9927 /* UploadImage */,
+				3D9ECA991CA016DE009DE497 /* Model */,
+				3D9ECA9F1CA017DB009DE497 /* View */,
+				3D9ECA9A1CA016EB009DE497 /* Controller */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -410,15 +502,12 @@
 			children = (
 				3DE1C53A1C3D4CC8008E3A94 /* AppDelegate.swift */,
 				3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */,
-				3D2C510F1C858A4B00E19000 /* CoreDataFunction */,
 				3DF22D971C4AA1A700DD53D2 /* Home */,
 				3D2C51001C852C6100E19000 /* Message */,
 				3DD1D38C1C8D6EF7006730FC /* Compose */,
+				3D9ECA9B1CA0172B009DE497 /* Public */,
+				3D9ECAA01CA0180C009DE497 /* Resource */,
 				3DE1C53E1C3D4CC8008E3A94 /* Main.storyboard */,
-				3D5F62061C7305A200BDED94 /* Assets.xcassets */,
-				3DE1C5491C3D4CC8008E3A94 /* Info.plist */,
-				3DE1C5411C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld */,
-				3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */,
 			);
 			path = NBWe1b0;
 			sourceTree = "<group>";
@@ -444,13 +533,9 @@
 		3DF22D971C4AA1A700DD53D2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				3D12344B1C9A7B2F00C74470 /* Delegate&DataSource */,
-				3D14DD181C9A513900D3FE90 /* Store */,
-				3D5F620C1C74597C00BDED94 /* Repost&Comment */,
-				3DABDB011C507E70001BC23E /* TableViewCell */,
-				3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */,
-				3D467BF71C571B47007A1797 /* NBWeiboContextBasicViewController.swift */,
-				3D5E86EF1C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift */,
+				3D9ECA9D1CA0178C009DE497 /* View */,
+				3D9ECA961CA01475009DE497 /* Model */,
+				3D9ECA951CA01448009DE497 /* Controller */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -673,7 +758,6 @@
 				3D5F620E1C7459A600BDED94 /* NBWRespotViewController.swift in Sources */,
 				3D92C95C1C4E0B490007A12C /* WeiboUser.swift in Sources */,
 				3DABDB031C51E68F001BC23E /* NBWTableViewRepostCell.swift in Sources */,
-				3D1146901C8FF2AD008479D2 /* NBWCompseBasicFuntion.swift in Sources */,
 				3D1ED7AC1C88929F00009CB3 /* NBWCommentTableViewController.swift in Sources */,
 				3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */,
 				3D14DCD61C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift in Sources */,
