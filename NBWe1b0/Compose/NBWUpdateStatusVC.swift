@@ -76,12 +76,12 @@ class NBWUpdateStatusVC: UIViewController {
         
         navigationBasicItem                     = UINavigationItem.init(title: "NewWeibo")
         
-        navigationBasicItem!.leftBarButtonItem  = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("dismissVC:"))
+        navigationBasicItem!.leftBarButtonItem  = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(NBWUpdateStatusVC.dismissVC(_:)))
         
         let rightBarButtonContextView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 20))
         rightButton = UIButton(frame: rightBarButtonContextView.frame)
         rightButton!.setImage(UIImage(named: "noSend"), forState: .Normal)
-        rightButton?.addTarget(self, action: Selector("updateWeibo:"), forControlEvents: .TouchUpInside)
+        rightButton?.addTarget(self, action: #selector(NBWUpdateStatusVC.updateWeibo(_:)), forControlEvents: .TouchUpInside)
         rightBarButtonContextView.addSubview(rightButton!)
 
         navigationBasicItem?.rightBarButtonItem = UIBarButtonItem.init(customView: rightBarButtonContextView)
@@ -120,7 +120,7 @@ class NBWUpdateStatusVC: UIViewController {
         let count = CGFloat(imageArray.count)
         
         var k:CGFloat = 0
-        for var i = 0; i < Int(count); i++ {
+        for i in 0 ..< Int(count) {
             var j:CGFloat = 0
             if i > 2 {
                 j = 1
@@ -133,7 +133,7 @@ class NBWUpdateStatusVC: UIViewController {
             let xImageView = UIImageView(frame: CGRect(x: imageViewHeight! - 20, y: 0, width: 20, height: 20))
             xImageView.image = UIImage(named: "x")
             imageViewArray[i].addSubview(xImageView)
-            let tap = UITapGestureRecognizer.init(target: self, action: Selector("deleteThisPhoto:"))
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(NBWUpdateStatusVC.deleteThisPhoto(_:)))
             xImageView.addGestureRecognizer(tap)
             xImageView.userInteractionEnabled = true
             xImageView.tag = i
@@ -151,7 +151,7 @@ class NBWUpdateStatusVC: UIViewController {
         
         shareWithButton = UIButton(frame: CGRect(x: view.frame.width - shareButtonWidthArray[0] - 8, y: 0, width: shareButtonWidthArray[0], height: 20))
         shareWithButton!.setImage(UIImage(named: "public"), forState: .Normal)
-        shareWithButton?.addTarget(self, action: Selector("shareWith:"), forControlEvents: .TouchUpInside)
+        shareWithButton?.addTarget(self, action: #selector(NBWUpdateStatusVC.shareWith(_:)), forControlEvents: .TouchUpInside)
         accessoryView?.addSubview(shareWithButton!)
         
         numberOfWordsLabel = UILabel(frame: CGRect(x: view.frame.width - (shareWithButton?.frame.width)! - 116, y: 0, width: 100, height: 20))
@@ -168,15 +168,15 @@ class NBWUpdateStatusVC: UIViewController {
         
         let flexibleSpaceButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         
-        let photoButtonItem         = UIBarButtonItem.init(image: UIImage(named: "photo48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("fetchPhoto"))
+        let photoButtonItem         = UIBarButtonItem.init(image: UIImage(named: "photo48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWUpdateStatusVC.fetchPhoto))
         
-        let atButtonItem            = UIBarButtonItem.init(image: UIImage(named: "at48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("atFriends"))
+        let atButtonItem            = UIBarButtonItem.init(image: UIImage(named: "at48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWUpdateStatusVC.atFriends))
         
-        let linkButtonItem          = UIBarButtonItem.init(image: UIImage(named: "link48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("link"))
+        let linkButtonItem          = UIBarButtonItem.init(image: UIImage(named: "link48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWUpdateStatusVC.link))
         
-        let emojiButtonItem         = UIBarButtonItem.init(image: UIImage(named: "emoji48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("sendEmoji"))
+        let emojiButtonItem         = UIBarButtonItem.init(image: UIImage(named: "emoji48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWUpdateStatusVC.sendEmoji))
         
-        let addButtonItem           = UIBarButtonItem.init(image: UIImage(named: "add48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("add"))
+        let addButtonItem           = UIBarButtonItem.init(image: UIImage(named: "add48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWUpdateStatusVC.add))
         
         toolBar?.items         = [flexibleSpaceButtonItem,photoButtonItem,flexibleSpaceButtonItem,atButtonItem,flexibleSpaceButtonItem,linkButtonItem,flexibleSpaceButtonItem,emojiButtonItem,flexibleSpaceButtonItem,addButtonItem,flexibleSpaceButtonItem]
         
@@ -233,7 +233,7 @@ class NBWUpdateStatusVC: UIViewController {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             imageView.removeFromSuperview()
             }) { (Bool) -> Void in
-                    for var i = index, j = index + 1; j < count; i++, j++ {
+                    for var i = index, j = index + 1; j < count; i += 1, j += 1 {
                         UIView.animateWithDuration(0.5, animations: { () -> Void in
                         newFrame = self.imageViewArray[j].frame
                         self.imageViewArray[j].frame = originalFrame

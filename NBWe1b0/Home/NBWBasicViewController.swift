@@ -59,9 +59,9 @@ class NBWBasicViewController: UIViewController {
 
         self.navigationBasicItem                     = UINavigationItem.init(title: "Comment")
 
-        self.navigationBasicItem!.leftBarButtonItem  = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("dismissViewController"))
+        self.navigationBasicItem!.leftBarButtonItem  = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(NBWBasicViewController.dismissViewController))
 
-        self.navigationBasicItem!.rightBarButtonItem = UIBarButtonItem.init(title: "Send", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("sendTextViewContext"))
+        self.navigationBasicItem!.rightBarButtonItem = UIBarButtonItem.init(title: "Send", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.sendTextViewContext))
 
         navigationBar.setItems([self.navigationBasicItem!], animated: true)
         navigationBar.tintColor                      = UIColor.orangeColor()
@@ -81,15 +81,15 @@ class NBWBasicViewController: UIViewController {
 
         let flexibleSpaceButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
 
-        let photoButtonItem         = UIBarButtonItem.init(image: UIImage(named: "photo48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("fetchPhoto"))
+        let photoButtonItem         = UIBarButtonItem.init(image: UIImage(named: "photo48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.fetchPhoto))
 
-        let atButtonItem            = UIBarButtonItem.init(image: UIImage(named: "at48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("atFriends"))
+        let atButtonItem            = UIBarButtonItem.init(image: UIImage(named: "at48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.atFriends))
 
-        let linkButtonItem          = UIBarButtonItem.init(image: UIImage(named: "link48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("link"))
+        let linkButtonItem          = UIBarButtonItem.init(image: UIImage(named: "link48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.link))
 
-        let emojiButtonItem         = UIBarButtonItem.init(image: UIImage(named: "emoji48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("sendEmoji"))
+        let emojiButtonItem         = UIBarButtonItem.init(image: UIImage(named: "emoji48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.sendEmoji))
 
-        let addButtonItem           = UIBarButtonItem.init(image: UIImage(named: "add48"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("add"))
+        let addButtonItem           = UIBarButtonItem.init(image: UIImage(named: "add48"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(NBWBasicViewController.add))
 
         self.toolBar?.items         = [flexibleSpaceButtonItem,photoButtonItem,flexibleSpaceButtonItem,atButtonItem,flexibleSpaceButtonItem,linkButtonItem,flexibleSpaceButtonItem,emojiButtonItem,flexibleSpaceButtonItem,addButtonItem,flexibleSpaceButtonItem]
         

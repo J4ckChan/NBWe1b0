@@ -53,9 +53,9 @@ class NBWCommentViewController: NBWBasicViewController {
     
     func registerForKeyboardNotifications(){
        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWasShow:"), name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentViewController.keyboardWasShow(_:)), name: UIKeyboardDidShowNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWasHidden:"), name: UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentViewController.keyboardWasHidden(_:)), name: UIKeyboardDidHideNotification, object: nil)
     }
     
     func keyboardWasShow(notif:NSNotification){
@@ -86,7 +86,7 @@ class NBWCommentViewController: NBWBasicViewController {
         self.alsoRepostButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         self.alsoRepostButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.alsoRepostButton?.setImage(UIImage(named: "frame"), forState: .Normal)
-        self.alsoRepostButton?.addTarget(self, action: Selector("alsoRepostOrNot"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.alsoRepostButton?.addTarget(self, action: #selector(NBWCommentViewController.alsoRepostOrNot), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.view.addSubview(self.alsoRepostButton!)
     }

@@ -47,7 +47,7 @@ class NBWContactTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .Done, target: self, action: Selector("dismissSelf"))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .Done, target: self, action: #selector(NBWContactTableViewController.dismissSelf))
         self.navigationItem.title = "Contact"
         self.navigationController?.navigationBar.tintColor = UIColor.lightGrayColor()
         
@@ -119,7 +119,7 @@ class NBWContactTableViewController: UITableViewController {
                 
             }else{
                 var flag = 0
-                for var index = 0; index < tableViewArray.count; index++ {
+                for index in 0 ..< tableViewArray.count {
                     
                     if tableViewArray[index].initial == initialUppercase {
                         flag = 1

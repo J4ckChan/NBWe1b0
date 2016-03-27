@@ -45,7 +45,7 @@ class NBWCommentTableViewController: UITableViewController {
         
         setupTableView()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("replyComment:"), name: "ReplyComment", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentTableViewController.replyComment(_:)), name: "ReplyComment", object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -76,7 +76,7 @@ class NBWCommentTableViewController: UITableViewController {
         midButton?.setTitle(midButtonTitle, forState: .Normal)
         midButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         midButton?.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
-        midButton?.addTarget(self, action: Selector("filterComments:"), forControlEvents: .TouchUpInside)
+        midButton?.addTarget(self, action: #selector(NBWCommentTableViewController.filterComments(_:)), forControlEvents: .TouchUpInside)
         view.addSubview(midButton!)
         
         navigationItem.titleView = view

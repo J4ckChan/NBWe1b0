@@ -18,6 +18,8 @@ var accessToken:String = "2.00HKoGiB0WU5Qn25f63843bdEJB58C"
 var userID:String = "1567914411"
 var refreshToken:String?
 var userScreenName:String = "J4ck_Chan"
+var managerContext:NSManagedObjectContext?
+var weiboUserInfo:WeiboUser?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -25,13 +27,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     let userShow                  = "https://api.weibo.com/2/users/show.json"
     
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    // Override point for customization after application launch.
-    WeiboSDK.enableDebugMode(true)
-    WeiboSDK.registerApp(appKey)
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // Override point for customization after application launch.
+        WeiboSDK.enableDebugMode(true)
+        WeiboSDK.registerApp(appKey)
     
-    return true
-  }
+        fetchUserDefault()
+    
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        managerContext = appDelegate.managedObjectContext
+    
+        weiboUserInfo = fetchUserData(userID)
+        if weiboUserInfo == nil {
+            usersShow()
+        }
+    
+        return true
+    }
+    
+    func fetchUserDefault(){
+        let userDefault = NSUserDefaults.standardUserDefaults()
+        if userDefault.objectForKey("accessToken") != nil &&  userDefault.objectForKey("userId") != nil && userDefault.objectForKey("refreshToken") != nil {
+            accessToken     = userDefault.objectForKey("accessToken") as! String
+            userID          = userDefault.objectForKey("userId") as! String
+            refreshToken    = userDefault.objectForKey("refreshToken") as? String
+        }
+    }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return WeiboSDK.handleOpenURL(url, delegate: self)
@@ -93,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
           dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
           dict[NSLocalizedFailureReasonErrorKey] = failureReason
 
-          dict[NSUnderlyingErrorKey] = error as! NSError
+          dict[NSUnderlyingErrorKey] = error as NSError
           let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
           // Replace this with code to handle the error appropriately.
           // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -144,9 +165,19 @@ extension AppDelegate: WeiboSDKDelegate{
             
             print("accessToken = \(accessToken), userID = \(userID)")
             
+            //UserDefaut
+            userDefault()
+            
             //Fetch userInfo
             usersShow()
         }
+    }
+    
+    func userDefault(){
+        let userDefault = NSUserDefaults.standardUserDefaults()
+        userDefault.setObject(accessToken, forKey: "accessToken")
+        userDefault.setObject(userID, forKey: "userId")
+        userDefault.setObject(refreshToken, forKey: "refreshToken")
     }
     
     func usersShow(){
@@ -159,7 +190,10 @@ extension AppDelegate: WeiboSDKDelegate{
                     
                     userScreenName = (jsonDictionary["screen_name"] as? String)!
                     
-                    print(jsonDictionary)
+                    weiboUserInfo = weiboUserManagedObject()
+                    importUserDataFromJSON(weiboUserInfo!, userDict: jsonDictionary)
+                    
+                    managerContextSave()
                     
                 }catch let error as NSError {
                     print("Error:\(error.localizedDescription)")

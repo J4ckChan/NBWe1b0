@@ -111,7 +111,7 @@ class NBWRespotViewController: NBWBasicViewController {
         self.alsoCommentButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         self.alsoCommentButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.alsoCommentButton?.setImage(UIImage(named: "frame"), forState: .Normal)
-        self.alsoCommentButton?.addTarget(self, action: Selector("alsoCommentOrNot"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.alsoCommentButton?.addTarget(self, action: #selector(NBWRespotViewController.alsoCommentOrNot), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.view.addSubview(self.alsoCommentButton!)
     }

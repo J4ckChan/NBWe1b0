@@ -64,12 +64,12 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     func setupNavigationBar(){
         navigationItem.title = "Photos"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("dismissSelf:"))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(NBWUploadImageCollectionViewController.dismissSelf(_:)))
         
         let rightBarButtonContextView = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 20))
         rightButton = UIButton(frame: rightBarButtonContextView.frame)
         rightButton!.setImage(UIImage(named: "grayNext"), forState: .Normal)
-        rightButton!.addTarget(self, action: Selector("nextToUploadImage:"), forControlEvents: .TouchUpInside)
+        rightButton!.addTarget(self, action: #selector(NBWUploadImageCollectionViewController.nextToUploadImage(_:)), forControlEvents: .TouchUpInside)
         rightBarButtonContextView.addSubview(rightButton!)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBarButtonContextView)
@@ -88,11 +88,11 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
     func fetchPhoto(){
         let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.AlbumRegular, options: nil)
         
-        for var i = 0 ; i < smartAlbums.count; i++ {
+        for i in 0  ..< smartAlbums.count {
             let collection = smartAlbums[i]
             if collection.isKindOfClass(PHAssetCollection.classForCoder()){
                 let fetchResult = PHAsset.fetchAssetsInAssetCollection(collection as! PHAssetCollection, options: nil)
-                for var j = 0; j < fetchResult.count; j++ {
+                for j in 0 ..< fetchResult.count {
                     let asset = fetchResult[j]
                     if asset.isKindOfClass(PHAsset.classForCoder()) {
                         assets.append(asset as! PHAsset)
@@ -177,7 +177,7 @@ class NBWUploadImageCollectionViewController: UICollectionViewController {
                 var count = 0
                 for imageStruct in imageArray {
                     if imageStruct.tag == true {
-                        count++
+                        count += 1
                     }
                     if count >= 6 {
                         flagCount = false

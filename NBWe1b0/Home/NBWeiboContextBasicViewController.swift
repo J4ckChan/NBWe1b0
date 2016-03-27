@@ -98,7 +98,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.navigationItem.title = "Weibo Context"
         self.navigationController?.navigationBar.tintColor = UIColor.grayColor()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: Selector("navigationAction"))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: #selector(NBWeiboContextBasicViewController.navigationAction))
         self.viewHeight = self.view.bounds.height
         self.viewWidth  = self.view.bounds.width
         self.commentCache = NSCache.init()
@@ -289,13 +289,13 @@ class NBWeiboContextBasicViewController: UIViewController {
             
         }else if picsCount == 2 || picsCount == 3 {
             
-            for var i = 0; i < picsCount; i++ {
+            for var i = 0; i < picsCount; i += 1 {
                 statusView.addSubview(imageViewArray[i]!)
             }
             
         }else if picsCount == 4 {
             
-            for var i = 0; i < 5; i++ {
+            for i in 0 ..< 5 {
                 if i != 2 {
                     statusView.addSubview(imageViewArray[i]!)
                 }
@@ -303,14 +303,14 @@ class NBWeiboContextBasicViewController: UIViewController {
             
         }else if picsCount > 4 {
             
-            for var i = 0; i < 6; i++ {
+            for i in 0 ..< 6 {
                 statusView.addSubview(imageViewArray[i]!)
             }
         }
         
         //Tap to Show Bigger Picture
         for imageView in imageViewArray {
-            let tap = UITapGestureRecognizer(target: self, action: Selector("showBiggerPicture:"))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(NBWeiboContextBasicViewController.showBiggerPicture(_:)))
             imageView?.addGestureRecognizer(tap)
             imageView?.userInteractionEnabled = true
         }
@@ -379,7 +379,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         }
         
         for imageView in imageViewArray {
-            let tap = UITapGestureRecognizer(target: self, action: Selector("showBiggerPicture:"))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(NBWeiboContextBasicViewController.showBiggerPicture(_:)))
             imageView.addGestureRecognizer(tap)
             imageView.userInteractionEnabled = true
         }
@@ -402,7 +402,7 @@ class NBWeiboContextBasicViewController: UIViewController {
             var i = 0
             for weiboStatusPic in repostPics {
                 imageViewArray[i].sd_setImageWithURL(NSURL(string: weiboStatusPic.pic!))
-                i++
+                i += 1
             }
             
             repostViewHeight = 24 + repostLabelHeight + imageViewWidth
@@ -412,9 +412,9 @@ class NBWeiboContextBasicViewController: UIViewController {
             var i = 0
             for weiboStatusPic in repostPics {
                 imageViewArray[i].sd_setImageWithURL(NSURL(string: weiboStatusPic.pic!))
-                i++
+                i += 1
                 if i == 2 {
-                    i++
+                    i += 1
                 }
             }
             
@@ -424,7 +424,7 @@ class NBWeiboContextBasicViewController: UIViewController {
             var i = 0
             for weiboStatusPic in repostPics {
                 imageViewArray[i].sd_setImageWithURL(NSURL(string: weiboStatusPic.pic!))
-                i++
+                i += 1
                 if i == 6 {
                     break
                 }
@@ -453,20 +453,20 @@ class NBWeiboContextBasicViewController: UIViewController {
             repostView!.addSubview(imageViewArray[0])
         }else if repostPicsCount == 2 || repostPicsCount == 3 {
             
-            for var i = 0; i < repostPicsCount; i++ {
+            for i in 0 ..< repostPicsCount {
                 repostView!.addSubview(imageViewArray[i])
             }
         }else if repostPicsCount == 4 {
             
-            for var i = 0; i < repostPicsCount; i++ {
+            for var i in 0 ..< repostPicsCount {
                 if i == 2 {
-                    i++
+                    i += 1
                 }
                 repostView!.addSubview(imageViewArray[i])
             }
         }else if repostPicsCount > 4 {
             
-            for var i = 0; i < repostPicsCount; i++ {
+            for i in 0 ..< repostPicsCount {
                 if i == 6 {
                     break
                 }
@@ -486,7 +486,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         repostSwitchButton!.setTitle("Repost \((weiboStatus?.reposts_count)!)", forState: UIControlState.Normal)
         repostSwitchButton!.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         repostSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
-        repostSwitchButton!.addTarget(self, action: Selector("refreshRepostTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        repostSwitchButton!.addTarget(self, action: #selector(NBWeiboContextBasicViewController.refreshRepostTableView), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.commentSwitchButton = UIButton.init(frame: CGRect(x: 80, y: 0, width: 100, height: 32))
         commentSwitchButton!.setTitle("Comment \((weiboStatus?.comments_count)!)", forState: .Normal)
@@ -494,14 +494,14 @@ class NBWeiboContextBasicViewController: UIViewController {
         commentSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
         commentSwitchButton!.titleLabel?.textColor = UIColor.lightGrayColor()
         
-        commentSwitchButton!.addTarget(self, action: Selector("refreshCommentTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        commentSwitchButton!.addTarget(self, action: #selector(NBWeiboContextBasicViewController.refreshCommentTableView), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.likeSwitchButton = UIButton.init(frame: CGRect(x: viewWidth! - 80, y: 0, width: 80, height: 32))
         likeSwitchButton!.setTitle("Likes \((weiboStatus?.attitudes_count)!)", forState: .Normal)
         likeSwitchButton!.setTitleColor(UIColor.lightGrayColor(), forState:
         .Normal)
         likeSwitchButton!.titleLabel?.font = UIFont.systemFontOfSize(15)
-        likeSwitchButton!.addTarget(self, action: Selector("refreshLikeTableView"), forControlEvents: UIControlEvents.TouchUpInside)
+        likeSwitchButton!.addTarget(self, action: #selector(NBWeiboContextBasicViewController.refreshLikeTableView), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.switchRepostCommentLikeBar?.addSubview(repostSwitchButton!)
         self.switchRepostCommentLikeBar?.addSubview(commentSwitchButton!)
@@ -533,21 +533,21 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.repostButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         self.repostButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.repostButton?.setImage(UIImage(named: "repost32"), forState: .Normal)
-        self.repostButton?.addTarget(self, action: Selector("repostWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.repostButton?.addTarget(self, action: #selector(NBWeiboContextBasicViewController.repostWeiboStatus), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.commentButton = UIButton.init(frame: CGRect(x: self.viewWidth!/3.0, y: 0, width: self.viewWidth!/3.0, height: 42))
         self.commentButton?.setTitle("  Comment", forState: .Normal)
         self.commentButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         self.commentButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.commentButton?.setImage(UIImage(named: "comment32"), forState: .Normal)
-        self.commentButton?.addTarget(self, action: Selector("commentWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.commentButton?.addTarget(self, action: #selector(NBWeiboContextBasicViewController.commentWeiboStatus), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.likeButton = UIButton.init(frame: CGRect(x: (self.viewWidth!/3.0)*2, y: 0, width: self.viewWidth!/3.0, height: 42))
         self.likeButton?.setTitle("  like", forState: .Normal)
         self.likeButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         self.likeButton?.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.likeButton?.setImage(UIImage(named: "like32"), forState: .Normal)
-        self.likeButton?.addTarget(self, action: Selector("likeWeiboStatus"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.likeButton?.addTarget(self, action: #selector(NBWeiboContextBasicViewController.likeWeiboStatus), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.likeFlag = false
         
@@ -580,7 +580,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.showImageView = UIImageView(image: imageViewTap?.image)
         self.showImageView?.frame = (imageViewTap?.frame)!
         self.orignalFrame = showImageView?.frame
-        let tap = UITapGestureRecognizer(target: self, action: Selector("hideImageView:"))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(NBWeiboContextBasicViewController.hideImageView(_:)))
         self.showImageView?.addGestureRecognizer(tap)
         self.showImageView?.userInteractionEnabled = true
         

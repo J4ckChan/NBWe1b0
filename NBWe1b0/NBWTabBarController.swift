@@ -25,7 +25,7 @@ class NBWTabBarController: UITabBarController {
         
         let composeButton = UIButton(frame: itemFrame)
         composeButton.setImage(UIImage(named: "tabbar_compose_bg"), forState: .Normal)
-        composeButton.addTarget(self, action: Selector("presentComposeVC:"), forControlEvents: .TouchUpInside)
+        composeButton.addTarget(self, action: #selector(NBWTabBarController.presentComposeVC(_:)), forControlEvents: .TouchUpInside)
         tabBar.addSubview(composeButton)
     }
     

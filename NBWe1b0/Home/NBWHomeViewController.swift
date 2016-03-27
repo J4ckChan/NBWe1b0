@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import CoreData
 
-var managerContext:NSManagedObjectContext?
 var tableViewCellWidth:CGFloat?
 var navigationBarHeight:CGFloat?
 
@@ -43,8 +42,7 @@ class NBWHomeViewController: UIViewController {
         navigationBarHeight = self.navigationController?.navigationBar.frame.height
         
         //CoreData
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        managerContext = appDelegate.managedObjectContext
+        
         
         setupUserNameButton()
         setUpRefresh()
@@ -60,7 +58,7 @@ class NBWHomeViewController: UIViewController {
         let attributedStrDict = [NSForegroundColorAttributeName:UIColor.orangeColor()]
         self.refreshHeaderController?.attributedTitle = NSAttributedString.init(string: "Refresh Data", attributes: attributedStrDict)
         
-        self.refreshHeaderController!.addTarget(self.store, action: Selector("setupStore"), forControlEvents: .ValueChanged)
+        self.refreshHeaderController!.addTarget(self.store, action: #selector(NBWHomeViewController.setupStore), forControlEvents: .ValueChanged)
         self.refreshHeaderController?.beginRefreshing()
     }
     
@@ -81,7 +79,7 @@ class NBWHomeViewController: UIViewController {
     
     func setupUserNameButton(){
         self.userNameButton.setTitle(userScreenName, forState: .Normal)
-        self.userNameButton.addTarget(self, action: Selector("showNameButtonView:"), forControlEvents: .TouchUpInside)
+        self.userNameButton.addTarget(self, action: #selector(NBWHomeViewController.showNameButtonView(_:)), forControlEvents: .TouchUpInside)
     }
     
     //MARK: - Button

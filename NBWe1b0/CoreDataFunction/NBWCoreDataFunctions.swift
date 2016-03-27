@@ -30,6 +30,25 @@ func weiboStatusAlreadyExisted(id:String)->Bool {
     return false
 }
 
+func fetchUserData(idstr:String) -> WeiboUser? {
+    
+    let request = NSFetchRequest(entityName: "WeiboUser")
+    request.predicate = NSPredicate(format: "idstr == \(idstr)")
+    
+    do{
+        let array = try managerContext?.executeFetchRequest(request) as! [WeiboUser]
+        if array.count != 0 {
+            let weiboUser = array[0]
+            return weiboUser
+        }else{
+            return nil
+        }
+    }catch let error as NSError{
+        print("Fetch Error:\(error.localizedDescription)")
+    }
+    return nil
+}
+
 
 //MARK: - Pesistently Store in CoreData
 
@@ -165,7 +184,7 @@ func sourceStringModifiedWithString(source:String)->String {
     if source.characters.count > 0 {
         let locationStart = source.rangeOfString(">")?.endIndex
         let locationEnd = source.rangeOfString("</")?.startIndex
-        let sourceName = source.substringWithRange(Range(start: locationStart!,end: locationEnd!))
+        let sourceName = source.substringWithRange(Range(locationStart!..<locationEnd!))
         
         return sourceName
     }else{
