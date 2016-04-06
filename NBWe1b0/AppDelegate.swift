@@ -19,7 +19,7 @@ var userID:String = "1567914411"
 var refreshToken:String?
 var userScreenName:String = "J4ck_Chan"
 var managerContext:NSManagedObjectContext?
-var weiboUserInfo:WeiboUser?
+var userInfo:WeiboUser?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         managerContext = appDelegate.managedObjectContext
     
-        weiboUserInfo = fetchUserData(userID)
-        if weiboUserInfo == nil {
+        userInfo = fetchUserData(userID)
+        if userInfo == nil {
             usersShow()
         }
     
@@ -190,8 +190,8 @@ extension AppDelegate: WeiboSDKDelegate{
                     
                     userScreenName = (jsonDictionary["screen_name"] as? String)!
                     
-                    weiboUserInfo = weiboUserManagedObject()
-                    importUserDataFromJSON(weiboUserInfo!, userDict: jsonDictionary)
+                    userInfo = weiboUserManagedObject()
+                    importUserDataFromJSON(userInfo!, userDict: jsonDictionary)
                     
                     managerContextSave()
                     

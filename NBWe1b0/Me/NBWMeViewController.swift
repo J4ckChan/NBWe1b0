@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 class NBWMeViewController: UITableViewController {
 
@@ -19,6 +18,7 @@ class NBWMeViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.title = "Me"
         self.tableView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         self.tableView.registerNib(UINib.init(nibName: "NBWMeTopTableViewCell", bundle: nil), forCellReuseIdentifier: "MeTopCell")
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MeCell")
@@ -60,7 +60,6 @@ class NBWMeViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         if indexPath.section == 0{
            let cell = tableView.dequeueReusableCellWithIdentifier("MeTopCell", forIndexPath: indexPath) as! NBWMeTopTableViewCell
             configureTopCell(cell)
@@ -73,44 +72,53 @@ class NBWMeViewController: UITableViewController {
     }
     
     func configureTopCell(cell:NBWMeTopTableViewCell){
-        cell.avater.sd_setImageWithURL(NSURL(string: (weiboUserInfo?.avatar_large)!))
+        cell.avater.sd_setImageWithURL(NSURL(string: (userInfo?.avatar_large)!))
         cell.avater.layer.cornerRadius = 30
-        cell.screenNameLabel.text      = weiboUserInfo?.screen_name
-        cell.bioLabel.text             = weiboUserInfo?.user_description
-        cell.weiboNumLabel.text        = "\((weiboUserInfo?.statuses_count)!)"
-        cell.followNumLabel.text       = "\((weiboUserInfo?.friends_count)!)"
-        cell.followerNumLabel.text     = "\((weiboUserInfo?.followers_count)!)"
+        cell.screenNameLabel.text      = userInfo?.screen_name
+        cell.bioLabel.text             = userInfo?.user_description
+        cell.weiboNumLabel.text        = "\((userInfo?.statuses_count)!)"
+        cell.followNumLabel.text       = "\((userInfo?.friends_count)!)"
+        cell.followerNumLabel.text     = "\((userInfo?.followers_count)!)"
     }
     
-    func  configureMeCell(cell:UITableViewCell,_ indexPath:NSIndexPath){
+    func configureMeCell(cell:UITableViewCell,_ indexPath:NSIndexPath){
         cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-
         if indexPath.section == 1 {
-            cell.textLabel?.text = "New Friends"
+            cell.textLabel?.text  = "New Friends"
+            cell.imageView?.image = UIImage(named: "newFriends")
         }else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Albums"
+            cell.textLabel?.text  = "Albums"
+            cell.imageView?.image = UIImage(named: "albums32")
             }else if indexPath.row == 1 {
-                cell.textLabel?.text = "My Reviews"
+            cell.textLabel?.text  = "My Reviews"
+            cell.imageView?.image = UIImage(named: "review32")
             }else {
-                cell.textLabel?.text = "Likes"
+            cell.textLabel?.text  = "Likes"
+            cell.imageView?.image = UIImage(named: "like32-1")
             }
         }else if indexPath.section == 3 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Weibo Pay"
+            cell.textLabel?.text  = "Weibo Pay"
+            cell.imageView?.image = UIImage(named: "weiboPay32")
             }else {
-                cell.textLabel?.text = "Weibo Fit"
+            cell.textLabel?.text  = "Weibo Fit"
+            cell.imageView?.image = UIImage(named: "weiboFit32")
             }
         }else if indexPath.section == 4 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Fanstop"
+            cell.textLabel?.text  = "Fanstop"
+            cell.imageView?.image = UIImage(named: "fanstop32")
             }else{
-                cell.textLabel?.text = "Fans Service"
+            cell.textLabel?.text  = "Fans Service"
+            cell.imageView?.image = UIImage(named: "fans32")
             }
         }else if indexPath.section == 5 {
-            cell.textLabel?.text = "Draft Box"
+            cell.textLabel?.text  = "Draft Box"
+            cell.imageView?.image = UIImage(named: "draft32")
         }else {
-            cell.textLabel?.text = "More"
+            cell.textLabel?.text  = "More"
+            cell.imageView?.image = UIImage(named: "more32")
         }
     }
 

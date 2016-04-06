@@ -1817,11 +1817,39 @@
                             <outlet property="delegate" destination="HyE-cl-P45" id="0Fn-Ke-dne"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="pPK-pc-8ux"/>
+                    <navigationItem key="navigationItem" id="pPK-pc-8ux">
+                        <barButtonItem key="rightBarButtonItem" title="Setting" id="iZT-zF-CKd">
+                            <color key="tintColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="93e-cV-Rfo" kind="show" id="MEc-jW-eM9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gG6-Ev-CAl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-216" y="-824.25"/>
+        </scene>
+        <!--Settings Controller-->
+        <scene sceneID="1ot-u0-gi3">
+            <objects>
+                <tableViewController hidesBottomBarWhenPushed="YES" id="93e-cV-Rfo" customClass="NBWSettingsController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="28" id="MN9-wA-MhF">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="93e-cV-Rfo" id="vp7-BW-Fpd"/>
+                            <outlet property="delegate" destination="93e-cV-Rfo" id="cev-lc-FhW"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zOy-8b-pqu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="564" y="-824.25"/>
         </scene>
     </scenes>
     <resources>
