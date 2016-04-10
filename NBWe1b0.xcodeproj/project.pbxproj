@@ -471,8 +471,8 @@
 		3DB39CAD1CA2ED90007A8686 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3D1323351CB4F3E800DFDA2C /* NBWSettingsController.swift */,
 				3D37C5D61CA0433F00C6AF36 /* NBWMeViewController.swift */,
+				3D1323351CB4F3E800DFDA2C /* NBWSettingsController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";

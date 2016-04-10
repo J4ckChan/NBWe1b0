@@ -22,6 +22,7 @@ class NBWSettingsController: UITableViewController {
         self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
         self.tableView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "SettingCell")
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
 
     override func didReceiveMemoryWarning() {
