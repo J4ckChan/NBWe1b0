@@ -80,7 +80,6 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
         }else{
             configureCommentCell(cell as! NBWCommentCell, comment: comment!)
         }
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

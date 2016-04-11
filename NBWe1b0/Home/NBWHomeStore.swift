@@ -18,10 +18,40 @@ class NBWHomeStore: NSObject {
     
     init(urlString:String) {
         super.init()
-        timelineFetchDataFromWeibo(urlString)
+//        timelineFetchDataFromWeibo(urlString)
+        fetchDataFromHomeTimeLine(urlString)
     }
     
     //MARK: - FetchData
+    
+    func fetchDataFromHomeTimeLine(urlString:String){
+        
+        let downloadStatusGroup = dispatch_group_create()
+        
+        dispatch_group_enter(downloadStatusGroup)
+        
+        Alamofire.request(.GET, urlString, parameters: ["access_token":accessToken,"count":20], encoding: ParameterEncoding.URL, headers: nil)
+            .responseJSON { (response) -> Void in
+                
+                do {
+                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
+                    let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
+                    
+                    self.weiboStatusPesistentlyStoreInCoreData(statusesArrary)
+                    
+                }catch let error as NSError{
+                    print("Error:\(error.localizedDescription)")
+                }
+                dispatch_group_leave(downloadStatusGroup)
+        }
+        
+        dispatch_group_notify(downloadStatusGroup, dispatch_get_main_queue()) { 
+            self.fetchDataFromCoreData()
+        }
+
+    }
+    
+    
     //FromWeb
     func timelineFetchDataFromWeibo(urlString:String){
     
@@ -42,7 +72,7 @@ class NBWHomeStore: NSObject {
     }
     
     //FromCoreData
-    func fetchDataFromCoreData()->[WeiboStatus]{
+    func fetchDataFromCoreData(){
         
         do{
             let request = NSFetchRequest(entityName: "WeiboStatus")
@@ -50,7 +80,16 @@ class NBWHomeStore: NSObject {
         }catch let error as NSError {
             print("Fetching error: \(error.localizedDescription)")
         }
-        return weiboStatusesArray
+        
+     weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
+        if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
+                return true
+        }else{
+                return false
+        }
+    })
+        
+        self.delegate?.fetchDataFromWeb(weiboStatusesArray)
     }
     
     func fetchOneWeiboStatusFromCoreDate(id:String)->Bool {
@@ -73,20 +112,13 @@ class NBWHomeStore: NSObject {
     
     //MARK: - StoreData
     func weiboStatusPesistentlyStoreInCoreData(statuesArray:NSArray){
-        
-        weiboStatusesArray = []
-        
+
         for jsonDict in statuesArray {
             
             let id = jsonDict["idstr"] as? String
             
-            if weiboStatusAlreadyExisted(id!) {
+            if !weiboStatusAlreadyExisted(id!) {
                 
-                fetchOneWeiboStatusFromCoreDate(id!)
-                
-                weiboStatusesArray.append(weiboStatus!)
-                
-            }else{
                 //create NSManagedObject
                 let weiboUser            = weiboUserManagedObject()
                 
@@ -121,19 +153,17 @@ class NBWHomeStore: NSObject {
                 
                 weiboUser.status = weiboUser.status?.setByAddingObject(weiboStatus)
                 
-                weiboStatusesArray.append(weiboStatus)
             }
         }
         
-        weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
-            if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
-                return true
-            }else{
-                return false
-            }
-        })
+//        weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
+//            if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
+//                return true
+//            }else{
+//                return false
+//            }
+//        })
 
-        delegate?.fetchDataFromWeb(weiboStatusesArray)
         managerContextSave()
     }
 }

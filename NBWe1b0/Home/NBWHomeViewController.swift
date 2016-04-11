@@ -43,7 +43,6 @@ class NBWHomeViewController: UIViewController {
         
         //CoreData
         
-        
         setupUserNameButton()
         setUpRefresh()
         setupStore()
@@ -65,8 +64,6 @@ class NBWHomeViewController: UIViewController {
     func setupStore(){
         store = NBWHomeStore.init(urlString: timelineURL)
         store!.delegate = self
-        
-        weiboStatusesArray = store!.fetchDataFromCoreData()
     }
     
     func setupTableViewDelegateAndDataSource(){
