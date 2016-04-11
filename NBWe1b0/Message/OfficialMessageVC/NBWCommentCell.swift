@@ -8,6 +8,8 @@
 
 import UIKit
 
+let replyCommentNotfi = "ReplyComment";
+
 class NBWCommentCell: UITableViewCell {
     
     @IBOutlet weak var avater: UIImageView!
@@ -33,7 +35,7 @@ class NBWCommentCell: UITableViewCell {
     }
     @IBAction func replyCommentInCommentCell(sender: UIButton) {
         let cell = sender.superview?.superview as! UITableViewCell
-        NSNotificationCenter.defaultCenter().postNotificationName("ReplyComment", object: cell)
+        NSNotificationCenter.defaultCenter().postNotificationName(replyCommentNotfi, object: cell)
     }
     
 }

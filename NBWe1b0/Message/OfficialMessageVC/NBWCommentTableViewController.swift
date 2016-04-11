@@ -45,7 +45,7 @@ class NBWCommentTableViewController: UITableViewController {
         
         setupTableView()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentTableViewController.replyComment(_:)), name: "ReplyComment", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentTableViewController.replyComment(_:)), name: replyCommentNotfi, object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -55,7 +55,7 @@ class NBWCommentTableViewController: UITableViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: "ReplyComment", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: replyCommentNotfi, object: nil)
     }
     
     func setupTableView(){

@@ -23,7 +23,7 @@ class NBWHomeStore: NSObject {
     }
     
     //MARK: - FetchData
-    
+    //FromWeb
     func fetchDataFromHomeTimeLine(urlString:String){
         
         let downloadStatusGroup = dispatch_group_create()
@@ -51,25 +51,23 @@ class NBWHomeStore: NSObject {
 
     }
     
-    
-    //FromWeb
-    func timelineFetchDataFromWeibo(urlString:String){
-    
-        Alamofire.request(.GET, urlString, parameters: ["access_token":accessToken,"count":20], encoding: ParameterEncoding.URL, headers: nil)
-            .responseJSON { (response) -> Void in
-                
-                do {
-                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
-                    let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
-                    
-                    self.weiboStatusPesistentlyStoreInCoreData(statusesArrary)
-                    
-                }catch let error as NSError{
-                    print("Error:\(error.localizedDescription)")
-                }
-    
-        }
-    }
+//    func timelineFetchDataFromWeibo(urlString:String){
+//    
+//        Alamofire.request(.GET, urlString, parameters: ["access_token":accessToken,"count":20], encoding: ParameterEncoding.URL, headers: nil)
+//            .responseJSON { (response) -> Void in
+//                
+//                do {
+//                    let jsonDictionary = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .AllowFragments) as! NSDictionary
+//                    let statusesArrary = jsonDictionary.valueForKey("statuses") as! NSArray
+//                    
+//                    self.weiboStatusPesistentlyStoreInCoreData(statusesArrary)
+//                    
+//                }catch let error as NSError{
+//                    print("Error:\(error.localizedDescription)")
+//                }
+//    
+//        }
+//    }
     
     //FromCoreData
     func fetchDataFromCoreData(){
@@ -81,7 +79,7 @@ class NBWHomeStore: NSObject {
             print("Fetching error: \(error.localizedDescription)")
         }
         
-     weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
+        weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
         if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
                 return true
         }else{
