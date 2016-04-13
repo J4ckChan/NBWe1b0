@@ -80,6 +80,9 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
         }else{
             configureCommentCell(cell as! NBWCommentCell, comment: comment!)
         }
+        
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsZero
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

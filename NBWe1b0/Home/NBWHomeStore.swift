@@ -153,14 +153,6 @@ class NBWHomeStore: NSObject {
                 
             }
         }
-        
-//        weiboStatusesArray = weiboStatusesArray.sort({ (status1, status2) -> Bool in
-//            if (status1.created_at?.compare(status2.created_at!) == NSComparisonResult.OrderedDescending){
-//                return true
-//            }else{
-//                return false
-//            }
-//        })
 
         managerContextSave()
     }
