@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreData
 
-var tableViewCellWidth:CGFloat?
+var viewWidth:CGFloat?
 var navigationBarHeight:CGFloat?
 
 class NBWHomeViewController: UIViewController {
@@ -38,7 +38,7 @@ class NBWHomeViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view
-        tableViewCellWidth = self.view.frame.width
+        viewWidth = self.view.frame.width
         navigationBarHeight = self.navigationController?.navigationBar.frame.height
         
         //CoreData
@@ -70,6 +70,9 @@ class NBWHomeViewController: UIViewController {
         homeDelegateAndDataSource = NBWHomeDelegateAndDataSource.init(array: weiboStatusesArray)
         self.tableView.dataSource = homeDelegateAndDataSource
         self.tableView.delegate   = homeDelegateAndDataSource
+        self.tableView?.registerNib(UINib.init(nibName:"NBWTableViewBasicCell", bundle: nil), forCellReuseIdentifier: basicReuseIdentifier)
+        self.tableView?.registerNib(UINib.init(nibName:"NBWTableViewImageCell", bundle: nil), forCellReuseIdentifier: multiImageReuseIdentifier)
+        self.tableView?.registerNib(UINib.init(nibName:"NBWTableViewRepostCell", bundle: nil), forCellReuseIdentifier: repostReuseIdentifier)
         homeDelegateAndDataSource?.delegate = self
         tableView.reloadData()
     }

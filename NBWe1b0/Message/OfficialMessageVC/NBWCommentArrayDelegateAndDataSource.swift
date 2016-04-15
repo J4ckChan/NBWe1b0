@@ -57,7 +57,7 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
             return cellHeightArray[indexPath.row]
         }else{
             let comment = commentArray[indexPath.row]
-            let textLabelHeight = calculateTextLabelHeight(comment.text!, fontSize: 15, viewWidth: tableViewCellWidth! - 16)
+            let textLabelHeight = calculateTextLabelHeight(comment.text!, fontSize: 15, viewWidth: viewWidth! - 16)
             if comment.reply_comment == nil {
                 let height = 152 + textLabelHeight
                 cellHeightArray.append(height)
@@ -65,7 +65,7 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
             }else{
                 let name = comment.reply_comment?.user?.screen_name
                 let text = "@\(name!): \((comment.reply_comment?.text)!)"
-                let replyCommentLableHeight = calculateTextLabelHeight(text, fontSize: 15, viewWidth: tableViewCellWidth! - 16)
+                let replyCommentLableHeight = calculateTextLabelHeight(text, fontSize: 15, viewWidth: viewWidth! - 16)
                 let height = 168 + textLabelHeight + replyCommentLableHeight
                 cellHeightArray.append(height)
                 return height
