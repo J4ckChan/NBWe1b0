@@ -413,9 +413,6 @@ class NBWeiboContextBasicViewController: UIViewController {
             for weiboStatusPic in repostPics {
                 imageViewArray[i].sd_setImageWithURL(NSURL(string: weiboStatusPic.pic!))
                 i += 1
-                if i == 2 {
-                    i += 1
-                }
             }
             
             repostViewHeight = 24 + repostLabelHeight + imageViewWidth*2 + 8

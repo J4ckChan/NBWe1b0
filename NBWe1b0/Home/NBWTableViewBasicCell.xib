@@ -35,19 +35,12 @@
                         <color key="textColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTS-Wh-e3C">
-                        <rect key="frame" x="8" y="56" width="332" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTS-Wh-e3C">
+                        <rect key="frame" x="8" y="56" width="340" height="21"/>
                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hv6-L6-VoY">
-                        <rect key="frame" x="8" y="85" width="140" height="105"/>
-                        <constraints>
-                            <constraint firstAttribute="width" secondItem="Hv6-L6-VoY" secondAttribute="height" multiplier="4:3" id="3FS-IP-Aye"/>
-                            <constraint firstAttribute="width" constant="140" id="uNf-2d-WLx"/>
-                        </constraints>
-                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mbf-VD-gyj">
                         <rect key="frame" x="0.0" y="235" width="356" height="42"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -61,6 +54,13 @@
                         <color key="textColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hv6-L6-VoY">
+                        <rect key="frame" x="8" y="85" width="140" height="105"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="Hv6-L6-VoY" secondAttribute="height" multiplier="4:3" id="3FS-IP-Aye"/>
+                            <constraint firstAttribute="width" constant="140" id="uNf-2d-WLx"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="iDG-eu-kff" firstAttribute="leading" secondItem="NWo-gn-5SY" secondAttribute="trailing" constant="8" id="1lf-P2-pyT"/>
@@ -90,7 +90,7 @@
                 <outlet property="sourceLabel" destination="iDG-eu-kff" id="5aR-Wi-OlF"/>
                 <outlet property="thumbnailHeadImageView" destination="NWo-gn-5SY" id="Eog-oD-3tX"/>
             </connections>
-            <point key="canvasLocation" x="-5" y="39"/>
+            <point key="canvasLocation" x="72" y="48"/>
         </tableViewCell>
     </objects>
 </document>

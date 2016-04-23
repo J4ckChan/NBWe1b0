@@ -249,7 +249,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
             }
-            for var i = 3; i < 6; i = i+1 {
+            for var i = picsCount; i < 6; i = i+1 {
                 imageViewArray[i].hidden = true
             }
         }else if picsCount == 4 {
@@ -262,6 +262,8 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
                     count = 3
                 }
             }
+            imageViewArray[2].hidden = true;
+            imageViewArray[5].hidden = true;
         }else if  picsCount > 4 && picsCount < 10{
             var count = 0
             for weiboStatusPic in  weiboStatusSet {

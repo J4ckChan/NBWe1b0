@@ -162,7 +162,7 @@
                 <outlet property="screenNameLabel" destination="U7I-1e-wgF" id="qjN-rY-xa0"/>
                 <outlet property="sourceLabel" destination="fWS-P8-d41" id="C3v-ZW-BJZ"/>
             </connections>
-            <point key="canvasLocation" x="258.5" y="346.5"/>
+            <point key="canvasLocation" x="341.5" y="346.5"/>
         </tableViewCell>
     </objects>
 </document>
