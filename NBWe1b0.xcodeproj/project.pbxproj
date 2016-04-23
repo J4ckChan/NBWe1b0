@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D04A4781CC0BCFA0098C330 /* NBWTableViewBasicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04A4771CC0BCFA0098C330 /* NBWTableViewBasicCell.xib */; };
+		3D04A47A1CC0C5BB0098C330 /* NBWTableViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04A4791CC0C5BB0098C330 /* NBWTableViewImageCell.xib */; };
+		3D04A47C1CC0CB2F0098C330 /* NBWTableViewRepostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04A47B1CC0CB2F0098C330 /* NBWTableViewRepostCell.xib */; };
 		3D0BED2F1C448FC900C1ED41 /* NBWComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */; };
 		3D12344D1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */; };
 		3D1323361CB4F3E800DFDA2C /* NBWSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1323351CB4F3E800DFDA2C /* NBWSettingsController.swift */; };
@@ -86,6 +89,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D04A4771CC0BCFA0098C330 /* NBWTableViewBasicCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWTableViewBasicCell.xib; path = Home/NBWTableViewBasicCell.xib; sourceTree = "<group>"; };
+		3D04A4791CC0C5BB0098C330 /* NBWTableViewImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWTableViewImageCell.xib; path = Home/NBWTableViewImageCell.xib; sourceTree = "<group>"; };
+		3D04A47B1CC0CB2F0098C330 /* NBWTableViewRepostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWTableViewRepostCell.xib; path = Home/NBWTableViewRepostCell.xib; sourceTree = "<group>"; };
 		3D0BED2D1C448FC900C1ED41 /* NBWComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWComposeViewController.swift; sourceTree = "<group>"; };
 		3D12344C1C9A7B8F00C74470 /* NBWHomeDelegateAndDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWHomeDelegateAndDataSource.swift; path = Home/NBWHomeDelegateAndDataSource.swift; sourceTree = "<group>"; };
 		3D1323351CB4F3E800DFDA2C /* NBWSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWSettingsController.swift; path = Me/NBWSettingsController.swift; sourceTree = "<group>"; };
@@ -345,8 +351,11 @@
 			isa = PBXGroup;
 			children = (
 				3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */,
+				3D04A4771CC0BCFA0098C330 /* NBWTableViewBasicCell.xib */,
 				3DABDAFF1C507C9D001BC23E /* NBWTableViewImageCell.swift */,
+				3D04A4791CC0C5BB0098C330 /* NBWTableViewImageCell.xib */,
 				3DABDB021C51E68F001BC23E /* NBWTableViewRepostCell.swift */,
+				3D04A47B1CC0CB2F0098C330 /* NBWTableViewRepostCell.xib */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -700,13 +709,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DE1C5401C3D4CC8008E3A94 /* Main.storyboard in Resources */,
+				3D04A47C1CC0CB2F0098C330 /* NBWTableViewRepostCell.xib in Resources */,
 				3DB39CB51CA2EE01007A8686 /* NBWMeTopTableViewCell.xib in Resources */,
 				3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */,
+				3D04A47A1CC0C5BB0098C330 /* NBWTableViewImageCell.xib in Resources */,
 				3D5F62071C7305A200BDED94 /* Assets.xcassets in Resources */,
 				3D2B91CC1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib in Resources */,
 				3D9EA3231C630AF900A8383A /* NBWCommentTableViewCell.xib in Resources */,
 				3D14DCCB1C98FBE400D3FE90 /* NBWCommentCell.xib in Resources */,
 				3D14DCCF1C98FC0400D3FE90 /* NBWReplyCommentCell.xib in Resources */,
+				3D04A4781CC0BCFA0098C330 /* NBWTableViewBasicCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

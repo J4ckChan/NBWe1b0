@@ -29,6 +29,10 @@ class NBWCommentStore: NSObject {
     
     func fetchCommentDataFromWeibo(urlString:String,_ filterByAuthor:Int){
         
+        let downloadCommentGroup = dispatch_group_create()
+        
+        dispatch_group_enter(downloadCommentGroup)
+        
         Alamofire.request(.GET, urlString, parameters: ["access_token":accessToken,"count":20,"filter_by_author":filterByAuthor], encoding: ParameterEncoding.URL, headers: nil)
             .responseJSON { (Response) -> Void in
                 
@@ -41,10 +45,15 @@ class NBWCommentStore: NSObject {
                 }catch let error as NSError{
                     print("Fetch error:\(error.localizedDescription)")
                 }
+                dispatch_group_leave(downloadCommentGroup)
+        }
+        
+        dispatch_group_notify(downloadCommentGroup, dispatch_get_main_queue()) { 
+            self.fetchDataFromCoreData()
         }
     }
     
-    func fetchDataFromCoreData()->[Comment]{
+    func fetchDataFromCoreData(){
         
         let request = NSFetchRequest(entityName: "Comment")
         var array:[Comment]?
@@ -63,7 +72,7 @@ class NBWCommentStore: NSObject {
             }
         })
         
-        return array!
+        delegate?.fetchDataFromWeb(commentArray)
     }
 
     
@@ -129,8 +138,6 @@ class NBWCommentStore: NSObject {
                 commentArray.append(comment)
             }
         }
-        
-        delegate?.fetchDataFromWeb(commentArray)
     }
     
     

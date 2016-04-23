@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 protocol PushViewControllerDelegate{
     func pushViewController(vc:UIViewController)
@@ -18,11 +19,11 @@ enum HomeTableViewCellType {
     case RepostCell
 }
 
+let basicReuseIdentifier      = "BasicCell"
+let multiImageReuseIdentifier = "ImageCell"
+let repostReuseIdentifier     = "RepostCell"
+
 class NBWHomeDelegateAndDataSource: NSObject {
-    
-    let basicReuseIdentifier      = "BasicCell"
-    let multiImageReuseIdentifier = "ImageCell"
-    let repostReuseIdentifier     = "RepostCell"
     
     var weiboStatusesArray = [WeiboStatus]()
     var weiboStatus:WeiboStatus?
@@ -128,8 +129,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
     func configureHomeBasicCell(cell:NBWTableViewBasicCell,weiboStatus:WeiboStatus){
         
         //Setup Header
-        cell.thumbnailHeadImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
-        trimImageViewToRound(cell.thumbnailHeadImageView)
+        downloadImageAndClip((weiboStatus.user?.avatar_large)!, imageView: cell.thumbnailHeadImageView)
         cell.screenNameLable.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -138,9 +138,10 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         
         //Setup ImageStackView
         if (weiboStatus.bmiddle_pic != nil) {
+            cell.imageViewOne.hidden = false
             cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
         }else{
-            cell.imageViewOne.removeFromSuperview()
+            cell.imageViewOne.hidden = true
         }
         
         //Setup bottomView
@@ -153,8 +154,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
     func configureMultiImageCell(cell:NBWTableViewImageCell,weiboStatus:WeiboStatus){
         
         //Setup Header
-        cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
-        trimImageViewToRound(cell.headerImageView)
+        downloadImageAndClip((weiboStatus.user?.avatar_large)!, imageView: cell.headerImageView)
         cell.screenNameLabel.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -173,8 +173,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
     func configureRespostCell(cell:NBWTableViewRepostCell,weiboStatus:WeiboStatus){
         
         //Setup Header
-        cell.headerImageView.sd_setImageWithURL(NSURL(string: (weiboStatus.user?.avatar_large)!))
-        trimImageViewToRound(cell.headerImageView)
+        downloadImageAndClip((weiboStatus.user?.avatar_large)!, imageView: cell.headerImageView)
         cell.screenNameLabel.text                      = weiboStatus.user?.screen_name
         cell.sourceLabel.text                          = weiboStatus.source
         
@@ -203,24 +202,28 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         if  picsCount == 2 || picsCount == 3{
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
             }
-            for var i = 3; i < 6; i = i+1 {
-                imageViewArray[i].removeFromSuperview()
+            for var i = picsCount; i < 6; i = i+1 {
+                imageViewArray[i].hidden = true
             }
         }else if picsCount == 4 {
             var count = 0
             for WeiboStatusPic in weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
                 count += 1
                 if count == 2 {
+                    imageViewArray[count].hidden = true
                     count = 3
                 }
             }
         }else if  picsCount > 4 && picsCount < 10{
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
                 if count > 5 {
@@ -237,20 +240,22 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         
         if picsCount == 0 {
             for imageViewPic in imageViewArray {
-                imageViewPic?.removeFromSuperview()
+                imageViewPic?.hidden = true
             }
         }else if  picsCount > 0 && picsCount < 4 {
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
             }
             for var i = 3; i < 6; i = i+1 {
-                imageViewArray[i].removeFromSuperview()
+                imageViewArray[i].hidden = true
             }
         }else if picsCount == 4 {
             var count = 0
             for WeiboStatusPic in weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
                 count += 1
                 if count == 2 {
@@ -260,6 +265,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         }else if  picsCount > 4 && picsCount < 10{
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
+                imageViewArray[count].hidden = false
                 imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
                 count += 1
                 if count > 5 {
@@ -269,41 +275,36 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         }
     }
     
-    func trimImageViewToRound(imageView:UIImageView){
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-    }
-    
     func setupRespotCommentLikeBarView(repostCommentLikeBarView:UIView){
         
-        let repostButton = UIButton.init(frame: CGRect(x: 0, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        let repostButton = UIButton.init(frame: CGRect(x: 0, y: 1, width: viewWidth!/3.0, height: 31.5))
         repostButton.setTitle("  Repost", forState: UIControlState.Normal)
         repostButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         repostButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         repostButton.setImage(UIImage(named: "repost32"), forState: .Normal)
         repostButton.addTarget(self, action: #selector(NBWHomeDelegateAndDataSource.repostWeiboStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        let commentButton = UIButton.init(frame: CGRect(x: tableViewCellWidth!/3.0, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        let commentButton = UIButton.init(frame: CGRect(x: viewWidth!/3.0, y: 1, width: viewWidth!/3.0, height: 31.5))
         commentButton.setTitle("  Comment", forState: .Normal)
         commentButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         commentButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         commentButton.setImage(UIImage(named: "comment32"), forState: .Normal)
         commentButton.addTarget(self, action: #selector(NBWHomeDelegateAndDataSource.commentWeiboStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        let likeButton = UIButton.init(frame: CGRect(x: (tableViewCellWidth!/3.0)*2, y: 1, width: tableViewCellWidth!/3.0, height: 31.5))
+        let likeButton = UIButton.init(frame: CGRect(x: (viewWidth!/3.0)*2, y: 1, width: viewWidth!/3.0, height: 31.5))
         likeButton.setTitle("  like", forState: .Normal)
         likeButton.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
         likeButton.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightThin)
         likeButton.setImage(UIImage(named: "like32"), forState: .Normal)
         likeButton.addTarget(self, action: #selector(NBWHomeDelegateAndDataSource.likeWeiboStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        let separator1 = UIView(frame: CGRect(x: tableViewCellWidth!/3.0, y: 11, width: 1, height: 11))
+        let separator1 = UIView(frame: CGRect(x: viewWidth!/3.0, y: 11, width: 1, height: 11))
         separator1.backgroundColor = UIColor.lightGrayColor()
-        let separator2 = UIView(frame: CGRect(x: 2.0*tableViewCellWidth!/3.0, y: 11, width: 1, height: 11))
+        let separator2 = UIView(frame: CGRect(x: 2.0*viewWidth!/3.0, y: 11, width: 1, height: 11))
         separator2.backgroundColor = UIColor.lightGrayColor()
-        let separator3 = UIView(frame: CGRect(x: 0, y: 32, width: tableViewCellWidth!, height: 10))
+        let separator3 = UIView(frame: CGRect(x: 0, y: 32, width: viewWidth!, height: 10))
         separator3.backgroundColor = UIColor(red: 242/250, green: 242/250, blue: 242/250, alpha: 1)
-        let separator4 = UIView(frame: CGRect(x: 0, y: 0, width: tableViewCellWidth!, height: 0.5))
+        let separator4 = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: 0.5))
         separator4.backgroundColor = UIColor.lightGrayColor()
         
         repostCommentLikeBarView.addSubview(repostButton)
@@ -351,6 +352,26 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         }else {
             sender.setImage(UIImage(named: "like32"), forState: .Normal)
         }
+    }
+    
+    func downloadImageAndClip(urlStr:String,imageView:UIImageView){
+        let downloader = SDWebImageDownloader.sharedDownloader
+        downloader().downloadImageWithURL(NSURL(string:urlStr), options: SDWebImageDownloaderOptions.HighPriority, progress: nil, completed: { (image, data, error, bool) in
+            self.clipImageViewRoundedCorner(20, image,imageView)
+        })
+    }
+    
+    func clipImageViewRoundedCorner(cornerRadius:CGFloat,_ image:UIImage,_ imageView:UIImageView){
+        
+        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, image.scale)
+        
+        UIBezierPath.init(roundedRect: imageView.bounds, cornerRadius: cornerRadius).addClip()
+        
+        image.drawInRect(imageView.bounds)
+        
+        imageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
     }
 
 }

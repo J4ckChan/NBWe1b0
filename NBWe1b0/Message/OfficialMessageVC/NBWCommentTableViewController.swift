@@ -41,10 +41,6 @@ class NBWCommentTableViewController: UITableViewController {
         
         store.delegate = self
         
-        commentArray = store.fetchDataFromCoreData()
-        
-        setupTableView()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NBWCommentTableViewController.replyComment(_:)), name: replyCommentNotfi, object: nil)
     }
     
