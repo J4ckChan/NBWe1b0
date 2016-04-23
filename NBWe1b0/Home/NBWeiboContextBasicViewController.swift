@@ -359,7 +359,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         let imageViewWidth:CGFloat = (self.view.frame.width - 32)/3.0
         
         for var i:CGFloat = 0,j:CGFloat = 0,k:CGFloat = 0; i < repostPicsCountCGFloat; i++ {
-            
+    
             if i < 3 {
                 k = i
             }
