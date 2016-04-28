@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import Alamofire
 
 protocol PushViewControllerDelegate{
     func pushViewController(vc:UIViewController)
@@ -139,7 +140,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         //Setup ImageStackView
         if (weiboStatus.bmiddle_pic != nil) {
             cell.imageViewOne.hidden = false
-            cell.imageViewOne.sd_setImageWithURL(NSURL(string: weiboStatus.bmiddle_pic!))
+            setImgageView(cell.imageViewOne, url: weiboStatus.bmiddle_pic!)
         }else{
             cell.imageViewOne.hidden = true
         }
@@ -203,7 +204,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: weiboStatusPic.pic!)
                 count += 1
             }
             for var i = picsCount; i < 6; i = i+1 {
@@ -213,7 +214,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             var count = 0
             for WeiboStatusPic in weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: WeiboStatusPic.pic!)
                 count += 1
                 if count == 2 {
                     imageViewArray[count].hidden = true
@@ -224,7 +225,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: weiboStatusPic.pic!)
                 count += 1
                 if count > 5 {
                     break
@@ -246,7 +247,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: weiboStatusPic.pic!)
                 count += 1
             }
             for var i = picsCount; i < 6; i = i+1 {
@@ -254,9 +255,9 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             }
         }else if picsCount == 4 {
             var count = 0
-            for WeiboStatusPic in weiboStatusSet {
+            for weiboStatusPic in weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string: WeiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: weiboStatusPic.pic!)
                 count += 1
                 if count == 2 {
                     count = 3
@@ -268,7 +269,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
             var count = 0
             for weiboStatusPic in  weiboStatusSet {
                 imageViewArray[count].hidden = false
-                imageViewArray[count].sd_setImageWithURL(NSURL(string:weiboStatusPic.pic!))
+                setImgageView(imageViewArray[count], url: weiboStatusPic.pic!)
                 count += 1
                 if count > 5 {
                     break
@@ -356,10 +357,16 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         }
     }
     
+    
+    //MARK: - SetImageView
     func downloadImageAndClip(urlStr:String,imageView:UIImageView){
         let downloader = SDWebImageDownloader.sharedDownloader
         downloader().downloadImageWithURL(NSURL(string:urlStr), options: SDWebImageDownloaderOptions.HighPriority, progress: nil, completed: { (image, data, error, bool) in
-            self.clipImageViewRoundedCorner(20, image,imageView)
+            if bool {
+                self.clipImageViewRoundedCorner(20, image,imageView)
+            }else{
+                imageView.image = UIImage(named: "placeholder")
+            }
         })
     }
     
@@ -374,6 +381,33 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
+    }
+    
+    
+    func setImgageView(imageView:UIImageView, url:String) {
+        
+        let placeholderImage = UIImage(named: "placeholder")
+        
+        let originalImage = SDImageCache.sharedImageCache().imageFromDiskCacheForKey(url)
+        
+        if originalImage != nil {
+            imageView.sd_setImageWithURL(NSURL(string:url), placeholderImage: placeholderImage)
+        }else{
+            let manager = NetworkReachabilityManager()
+            if manager!.isReachableOnEthernetOrWiFi {
+                imageView.sd_setImageWithURL(NSURL(string: url), placeholderImage: placeholderImage)
+            }else if manager!.isReachableOnWWAN {
+                imageView.sd_setImageWithURL(NSURL(string: url), placeholderImage: placeholderImage)
+            }else{
+                let thumbnailUrl = url.stringByReplacingOccurrencesOfString("bmiddle", withString: "thumbnail")
+                let thumbnailImage = SDImageCache.sharedImageCache().imageFromDiskCacheForKey(thumbnailUrl)//URL应该为thumnailimage 以后再修改
+                if thumbnailImage != nil {
+                    imageView.sd_setImageWithURL(NSURL(string: url), placeholderImage: placeholderImage)
+                }else{
+                    imageView.sd_setImageWithURL(nil, placeholderImage: placeholderImage)
+                }
+            }
+        }
     }
 
 }
