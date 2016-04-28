@@ -29,17 +29,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //weiboSDK
         WeiboSDK.enableDebugMode(true)
         WeiboSDK.registerApp(appKey)
-    
         fetchUserDefault()
     
+        //CoreData
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         managerContext = appDelegate.managedObjectContext
     
         userInfo = fetchUserData(userID)
         if userInfo == nil {
             usersShow()
+        }
+        
+        //NetworkMonitor
+        let listenerBool = NetworkReachabilityManager()?.startListening()
+        if listenerBool! {
+            print("Start Network monitor")
         }
     
         return true
