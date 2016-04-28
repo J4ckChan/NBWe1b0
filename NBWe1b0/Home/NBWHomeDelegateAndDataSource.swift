@@ -400,7 +400,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
                 imageView.sd_setImageWithURL(NSURL(string: url), placeholderImage: placeholderImage)
             }else{
                 let thumbnailUrl = url.stringByReplacingOccurrencesOfString("bmiddle", withString: "thumbnail")
-                let thumbnailImage = SDImageCache.sharedImageCache().imageFromDiskCacheForKey(thumbnailUrl)//URL应该为thumnailimage 以后再修改
+                let thumbnailImage = SDImageCache.sharedImageCache().imageFromDiskCacheForKey(thumbnailUrl)
                 if thumbnailImage != nil {
                     imageView.sd_setImageWithURL(NSURL(string: url), placeholderImage: placeholderImage)
                 }else{
