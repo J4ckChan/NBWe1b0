@@ -127,7 +127,8 @@ func calculateRepostCellHeight(weiboStatus:WeiboStatus) -> CGFloat{
     
     let bodyLabelHeight:CGFloat = calculateTextLabelHeight(weiboStatus.text!, fontSize: 17, viewWidth: viewWidth!) + 8
     
-    let repostTextLabelHeight:CGFloat = calculateTextLabelHeight((weiboStatus.retweeted_status?.text)!, fontSize: 17, viewWidth: viewWidth!) + 8
+    let repostText = "@\((weiboStatus.retweeted_status?.user?.screen_name)!):\((weiboStatus.retweeted_status?.text)!)"
+    let repostTextLabelHeight:CGFloat = calculateTextLabelHeight(repostText, fontSize: 17, viewWidth: viewWidth!) + 8
     
     let singleImageHeight:CGFloat = (viewWidth! - 32)/3
     

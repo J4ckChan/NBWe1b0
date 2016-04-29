@@ -182,7 +182,8 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         cell.bodyTextLabel.text            = weiboStatus.text
        
         //Setup repostTextLabel
-        cell.repostTextLabel.text      = "@\((weiboStatus.retweeted_status?.user?.screen_name)!):\((weiboStatus.retweeted_status?.text)!)"
+        let repostText = "@\((weiboStatus.retweeted_status?.user?.screen_name)!):\((weiboStatus.retweeted_status?.text)!)"
+        cell.repostTextLabel.text      = repostText
         
         //Setup ImageStackView
         configureRepostStatusImageView(cell, weiboStatus: weiboStatus.retweeted_status!)
