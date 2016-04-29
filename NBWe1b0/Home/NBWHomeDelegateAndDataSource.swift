@@ -364,7 +364,9 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         let downloader = SDWebImageDownloader.sharedDownloader
         downloader().downloadImageWithURL(NSURL(string:urlStr), options: SDWebImageDownloaderOptions.HighPriority, progress: nil, completed: { (image, data, error, bool) in
             if bool {
-                self.clipImageViewRoundedCorner(20, image,imageView)
+                dispatch_async(dispatch_get_main_queue(), { 
+                    self.clipImageViewRoundedCorner(20, image,imageView)
+                })
             }else{
                 imageView.image = UIImage(named: "placeholder")
             }
