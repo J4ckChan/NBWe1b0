@@ -79,31 +79,34 @@ func weiboCommentManagedObject()->Comment{
 //MARK: WeiboStatus
 func importStatusDataFromJSON(weiboStatus:WeiboStatus,jsonDict:NSDictionary){
     //status
-    weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
-    weiboStatus.id              = jsonDict["idstr"] as? String
-    weiboStatus.text            = jsonDict["text"] as? String
-    weiboStatus.source          = sourceStringModifiedWithString((jsonDict["source"] as? String)!)
-    weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
-    weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
-    weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
-    weiboStatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
-    weiboStatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
-    weiboStatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
-    weiboStatus.original_pic    = jsonDict["original_pic"] as? String
-    
-    //pic_urls
-    let dictArray         = jsonDict["pic_urls"] as? Array<[String:String]>
-    let pic_urlsArray     = picUrlsJSONToString(dictArray!)
-    
-    if pic_urlsArray.count > 0 {
-        for pic_url in pic_urlsArray {
-            
-            let picEntity         = NSEntityDescription.entityForName("WeiboStatusPics", inManagedObjectContext: managerContext!)
-            let weiboStatusPic    = NSManagedObject(entity: picEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboStatusPics
-            
-            weiboStatusPic.pic    = pic_url.thumbnail_pic
-            weiboStatusPic.status = weiboStatus
-            weiboStatus.pics      = weiboStatus.pics?.setByAddingObject(weiboStatusPic)
+    let deletedBool = jsonDict["deleted"] as? String
+    if deletedBool == nil {
+        weiboStatus.created_at      = createdAtDateStringToNSDate((jsonDict["created_at"] as? String)!)
+        weiboStatus.id              = jsonDict["idstr"] as? String
+        weiboStatus.text            = jsonDict["text"] as? String
+        weiboStatus.source          = sourceStringModifiedWithString((jsonDict["source"] as? String)!)
+        weiboStatus.favorited       = jsonDict["favorited"] as? NSNumber
+        weiboStatus.reposts_count   = jsonDict["reposts_count"] as? NSNumber
+        weiboStatus.comments_count  = jsonDict["comments_count"] as? NSNumber
+        weiboStatus.attitudes_count = jsonDict["attitudes_count"] as? NSNumber
+        weiboStatus.thumbnail_pic   = jsonDict["thumbnail_pic"] as? String
+        weiboStatus.bmiddle_pic     = jsonDict["bmiddle_pic"] as? String
+        weiboStatus.original_pic    = jsonDict["original_pic"] as? String
+        
+        //pic_urls
+        let dictArray         = jsonDict["pic_urls"] as? Array<[String:String]>
+        let pic_urlsArray     = picUrlsJSONToString(dictArray!)
+        
+        if pic_urlsArray.count > 0 {
+            for pic_url in pic_urlsArray {
+                
+                let picEntity         = NSEntityDescription.entityForName("WeiboStatusPics", inManagedObjectContext: managerContext!)
+                let weiboStatusPic    = NSManagedObject(entity: picEntity!, insertIntoManagedObjectContext: managerContext) as! WeiboStatusPics
+                
+                weiboStatusPic.pic    = pic_url.thumbnail_pic
+                weiboStatusPic.status = weiboStatus
+                weiboStatus.pics      = weiboStatus.pics?.setByAddingObject(weiboStatusPic)
+            }
         }
     }
 }

@@ -116,9 +116,11 @@ class NBWCommentStore: NSObject {
                     comment.status?.retweeted_status = retweetedStatus
                     
                     let retweetedUser = weiboUserManagedObject()
-                    let retweetedUserDict = retweetedStatusDict!["user"] as! NSDictionary
-                    importUserDataFromJSON(retweetedUser, userDict: retweetedUserDict)
-                    comment.status?.retweeted_status?.user = retweetedUser
+                    if retweetedStatusDict!["user"] != nil {
+                        let retweetedUserDict = retweetedStatusDict!["user"] as! NSDictionary
+                        importUserDataFromJSON(retweetedUser, userDict: retweetedUserDict)
+                        comment.status?.retweeted_status?.user = retweetedUser
+                    }
                 }
                 
                 let reply_commentDict = commentDict["reply_comment"] as? NSDictionary

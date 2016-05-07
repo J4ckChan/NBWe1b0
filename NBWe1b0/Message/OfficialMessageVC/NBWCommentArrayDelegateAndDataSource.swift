@@ -108,7 +108,9 @@ extension NBWCommentArrayDelegateAndDataSource:UITableViewDelegate {
         if comment.status?.retweeted_status != nil {
             let name = comment.status?.retweeted_status?.user?.screen_name
             let text = comment.status?.retweeted_status?.text
-            context = "\((comment.status?.text)!)//@\(name!):\(text!)"
+            if name != nil && text != nil {
+                context = "\((comment.status?.text)!)//@\(name!):\(text!)"
+            }
         }else{
             context = comment.status?.text
         }
