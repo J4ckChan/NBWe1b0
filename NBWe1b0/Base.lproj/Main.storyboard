@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Vgf-ev-K2j">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Vgf-ev-K2j">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -475,7 +475,7 @@
         <!--Discover-->
         <scene sceneID="p2I-TN-mD4">
             <objects>
-                <viewController id="qdh-fr-Ecy" sceneMemberID="viewController">
+                <viewController id="qdh-fr-Ecy" customClass="NBWDiscoveryViewController" customModule="NBWe1b0" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VHS-Je-N1p"/>
                         <viewControllerLayoutGuide type="bottom" id="JWa-pk-cNB"/>
@@ -483,9 +483,48 @@
                     <view key="view" contentMode="scaleToFill" id="24b-cG-TEq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vaG-V9-MXo">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="vaG-V9-MXo" secondAttribute="trailing" id="7La-7Z-jHa"/>
+                            <constraint firstItem="JWa-pk-cNB" firstAttribute="top" secondItem="vaG-V9-MXo" secondAttribute="bottom" id="E5a-La-reh"/>
+                            <constraint firstItem="vaG-V9-MXo" firstAttribute="top" secondItem="24b-cG-TEq" secondAttribute="top" id="Kyd-Uc-Tva">
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="vaG-V9-MXo" firstAttribute="leading" secondItem="24b-cG-TEq" secondAttribute="leading" id="zjy-sN-Bfw"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="vaG-V9-MXo"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="7La-7Z-jHa"/>
+                                <exclude reference="Kyd-Uc-Tva"/>
+                                <exclude reference="zjy-sN-Bfw"/>
+                                <exclude reference="E5a-La-reh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="vaG-V9-MXo"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="7La-7Z-jHa"/>
+                                <include reference="Kyd-Uc-Tva"/>
+                                <include reference="zjy-sN-Bfw"/>
+                                <include reference="E5a-La-reh"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Discover" image="tabbar_discover" selectedImage="tabbar_discover_highlighted" id="EWq-p1-BdP"/>
+                    <connections>
+                        <outlet property="webView" destination="vaG-V9-MXo" id="Dv5-LK-9o8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xmt-RP-Zqw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

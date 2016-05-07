@@ -47,6 +47,7 @@
 		3D5F620E1C7459A600BDED94 /* NBWRespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5F620D1C7459A600BDED94 /* NBWRespotViewController.swift */; };
 		3D7FEADD1C76B1EE00C2E847 /* NBWContactTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7FEADC1C76B1EE00C2E847 /* NBWContactTableViewController.swift */; };
 		3D7FEADF1C76BEBB00C2E847 /* NBWContactResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7FEADE1C76BEBB00C2E847 /* NBWContactResultTableViewController.swift */; };
+		3D8395341CDE111900583D59 /* NBWDiscoveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8395331CDE111900583D59 /* NBWDiscoveryViewController.swift */; };
 		3D92C9581C4E0B490007A12C /* NBWHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */; };
 		3D92C9591C4E0B490007A12C /* NBWTableViewBasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */; };
 		3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D92C9541C4E0B480007A12C /* WeiboStatus.swift */; };
@@ -129,6 +130,7 @@
 		3D5F620D1C7459A600BDED94 /* NBWRespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWRespotViewController.swift; path = Home/NBWRespotViewController.swift; sourceTree = "<group>"; };
 		3D7FEADC1C76B1EE00C2E847 /* NBWContactTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWContactTableViewController.swift; path = Home/NBWContactTableViewController.swift; sourceTree = "<group>"; };
 		3D7FEADE1C76BEBB00C2E847 /* NBWContactResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWContactResultTableViewController.swift; path = Home/NBWContactResultTableViewController.swift; sourceTree = "<group>"; };
+		3D8395331CDE111900583D59 /* NBWDiscoveryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWDiscoveryViewController.swift; sourceTree = "<group>"; };
 		3D92C9521C4E0B480007A12C /* NBWHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWHomeViewController.swift; path = Home/NBWHomeViewController.swift; sourceTree = "<group>"; };
 		3D92C9531C4E0B480007A12C /* NBWTableViewBasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWTableViewBasicCell.swift; path = Home/NBWTableViewBasicCell.swift; sourceTree = "<group>"; };
 		3D92C9541C4E0B480007A12C /* WeiboStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeiboStatus.swift; path = Home/WeiboStatus.swift; sourceTree = "<group>"; };
@@ -360,6 +362,14 @@
 			name = Home;
 			sourceTree = "<group>";
 		};
+		3D8395321CDE10E800583D59 /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				3D8395331CDE111900583D59 /* NBWDiscoveryViewController.swift */,
+			);
+			path = Discovery;
+			sourceTree = "<group>";
+		};
 		3D9EA31C1C62FADA00A8383A /* WeiboContextCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,6 +567,7 @@
 				3DF22D971C4AA1A700DD53D2 /* Home */,
 				3D2C51001C852C6100E19000 /* Message */,
 				3DD1D38C1C8D6EF7006730FC /* Compose */,
+				3D8395321CDE10E800583D59 /* Discovery */,
 				3D37C5D51CA042FF00C6AF36 /* Me */,
 				3D9ECA9B1CA0172B009DE497 /* Public */,
 				3D9ECAA01CA0180C009DE497 /* Resource */,
@@ -800,6 +811,7 @@
 				3D92C95A1C4E0B490007A12C /* WeiboStatus.swift in Sources */,
 				3DB39CB41CA2EE01007A8686 /* NBWMeTopTableViewCell.swift in Sources */,
 				3D1ED7B21C8962AC00009CB3 /* NBWFilterCommentTableViewController.swift in Sources */,
+				3D8395341CDE111900583D59 /* NBWDiscoveryViewController.swift in Sources */,
 				3D2C51021C852CB500E19000 /* NBWMessageTableViewController.swift in Sources */,
 				3D37C5D71CA0433F00C6AF36 /* NBWMeViewController.swift in Sources */,
 				3D9EA3221C630AF900A8383A /* NBWCommentTableViewCell.swift in Sources */,
