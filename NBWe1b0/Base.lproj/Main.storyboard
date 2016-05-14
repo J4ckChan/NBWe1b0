@@ -503,10 +503,10 @@
                                 <exclude reference="vaG-V9-MXo"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="E5a-La-reh"/>
                                 <exclude reference="7La-7Z-jHa"/>
                                 <exclude reference="Kyd-Uc-Tva"/>
                                 <exclude reference="zjy-sN-Bfw"/>
-                                <exclude reference="E5a-La-reh"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -514,10 +514,10 @@
                                 <include reference="vaG-V9-MXo"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="E5a-La-reh"/>
                                 <include reference="7La-7Z-jHa"/>
                                 <include reference="Kyd-Uc-Tva"/>
                                 <include reference="zjy-sN-Bfw"/>
-                                <include reference="E5a-La-reh"/>
                             </mask>
                         </variation>
                     </view>

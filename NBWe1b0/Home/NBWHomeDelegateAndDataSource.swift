@@ -14,6 +14,10 @@ protocol PushViewControllerDelegate{
     func pushViewController(vc:UIViewController)
 }
 
+protocol ShowScrollToTopButton {
+    func showButton()
+}
+
 enum HomeTableViewCellType {
     case BasicCell
     case ImageCell
@@ -34,6 +38,7 @@ class NBWHomeDelegateAndDataSource: NSObject {
     var tableView:UITableView?
     var selectedWeiboStatus:WeiboStatus?
     var delegate:PushViewControllerDelegate?
+    var showButtonDelegate:ShowScrollToTopButton?
     
     //MARK: - Init
     init(array:[WeiboStatus]) {
@@ -413,4 +418,13 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         }
     }
 
+}
+
+extension NBWHomeDelegateAndDataSource: UIScrollViewDelegate{
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let yPoint = scrollView.contentOffset.y
+        if yPoint > 1.5*viewHeight! {
+            self.showButtonDelegate?.showButton()
+        }
+    }
 }

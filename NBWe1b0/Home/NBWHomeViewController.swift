@@ -11,6 +11,7 @@ import Alamofire
 import CoreData
 
 var viewWidth:CGFloat?
+var viewHeight:CGFloat?
 var navigationBarHeight:CGFloat?
 
 class NBWHomeViewController: UIViewController {
@@ -32,6 +33,7 @@ class NBWHomeViewController: UIViewController {
     var nameButtonTableViewController:NBWNameButtonTableViewController?
     var homeDelegateAndDataSource:NBWHomeDelegateAndDataSource?
     var store:NBWHomeStore?
+    var backToTopButton:UIButton?
     
     //MARK: - View
     override func viewDidLoad() {
@@ -39,14 +41,20 @@ class NBWHomeViewController: UIViewController {
 
         // Do any additional setup after loading the view
         viewWidth = self.view.frame.width
+        viewHeight = self.view.frame.height
         navigationBarHeight = self.navigationController?.navigationBar.frame.height
-        
+
         //CoreData
-        
+    
         setupUserNameButton()
         setUpRefresh()
         setupStore()
         setupTableViewDelegateAndDataSource()
+        setupButtonToTop()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        backToTopButton?.hidden = true
     }
     
     func setUpRefresh(){
@@ -74,6 +82,7 @@ class NBWHomeViewController: UIViewController {
         self.tableView?.registerNib(UINib.init(nibName:"NBWTableViewImageCell", bundle: nil), forCellReuseIdentifier: multiImageReuseIdentifier)
         self.tableView?.registerNib(UINib.init(nibName:"NBWTableViewRepostCell", bundle: nil), forCellReuseIdentifier: repostReuseIdentifier)
         homeDelegateAndDataSource?.delegate = self
+        homeDelegateAndDataSource?.showButtonDelegate = self
         tableView.reloadData()
     }
     
@@ -82,7 +91,17 @@ class NBWHomeViewController: UIViewController {
         self.userNameButton.addTarget(self, action: #selector(NBWHomeViewController.showNameButtonView(_:)), forControlEvents: .TouchUpInside)
     }
     
-    //MARK: - Button
+    func setupButtonToTop(){
+        backToTopButton = UIButton(frame: CGRect(x: viewWidth! - 60, y: viewHeight! - (self.tabBarController?.tabBar.frame.size.height)! - 50, width: 40, height: 40))
+        backToTopButton?.setImage(UIImage(named: "topButton"), forState: UIControlState.Normal)
+        backToTopButton?.addTarget(self, action: #selector(scrollToTop(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        backToTopButton?.hidden = true
+        self.tabBarController?.view.addSubview(backToTopButton!)
+    }
+    
+    
+    
+    //MARK: - ButtonAction
     @IBAction func weiboLogin(sender: UIBarButtonItem) {
         let request         = WBAuthorizeRequest.request() as! WBAuthorizeRequest
         request.redirectURI = redirectURL
@@ -103,6 +122,11 @@ class NBWHomeViewController: UIViewController {
         popover?.sourceRect = CGRect(x: userNameButton.center.x, y: userNameButton.center.y + userNameButton.frame.height/2, width: 0, height: 0)
         popover?.delegate = self
         presentViewController(nameButtonTableVC, animated: true, completion: nil)
+    }
+    
+    func scrollToTop(sender:UIButton){
+        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        backToTopButton?.hidden = true
     }
 }
 
@@ -136,3 +160,10 @@ extension NBWHomeViewController:PushViewControllerDelegate{
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
+
+extension NBWHomeViewController:ShowScrollToTopButton{
+    func showButton() {
+        backToTopButton?.hidden = false
+    }
+}
+

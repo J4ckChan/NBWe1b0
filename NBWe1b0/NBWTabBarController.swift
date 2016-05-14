@@ -59,11 +59,14 @@ class NBWTabBarController: UITabBarController {
 extension NBWTabBarController:UITabBarControllerDelegate{
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
+        
         if viewController.isEqual(tabBarController.viewControllers![2]){
             return false
         }else{
             return true
         }
+        
+        
     }
 }
 
