@@ -140,7 +140,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         cell.sourceLabel.text                          = weiboStatus.source
         
         //Setup bodyTextLabel
-        cell.bodyTextLabel.text            = weiboStatus.text
+        cell.bodyTextLabel.attributedText            = translateEmojiText(weiboStatus.text!)
         
         //Setup ImageStackView
         if (weiboStatus.bmiddle_pic != nil) {
@@ -165,7 +165,7 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         cell.sourceLabel.text                          = weiboStatus.source
         
         //Setup bodyTextLabel
-        cell.bodyTextLabel.text            = weiboStatus.text
+        cell.bodyTextLabel.attributedText            = translateEmojiText(weiboStatus.text!)
         
         //Setup ImageStackView
         configureMultiImageView(cell, weiboStatus: weiboStatus)
@@ -184,11 +184,11 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         cell.sourceLabel.text                          = weiboStatus.source
         
         //Setup bodyTextLabel
-        cell.bodyTextLabel.text            = weiboStatus.text
+        cell.bodyTextLabel.attributedText            = translateEmojiText(weiboStatus.text!)
        
         //Setup repostTextLabel
         let repostText = "@\((weiboStatus.retweeted_status?.user?.screen_name)!):\((weiboStatus.retweeted_status?.text)!)"
-        cell.repostTextLabel.text      = repostText
+        cell.repostTextLabel.attributedText            = translateEmojiText(repostText)
         
         //Setup ImageStackView
         configureRepostStatusImageView(cell, weiboStatus: weiboStatus.retweeted_status!)
@@ -369,8 +369,10 @@ extension NBWHomeDelegateAndDataSource:UITableViewDelegate {
         let downloader = SDWebImageDownloader.sharedDownloader
         downloader().downloadImageWithURL(NSURL(string:urlStr), options: SDWebImageDownloaderOptions.HighPriority, progress: nil, completed: { (image, data, error, bool) in
             if bool {
-                dispatch_async(dispatch_get_main_queue(), { 
-                    self.clipImageViewRoundedCorner(20, image,imageView)
+                dispatch_async(dispatch_get_main_queue(), {
+                    if image != nil{
+                         self.clipImageViewRoundedCorner(20, image,imageView)
+                    }
                 })
             }else{
                 imageView.image = UIImage(named: "placeholder")

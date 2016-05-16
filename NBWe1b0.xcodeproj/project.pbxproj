@@ -41,7 +41,6 @@
 		3D5D433A1C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */; };
 		3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */; };
 		3D5E86F01C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E86EF1C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift */; };
-		3D5F62071C7305A200BDED94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F62061C7305A200BDED94 /* Assets.xcassets */; };
 		3D5F62091C7405E900BDED94 /* NBWBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5F62081C7405E900BDED94 /* NBWBasicViewController.swift */; };
 		3D5F620B1C741B1D00BDED94 /* NBWCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5F620A1C741B1D00BDED94 /* NBWCommentViewController.swift */; };
 		3D5F620E1C7459A600BDED94 /* NBWRespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5F620D1C7459A600BDED94 /* NBWRespotViewController.swift */; };
@@ -60,6 +59,9 @@
 		3DABDB031C51E68F001BC23E /* NBWTableViewRepostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DABDB021C51E68F001BC23E /* NBWTableViewRepostCell.swift */; };
 		3DB39CB41CA2EE01007A8686 /* NBWMeTopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB39CB21CA2EE01007A8686 /* NBWMeTopTableViewCell.swift */; };
 		3DB39CB51CA2EE01007A8686 /* NBWMeTopTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DB39CB31CA2EE01007A8686 /* NBWMeTopTableViewCell.xib */; };
+		3DC109161CEA1B3100CF3B28 /* emoji.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DC109151CEA1B3100CF3B28 /* emoji.plist */; };
+		3DC109181CEA1B5500CF3B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DC109171CEA1B5500CF3B28 /* Assets.xcassets */; };
+		3DC1091A1CEA1C6A00CF3B28 /* NBWTranslateTextContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC109191CEA1C6A00CF3B28 /* NBWTranslateTextContext.swift */; };
 		3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */; };
 		3DD1D3901C8D6F7E006730FC /* NBWUpdateStatusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD1D38F1C8D6F7E006730FC /* NBWUpdateStatusVC.swift */; };
 		3DD1D3921C8F1A3D006730FC /* NBWShareWithTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD1D3911C8F1A3D006730FC /* NBWShareWithTableVC.swift */; };
@@ -124,7 +126,6 @@
 		3D5D43381C4E894D00DA8834 /* WeiboStatusPics+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "WeiboStatusPics+CoreDataProperties.swift"; path = "Home/WeiboStatusPics+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3D5D43391C4E894D00DA8834 /* WeiboStatusPics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeiboStatusPics.swift; path = Home/WeiboStatusPics.swift; sourceTree = "<group>"; };
 		3D5E86EF1C847D5D00CAA2AB /* NBWNameButtonTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWNameButtonTableViewController.swift; path = Home/NBWNameButtonTableViewController.swift; sourceTree = "<group>"; };
-		3D5F62061C7305A200BDED94 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D5F62081C7405E900BDED94 /* NBWBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWBasicViewController.swift; path = Home/NBWBasicViewController.swift; sourceTree = "<group>"; };
 		3D5F620A1C741B1D00BDED94 /* NBWCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWCommentViewController.swift; path = Home/NBWCommentViewController.swift; sourceTree = "<group>"; };
 		3D5F620D1C7459A600BDED94 /* NBWRespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWRespotViewController.swift; path = Home/NBWRespotViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +144,9 @@
 		3DABDB021C51E68F001BC23E /* NBWTableViewRepostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWTableViewRepostCell.swift; path = Home/NBWTableViewRepostCell.swift; sourceTree = "<group>"; };
 		3DB39CB21CA2EE01007A8686 /* NBWMeTopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWMeTopTableViewCell.swift; path = Me/NBWMeTopTableViewCell.swift; sourceTree = "<group>"; };
 		3DB39CB31CA2EE01007A8686 /* NBWMeTopTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NBWMeTopTableViewCell.xib; path = Me/NBWMeTopTableViewCell.xib; sourceTree = "<group>"; };
+		3DC109151CEA1B3100CF3B28 /* emoji.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = emoji.plist; sourceTree = "<group>"; };
+		3DC109171CEA1B5500CF3B28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3DC109191CEA1C6A00CF3B28 /* NBWTranslateTextContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWTranslateTextContext.swift; sourceTree = "<group>"; };
 		3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NBWe1b0-Bridging-Header.h"; sourceTree = "<group>"; };
 		3DCCEB7D1C4024E50062B842 /* NBWTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBWTabBarController.swift; sourceTree = "<group>"; };
 		3DD1D38F1C8D6F7E006730FC /* NBWUpdateStatusVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NBWUpdateStatusVC.swift; path = Compose/NBWUpdateStatusVC.swift; sourceTree = "<group>"; };
@@ -437,6 +441,7 @@
 		3D9ECA9B1CA0172B009DE497 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				3DC109191CEA1C6A00CF3B28 /* NBWTranslateTextContext.swift */,
 				3DCCEB761C4022420062B842 /* NBWe1b0-Bridging-Header.h */,
 				3DE1C5411C3D4CC8008E3A94 /* NBWe1b0.xcdatamodeld */,
 				3D2C510F1C858A4B00E19000 /* CoreDataFunction */,
@@ -472,7 +477,8 @@
 		3D9ECAA01CA0180C009DE497 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				3D5F62061C7305A200BDED94 /* Assets.xcassets */,
+				3DC109171CEA1B5500CF3B28 /* Assets.xcassets */,
+				3DC109151CEA1B3100CF3B28 /* emoji.plist */,
 				3DE1C5491C3D4CC8008E3A94 /* Info.plist */,
 			);
 			name = Resource;
@@ -725,11 +731,12 @@
 				3DB39CB51CA2EE01007A8686 /* NBWMeTopTableViewCell.xib in Resources */,
 				3D2D053E1C643F2C001F1320 /* NBWRepostTableViewCell.xib in Resources */,
 				3D04A47A1CC0C5BB0098C330 /* NBWTableViewImageCell.xib in Resources */,
-				3D5F62071C7305A200BDED94 /* Assets.xcassets in Resources */,
 				3D2B91CC1C91A037002A9927 /* NBWUploadImageCollectionViewCell.xib in Resources */,
 				3D9EA3231C630AF900A8383A /* NBWCommentTableViewCell.xib in Resources */,
 				3D14DCCB1C98FBE400D3FE90 /* NBWCommentCell.xib in Resources */,
+				3DC109161CEA1B3100CF3B28 /* emoji.plist in Resources */,
 				3D14DCCF1C98FC0400D3FE90 /* NBWReplyCommentCell.xib in Resources */,
+				3DC109181CEA1B5500CF3B28 /* Assets.xcassets in Resources */,
 				3D04A4781CC0BCFA0098C330 /* NBWTableViewBasicCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -834,6 +841,7 @@
 				3D5D433B1C4E894D00DA8834 /* WeiboStatusPics.swift in Sources */,
 				3D14DCD61C9933B900D3FE90 /* NBWCommentArrayDelegateAndDataSource.swift in Sources */,
 				3DD1D3921C8F1A3D006730FC /* NBWShareWithTableVC.swift in Sources */,
+				3DC1091A1CEA1C6A00CF3B28 /* NBWTranslateTextContext.swift in Sources */,
 				3D1ED7AF1C89211C00009CB3 /* Comment+CoreDataProperties.swift in Sources */,
 				3DCCEB7E1C4024E50062B842 /* NBWTabBarController.swift in Sources */,
 				3D2D053D1C643F2C001F1320 /* NBWRepostTableViewCell.swift in Sources */,
