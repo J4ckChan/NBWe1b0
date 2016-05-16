@@ -79,6 +79,9 @@ class NBWeiboContextBasicViewController: UIViewController {
     var likeButton:UIButton?
     var likeFlag:Bool?
     
+    //ScorllViewDelegate
+    var switchBarY:CGFloat?
+    
     
     //MARK: - ViewController LifeCycle
     init(id:String,tableViewBool:Bool){
@@ -162,6 +165,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         self.scrollView                       = UIScrollView.init(frame: CGRect(x: 0, y: 0, width: viewWidth!, height: viewHeight! - 42))
         scrollView!.contentSize               = CGSize(width: viewWidth!, height: 1.5 * viewHeight!)
         scrollView!.backgroundColor           = UIColor(red: 242/250, green: 242/250, blue: 242/250, alpha: 1)
+        scrollView?.delegate                  = self
         self.view.addSubview(scrollView!)
         
         self.repostCommentLikeBar             = UIView.init(frame: CGRect(x: 0, y: viewHeight! - 42, width: viewWidth!, height: 42))
@@ -477,6 +481,7 @@ class NBWeiboContextBasicViewController: UIViewController {
         //Swith RepostCommentLikes Bar
         self.switchRepostCommentLikeBar = UIView.init(frame: CGRect(x: 0, y: self.statusViewHeight!+16, width: viewWidth!, height: 34))
         self.switchRepostCommentLikeBar?.backgroundColor = UIColor.whiteColor()
+        switchBarY = CGRectGetMinY(switchRepostCommentLikeBar!.frame)
         
         //Buttons
         self.repostSwitchButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 80, height: 32))
@@ -823,5 +828,17 @@ extension NBWeiboContextBasicViewController:UITableViewDelegate,UITableViewDataS
         return (labelRect?.height)!
     }
         
+}
+
+extension NBWeiboContextBasicViewController:UIScrollViewDelegate{
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + navigationBarHeight! + 20 >= switchBarY! {
+            switchRepostCommentLikeBar!.frame = CGRectMake(0, navigationBarHeight! + 20, viewWidth!, (switchRepostCommentLikeBar?.frame.size.height)!)
+            view.addSubview(switchRepostCommentLikeBar!)
+        }else{
+            switchRepostCommentLikeBar!.frame = CGRectMake(0, self.statusViewHeight!+16, viewWidth!, 34)
+            scrollView.addSubview(switchRepostCommentLikeBar!)
+        }
+    }
 }
 
