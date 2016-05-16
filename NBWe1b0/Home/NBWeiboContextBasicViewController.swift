@@ -81,6 +81,7 @@ class NBWeiboContextBasicViewController: UIViewController {
     
     //ScorllViewDelegate
     var switchBarY:CGFloat?
+    var switchBarBool = false
     
     
     //MARK: - ViewController LifeCycle
@@ -832,10 +833,12 @@ extension NBWeiboContextBasicViewController:UITableViewDelegate,UITableViewDataS
 
 extension NBWeiboContextBasicViewController:UIScrollViewDelegate{
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView.contentOffset.y + navigationBarHeight! + 20 >= switchBarY! {
+        if scrollView.contentOffset.y + navigationBarHeight! + 20 >= switchBarY! && switchBarBool == false {
+            switchBarBool = true
             switchRepostCommentLikeBar!.frame = CGRectMake(0, navigationBarHeight! + 20, viewWidth!, (switchRepostCommentLikeBar?.frame.size.height)!)
             view.addSubview(switchRepostCommentLikeBar!)
-        }else{
+        }else if scrollView.contentOffset.y + navigationBarHeight! + 20 < switchBarY! && switchBarBool == true {
+            switchBarBool = false
             switchRepostCommentLikeBar!.frame = CGRectMake(0, self.statusViewHeight!+16, viewWidth!, 34)
             scrollView.addSubview(switchRepostCommentLikeBar!)
         }
